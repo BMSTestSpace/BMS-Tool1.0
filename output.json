@@ -16,7 +16,8 @@
         "Supply Fan": "q1401",
         "Communications": "q501",
         "Other": "q401"
-      }
+      },
+      "notes": "SAFETY: Follow site LOTO, electrical PPE, arc-flash, ladder, rotating-equipment, combustion, refrigerant, and life-safety procedures. Never bypass a safety or exceed product ratings. Verify exact model and approved documentation."
     },
     "q2": {
       "question": "What BMS panel component are you troubleshooting?",
@@ -33,14 +34,16 @@
       "answers": {
         "Yes": "q4",
         "No": "r1"
-      }
+      },
+      "notes": "RBravo equipment notes: RB-016"
     },
     "q4": {
-      "question": "Is 24 VAC control power present?",
+      "question": "Is the specified power supply present and within the voltage range required by the installed power-supply/server hardware?",
       "answers": {
         "Yes": "q5",
         "No": "r2"
-      }
+      },
+      "notes": "Do not assume every installation is 24 VAC only. Verify the exact PS-24V/automation-server hardware and approved documentation before testing."
     },
     "q5": {
       "question": "Are any breakers tripped?",
@@ -72,19 +75,20 @@
       }
     },
     "q9": {
-      "question": "Can you connect locally by USB?",
+      "question": "Can Device Administrator communicate through the AS-P USB device port using a known-good USB data cable?",
       "answers": {
         "Yes": "r7",
         "No": "r8"
-      }
+      },
+      "notes": "The front USB device port is intended for Device Administrator/program download. A charging-only cable will not work."
     },
     "r1": {
       "diagnosis": "No panel power",
       "action": "Verify source power, disconnect, breakers, and upstream electrical supply."
     },
     "r2": {
-      "diagnosis": "Low-voltage control power is missing",
-      "action": "Verify transformer primary and secondary voltage, low-voltage breaker, and wiring."
+      "diagnosis": "Automation-server/Central IO supply or backplane power is missing or out of tolerance",
+      "action": "Verify the installed power-supply model, source voltage, protective devices, terminal-base seating, and backplane connection. Do not energize until the source and polarity/type match the product documentation."
     },
     "r3": {
       "diagnosis": "Breaker tripped",
@@ -104,7 +108,7 @@
     },
     "r7": {
       "diagnosis": "Automation Server hardware appears accessible",
-      "action": "Continue with EBO status, application, bindings, and communications checks."
+      "action": "Document controller identity and status in Device Administrator, then verify EBO server association, IP settings, application status, Central IO bus, bindings, and field-bus health."
     },
     "r8": {
       "diagnosis": "Automation Server cannot be reached locally",
@@ -121,10 +125,11 @@
       "question": "What kind of input are you troubleshooting?",
       "answers": {
         "Digital Input": "q103",
-        "4-20 mA": "q107",
-        "0-10 VDC": "q114",
+        "Current Input (0-20 mA; commonly 4-20 mA)": "q107",
+        "Voltage Input (0-10 VDC)": "q114",
         "Temperature 10k Type II": "q121"
-      }
+      },
+      "notes": "UI-16 supports digital, counter, supervised, voltage, current, temperature, and resistive inputs. Confirm the configured electrical type before field testing."
     },
     "q103": {
       "question": "Is the digital input contact normally open or normally closed?",
@@ -155,11 +160,12 @@
       }
     },
     "q107": {
-      "question": "Is the 4-20 mA transmitter two-wire or three/four-wire?",
+      "question": "Is the current transmitter a two-wire loop-powered device or a separately powered three/four-wire device?",
       "answers": {
         "Two-wire loop": "q108",
         "Three/four-wire": "q109"
-      }
+      },
+      "notes": "UI-16 current input supports 0-20 mA. Many HVAC transmitters use a 4-20 mA operating range within that input capability."
     },
     "q108": {
       "question": "Is loop DC power present with correct polarity?",
@@ -176,18 +182,20 @@
       }
     },
     "q110": {
-      "question": "Is expected current measured at the controller terminals?",
+      "question": "With the loop intact and the meter connected correctly in series, is the expected current measured at the controller terminals?",
       "answers": {
         "Yes": "q111",
         "No": "q112"
-      }
+      },
+      "notes": "Never place a current meter directly across a powered source. Follow meter and site electrical-safety procedures."
     },
     "q111": {
-      "question": "Does measured mA correspond to the expected engineering value?",
+      "question": "Does measured current correspond to the transmitter range and the actual process value?",
       "answers": {
         "Yes": "r120",
         "No": "r114"
-      }
+      },
+      "notes": "Use the transmitter nameplate/configured range. For a 4-20 mA transmitter, calculate expected mA from the configured lower and upper range values."
     },
     "q112": {
       "question": "Is expected current present at the field device output?",
@@ -197,11 +205,12 @@
       }
     },
     "q114": {
-      "question": "Is correct supply voltage present at the 0-10 VDC device?",
+      "question": "Is the correct device supply present and is the signal common/reference correctly connected?",
       "answers": {
         "Yes": "q115",
         "No": "r113"
-      }
+      },
+      "notes": "Confirm the field device supply requirement separately from the 0-10 V signal. Verify whether signal common is isolated or shared."
     },
     "q115": {
       "question": "Is expected signal voltage measured at the controller terminals?",
@@ -211,11 +220,11 @@
       }
     },
     "q116": {
-      "question": "Does the voltage also fluctuate on the meter?",
+      "question": "If the displayed value is unstable, does the voltage also fluctuate on a properly connected meter?",
       "answers": {
         "Yes": "r115",
         "No": "r116",
-        "Not fluctuating": "q117"
+        "Display is stable": "q117"
       }
     },
     "q117": {
@@ -226,11 +235,12 @@
       }
     },
     "q118": {
-      "question": "When applying a known-good signal, does the input respond correctly?",
+      "question": "After isolating the field circuit, does a safe known-good 0-10 V test signal make the input respond correctly?",
       "answers": {
         "Yes": "r118",
         "No": "r102"
-      }
+      },
+      "notes": "Use an approved signal source. Do not inject voltage into a circuit that is still connected to an active transmitter."
     },
     "q119": {
       "question": "Is expected voltage present at the field device output?",
@@ -251,7 +261,8 @@
       "answers": {
         "Yes": "r121",
         "No": "q122"
-      }
+      },
+      "notes": "RBravo equipment notes: RB-001, RB-008"
     },
     "q122": {
       "question": "At the sensor, is resistance near 0 ohms?",
@@ -261,12 +272,12 @@
       }
     },
     "q123": {
-      "question": "Does sensor resistance match the 10k Type II chart for actual temperature?",
+      "question": "Does sensor resistance match the manufacturer-approved 10k Type II curve at the independently measured temperature?",
       "answers": {
         "Yes": "q124",
         "No": "r123"
       },
-      "notes": "Schneider and BAPI 10k Type II sensors are typical."
+      "notes": "In EBO terminology, verify the configured Type II curve used by the project, commonly shown as 10K CSI / I/NET. Use the exact approved curve for the installed Schneider or BAPI part number."
     },
     "q124": {
       "question": "Does resistance measured at the controller match resistance at the sensor?",
@@ -276,11 +287,12 @@
       }
     },
     "q125": {
-      "question": "Is the input configured as a 10k Type II thermistor in EBO?",
+      "question": "Is the input configured for the exact 10k Type II curve required by the installed sensor?",
       "answers": {
         "Yes": "q126",
         "No": "r125"
-      }
+      },
+      "notes": "Do not select a thermistor curve solely because the sensor is nominally 10 kOhm at 25 C. Different 10 kOhm curves are not interchangeable."
     },
     "q126": {
       "question": "Is displayed temperature within 2 F of a calibrated thermometer?",
@@ -365,8 +377,8 @@
       "action": "Isolate sensor from wiring; locate the short or replace the sensor."
     },
     "r123": {
-      "diagnosis": "10k Type II sensor is out of tolerance",
-      "action": "Confirm with chart and calibrated reference; replace the sensor if required."
+      "diagnosis": "Thermistor, reference measurement, or selected resistance curve does not agree",
+      "action": "Confirm the actual temperature with a calibrated reference, identify the sensor part number, use its approved resistance table, isolate sensor from wiring, and replace only after confirming the mismatch remains."
     },
     "r125": {
       "diagnosis": "Incorrect sensor type configured",
@@ -381,11 +393,12 @@
       "action": "Correct mounting, seal wall penetrations, improve thermal contact, or relocate the sensor."
     },
     "q201": {
-      "question": "Is the DO8 module online and healthy?",
+      "question": "Is the installed digital-output module identified correctly (for example DO-FC-8 Form C or DO-FA-12 Form A), online, and healthy?",
       "answers": {
         "Yes": "q202",
         "No": "r203"
-      }
+      },
+      "notes": "The 8-channel Schneider Central IO digital-output module is DO-FC-8. Form C provides COM/NO/NC relay contacts. DO-FA-12 is a separate 12-channel Form A module."
     },
     "q202": {
       "question": "Is the output commanded ON in EBO?",
@@ -395,25 +408,28 @@
       }
     },
     "q203": {
-      "question": "Is the output overridden, forced, or controlled by a higher priority?",
+      "question": "Is the software value overridden/forced, or is an -H module HOA switch in Hand or Off?",
       "answers": {
         "Yes": "r999",
         "No": "q204"
-      }
+      },
+      "notes": "On -H modules, physical Hand-Off-Auto position can override normal software control. Follow current Schneider advisories for the installed manufacturing date."
     },
     "q204": {
-      "question": "Is the DO LED illuminated when commanded ON?",
+      "question": "Does the channel status LED follow the commanded state?",
       "answers": {
         "Yes": "q205",
         "No": "q206"
-      }
+      },
+      "notes": "A channel LED indicates output state, but does not prove external source voltage or load operation."
     },
     "q205": {
-      "question": "Is the expected switched voltage/contact state present at the DO terminals?",
+      "question": "With power isolated as required, does continuity between COM and NO/NC change correctly when the relay is commanded?",
       "answers": {
         "Yes": "q207",
         "No": "r202"
-      }
+      },
+      "notes": "DO-FC-8 is a dry Form C relay output. Test the contact state appropriate to the installed wiring. Do not assume the module supplies voltage."
     },
     "q206": {
       "question": "Can the output be commanded manually after verifying safeties?",
@@ -423,11 +439,12 @@
       }
     },
     "q207": {
-      "question": "Is the expected voltage/contact state present at the field device?",
+      "question": "Is the external control-power source present, correctly rated, and switched through the intended COM/NO/NC conductors to the field device?",
       "answers": {
         "Yes": "q208",
         "No": "r998"
-      }
+      },
+      "notes": "Verify source voltage, common/reference, relay contact selection, load rating, and any interposing relay. Use safe energized testing procedures."
     },
     "q208": {
       "question": "Does the field device operate?",
@@ -441,8 +458,8 @@
       "action": "Investigate enable logic, schedules, safeties, interlocks, operating mode, and setpoints."
     },
     "r202": {
-      "diagnosis": "DO relay/contact is not switching correctly",
-      "action": "Verify wet/dry contact requirements and common wiring; test a known-good output, then repair/replace module."
+      "diagnosis": "Relay contact or channel does not switch as commanded",
+      "action": "Verify correct module type, point type, HOA position, COM/NO/NC terminals, and isolated continuity. Compare with a known-good channel without exceeding relay ratings; replace hardware only after isolation."
     },
     "r203": {
       "diagnosis": "DO8 module or application is not responding",
@@ -450,21 +467,23 @@
     },
     "r204": {
       "diagnosis": "Digital output path operates correctly",
-      "action": "Continue downstream to starter, relay, contactor, VFD, motor, or mechanical equipment."
+      "action": "The EBO command, module indication, relay contact, external source, and field wiring are functioning. Continue downstream to interposing relay, starter, contactor, VFD enable circuit, safeties, motor, or mechanical equipment."
     },
     "q301": {
       "question": "Is the AO8 module online and healthy?",
       "answers": {
         "Yes": "q302",
         "No": "r303"
-      }
+      },
+      "notes": "RBravo equipment notes: RB-004, RB-008, RB-017"
     },
     "q302": {
-      "question": "What signal type is configured?",
+      "question": "What AO-8 electrical output type is configured?",
       "answers": {
         "0-10 VDC": "q303",
-        "4-20 mA": "q320"
-      }
+        "0-20 mA": "q320"
+      },
+      "notes": "AO-8 supports 0-10 VDC and 0-20 mA. A connected device may be configured to use only the 4-20 mA portion, but the module electrical type remains 0-20 mA."
     },
     "q303": {
       "question": "Is the output command changing as expected in EBO?",
@@ -474,11 +493,12 @@
       }
     },
     "q304": {
-      "question": "Does measured output voltage match the commanded percentage and configured scale?",
+      "question": "Does measured voltage match the commanded value within the AO-8 accuracy and resolution limits?",
       "answers": {
         "Yes": "q305",
         "No": "r301"
-      }
+      },
+      "notes": "AO-8 voltage range is 0-10 VDC; published accuracy is +/-100 mV, resolution 42 mV, and minimum load resistance 5 kohm."
     },
     "q305": {
       "question": "Does the same voltage reach the field device?",
@@ -488,7 +508,7 @@
       }
     },
     "q306": {
-      "question": "Does the actuator or VFD respond across the command range?",
+      "question": "Does the actuator/VFD respond correctly at low, mid, and high command without exceeding the configured operating range?",
       "answers": {
         "Yes": "r302",
         "No": "r997"
@@ -502,25 +522,28 @@
       }
     },
     "q321": {
-      "question": "Can current be measured safely in series at the output?",
+      "question": "Can output current be measured safely in series with the load using the correct meter range?",
       "answers": {
         "Yes": "q322",
         "No": "r303"
-      }
+      },
+      "notes": "AO-8 current output is 0-20 mA. Published maximum load is 650 ohm. Opening the loop or incorrect meter placement can force an invalid result."
     },
     "q322": {
-      "question": "Does measured current match the commanded percentage and configured scale?",
+      "question": "Does measured current match the commanded value within the AO-8 accuracy and resolution limits?",
       "answers": {
         "Yes": "q323",
         "No": "r304"
-      }
+      },
+      "notes": "Published AO-8 current accuracy is +/-0.2 mA and resolution is 0.1 mA. Compare against the configured output scale, including any 4-20 mA device mapping."
     },
     "q323": {
-      "question": "Does the same current reach the field device and cause a response?",
+      "question": "Does the same current reach the field device, remain within load limits, and produce the expected response?",
       "answers": {
         "Yes": "r302",
         "No": "r998"
-      }
+      },
+      "notes": "Verify polarity, total loop resistance, device input configuration, and whether the receiving device expects 0-20 mA or 4-20 mA."
     },
     "r301": {
       "diagnosis": "0-10 V output does not match command",
@@ -531,12 +554,12 @@
       "action": "Investigate actuator setup, VFD parameters, linkage, sequence, or mechanical equipment."
     },
     "r303": {
-      "diagnosis": "AO8/module or current-loop test issue",
-      "action": "Verify module health, current-output configuration, loop wiring, and correct meter connection."
+      "diagnosis": "AO-8 current-output test cannot establish a valid loop current",
+      "action": "Verify AO-8 module health, 0-20 mA point configuration, closed-loop wiring, polarity, meter placement, and total load at or below the published 650 ohm maximum."
     },
     "r304": {
-      "diagnosis": "4-20 mA output does not match command",
-      "action": "Verify range, loop load, polarity, channel configuration, and test with a known-good device."
+      "diagnosis": "AO-8 current output does not match the commanded value",
+      "action": "Verify 0-20 mA electrical type, output scaling, polarity, loop resistance, receiving-device range, and channel operation. Compare against published +/-0.2 mA accuracy before condemning the module."
     },
     "q401": {
       "question": "This section is reserved for user-defined troubleshooting. Return to the main menu?",
@@ -552,7 +575,8 @@
         "BACnet/IP Device Offline": "q540",
         "Intermittent Communications": "q560",
         "Wrong Data Displayed": "q580"
-      }
+      },
+      "notes": "RBravo equipment notes: RB-004, RB-005, RB-006, RB-007, RB-009, RB-010, RB-011, RB-012, RB-014, RB-015, RB-018"
     },
     "q502": {
       "question": "Does the controller have correct power and normal status LEDs?",
@@ -562,11 +586,12 @@
       }
     },
     "q503": {
-      "question": "Can you connect locally by USB?",
+      "question": "Can Device Administrator communicate locally through the USB device port?",
       "answers": {
         "Yes": "q504",
         "No": "r502"
-      }
+      },
+      "notes": "Use a known-good data cable and verify the correct USB device port. Distinguish USB-local access from Ethernet reachability."
     },
     "q504": {
       "question": "Are other controllers on the same Ethernet network reachable?",
@@ -597,32 +622,36 @@
       }
     },
     "q522": {
-      "question": "Does baud rate match the trunk and is Max Master appropriate?",
+      "question": "Are baud rate, MAC address range, Max Master, and Max Info Frames appropriate for every MS/TP master on the trunk?",
       "answers": {
         "Yes": "q523",
         "No": "r522"
-      }
+      },
+      "notes": "A duplicate MAC or Max Master set below an active master address can prevent token passing. Preserve a consistent supported baud rate across the segment."
     },
     "q523": {
-      "question": "Are RS-485 polarity, shield, topology, and end-of-line termination correct?",
+      "question": "Does the RS-485 segment have correct polarity, daisy-chain topology, shield practice, biasing/termination, and no shorts/grounds?",
       "answers": {
         "Yes": "q524",
         "No": "r523"
-      }
+      },
+      "notes": "Do not add termination arbitrarily. Verify the exact trunk design and device instructions; inspect long stubs, star wiring, grounded conductors, and shield grounding at unintended points."
     },
     "q524": {
-      "question": "Does disconnecting downstream segments identify a failing segment/device?",
+      "question": "After documenting the trunk, does sectional isolation identify a cable segment or device that disrupts communications?",
       "answers": {
         "Yes": "r524",
         "No": "r525"
-      }
+      },
+      "notes": "De-energize or disconnect only as permitted. Reconnect one segment/device at a time and document changes to avoid creating address or topology errors."
     },
     "q540": {
-      "question": "Can the BACnet/IP device be pinged from the appropriate network?",
+      "question": "From an appropriate host on the same routed network, do link status, ARP/IP reachability, and ping results support basic IP connectivity?",
       "answers": {
         "Yes": "q541",
         "No": "r540"
-      }
+      },
+      "notes": "Ping can be blocked and is not proof of BACnet service. Use link/ARP/routing evidence together rather than relying on ping alone."
     },
     "q541": {
       "question": "Are IP address, subnet, gateway, and VLAN correct and unique?",
@@ -632,18 +661,20 @@
       }
     },
     "q542": {
-      "question": "Can BACnet objects be discovered locally on the same subnet?",
+      "question": "Can the BACnet device be discovered locally using the correct BACnet/IP network and UDP port?",
       "answers": {
         "Yes": "q543",
         "No": "r542"
-      }
+      },
+      "notes": "Verify unique BACnet device instance separately from IP address. Local discovery depends on broadcasts and the configured BACnet/IP network/port."
     },
     "q543": {
-      "question": "Does communication cross a subnet or require BBMD/foreign-device registration?",
+      "question": "Is the client/device on another IP subnet or otherwise dependent on BACnet broadcast management/routing?",
       "answers": {
         "Yes": "q544",
         "No": "r543"
-      }
+      },
+      "notes": "BBMD/foreign-device configuration is relevant when BACnet broadcasts must cross IP subnet boundaries; avoid duplicate or unintended broadcast-distribution paths."
     },
     "q544": {
       "question": "Are BBMD/BDT/FDT settings and firewall UDP port rules correct?",
@@ -795,7 +826,8 @@
         "Damper Not Moving": "q630",
         "Reheat Not Working": "q640",
         "Offline": "q501"
-      }
+      },
+      "notes": "RBravo equipment notes: RB-001"
     },
     "q602": {
       "question": "Is the space-temperature reading accurate?",
@@ -854,37 +886,137 @@
       }
     },
     "q620": {
-      "question": "Is airflow sensor reading believable compared with a field measurement?",
+      "question": "Is the AHU that serves this VAV running and delivering airflow to the duct system?",
       "answers": {
-        "Yes": "q621",
-        "No": "q107"
-      }
+        "Yes": "q622",
+        "No": "r602",
+        "Unknown": "q623"
+      },
+      "notes": "Confirm actual upstream operation, not only an AHU command. Use fan proof, duct static, and a field airflow check where available."
     },
     "q621": {
-      "question": "Is damper commanded open?",
+      "question": "Is the VAV damper commanded open?",
       "answers": {
         "Yes": "q630",
         "No": "r995"
       }
     },
     "q630": {
-      "question": "Is the damper command signal changing?",
+      "question": "Which Schneider Electric VAV controller arrangement is installed?",
       "answers": {
-        "Yes": "q301",
-        "No": "r995"
-      }
+        "MPV with built-in actuator": "q631",
+        "RPV with built-in actuator": "q631",
+        "MPC with hardwired actuator": "q632",
+        "RPC with hardwired actuator": "q632",
+        "Central AO-8 module": "q301",
+        "Third-party/unit controller or network command": "q635",
+        "Unknown": "q633"
+      },
+      "notes": "MPV and RPV use built-in damper actuators. MPC and RPC require a separately hardwired actuator. Route to AO-8 only when a Central IO AO-8 module is physically installed."
     },
     "q640": {
       "question": "What type of reheat control is used?",
       "answers": {
-        "Floating/Digital": "q201",
-        "Modulating Analog": "q301",
-        "Electric Stages": "q201"
+        "Floating/Digital": "q1601",
+        "Modulating Analog": "q1501",
+        "Electric Stages": "q1601"
       }
+    },
+    "q622": {
+      "question": "Is airflow present at the VAV inlet or upstream branch duct, with adequate inlet pressure for the box to deliver its setpoint?",
+      "answers": {
+        "Yes": "q624",
+        "No": "r603",
+        "Unknown": "q623"
+      },
+      "notes": "Check at the box inlet or nearest approved test location. Do not assume that AHU operation guarantees airflow at this branch."
+    },
+    "q623": {
+      "question": "Can AHU fan proof, duct static, and an upstream field airflow check be confirmed?",
+      "answers": {
+        "Yes": "q622",
+        "No": "r604"
+      }
+    },
+    "q624": {
+      "question": "Is the airflow sensor reading believable compared with a field measurement?",
+      "answers": {
+        "Yes": "q621",
+        "No": "q107"
+      }
+    },
+    "q631": {
+      "question": "Does the MPV or RPV built-in actuator position and physical damper rotation follow the commanded position?",
+      "answers": {
+        "Yes": "q634",
+        "No": "r605"
+      },
+      "notes": "MPV and RPV have built-in actuators, so there is no separate field actuator signal wire or AO-8 module-health check for the damper output."
+    },
+    "q632": {
+      "question": "For the MPC or RPC, does the onboard analog output command and measured signal at the hardwired actuator input agree?",
+      "answers": {
+        "Yes": "q634",
+        "No": "q1503"
+      },
+      "notes": "MPC and RPC require a separately hardwired actuator. Use the controller onboard-output workflow unless the project actually uses a Central AO-8 module."
+    },
+    "q633": {
+      "question": "Can the installed controller, output point, and actuator type be identified from the as-built, submittal, controller label, or EBO point reference?",
+      "answers": {
+        "Yes": "q630",
+        "No": "r606"
+      }
+    },
+    "q634": {
+      "question": "With adequate inlet airflow, does the physical damper travel freely through the required range and is linkage/shaft engagement correct?",
+      "answers": {
+        "Yes": "r607",
+        "No": "r608"
+      }
+    },
+    "q635": {
+      "question": "Does the unit/controller-reported damper command and feedback change together, without an active local override or fault?",
+      "answers": {
+        "Yes": "q634",
+        "No": "r609"
+      }
+    },
+    "r602": {
+      "diagnosis": "Upstream AHU is not providing airflow",
+      "action": "Troubleshoot the serving AHU, fan enable/proof, safeties, duct static, smoke/fire dampers, and upstream distribution before condemning the VAV."
+    },
+    "r603": {
+      "diagnosis": "No airflow or inadequate pressure is reaching the VAV inlet",
+      "action": "Inspect the upstream branch for closed balancing/fire/smoke dampers, disconnected or collapsed duct, blockage, leakage, incorrect tap, or insufficient AHU static pressure."
+    },
+    "r604": {
+      "diagnosis": "Upstream air-system condition is not confirmed",
+      "action": "Confirm the serving AHU identity, fan proof, duct static, and airflow at an upstream test point before testing the VAV controller or actuator."
+    },
+    "r605": {
+      "diagnosis": "MPV or RPV built-in damper actuator is not following command",
+      "action": "Verify controller mode, application, actuator calibration, shaft engagement, mechanical obstruction, and controller faults. Do not look for an AO-8 module unless one is actually installed."
+    },
+    "r606": {
+      "diagnosis": "Controller/output/actuator arrangement is unknown",
+      "action": "Identify the exact controller and actuator from labels, drawings, submittals, and EBO references before electrical testing. Avoid assuming a Central IO module exists."
+    },
+    "r607": {
+      "diagnosis": "Damper command and mechanical travel appear normal",
+      "action": "Verify airflow pickup tubing, box factor/K-factor, inlet pressure, balancing, minimum/maximum airflow settings, duct condition, and downstream restrictions."
+    },
+    "r608": {
+      "diagnosis": "Damper or linkage mechanical problem",
+      "action": "Inspect shaft engagement, set screws, linkage, blade obstruction, actuator mounting, and full-stroke setup. Repair mechanics before changing the control sequence."
+    },
+    "r609": {
+      "diagnosis": "Third-party or network-controlled damper path is not responding",
+      "action": "Verify local controller faults, network command/feedback, local override, output configuration, actuator power, and OEM sequence. Use the exact unit documentation."
     },
     "r601": {
       "diagnosis": "VAV controls appear to be responding",
-      "action": "Investigate system supply-air temperature/pressure, balancing, box sizing, duct restrictions, and mechanical condition."
+      "action": "Verify system supply-air temperature and static pressure, upstream AHU availability, box inlet pressure, airflow pickup tubing orientation/condition, damper/linkage travel, design min/max airflow, balancing, duct restrictions, and reheat valve/stage operation. Compare actual field measurements with design values before changing control parameters."
     },
     "q701": {
       "question": "What AHU symptom are you troubleshooting?",
@@ -895,7 +1027,8 @@
         "Static Pressure Issue": "q730",
         "Temperature Issue": "q121",
         "Offline": "q501"
-      }
+      },
+      "notes": "RBravo equipment notes: RB-003, RB-013"
     },
     "q702": {
       "question": "Is the AHU enabled by schedule/occupancy?",
@@ -914,14 +1047,14 @@
     "q704": {
       "question": "Is the supply-fan command ON?",
       "answers": {
-        "Yes": "q201",
+        "Yes": "q1601",
         "No": "r995"
       }
     },
     "q710": {
       "question": "Are supply-air and mixed-air temperatures accurate?",
       "answers": {
-        "Yes": "q711",
+        "Yes": "q713",
         "No": "q121"
       }
     },
@@ -935,14 +1068,14 @@
     "q712": {
       "question": "What cooling output type is used?",
       "answers": {
-        "Modulating Valve": "q301",
-        "Digital Stages": "q201"
+        "Modulating Valve": "q1501",
+        "Digital Stages": "q1601"
       }
     },
     "q720": {
       "question": "Are supply-air and heating-water/air temperatures accurate?",
       "answers": {
-        "Yes": "q721",
+        "Yes": "q723",
         "No": "q121"
       }
     },
@@ -956,8 +1089,8 @@
     "q722": {
       "question": "What heating output type is used?",
       "answers": {
-        "Modulating Valve": "q301",
-        "Digital Stages": "q201"
+        "Modulating Valve": "q1501",
+        "Digital Stages": "q1601"
       }
     },
     "q730": {
@@ -970,13 +1103,59 @@
     "q731": {
       "question": "Is fan-speed command changing to maintain setpoint?",
       "answers": {
-        "Yes": "q301",
+        "Yes": "q1501",
         "No": "r995"
       }
     },
+    "q713": {
+      "question": "Is the chilled-water/refrigeration source available and are required pumps, valves, and equipment proven?",
+      "answers": {
+        "Yes": "q714",
+        "No": "r702",
+        "DX system": "q714"
+      }
+    },
+    "q714": {
+      "question": "Is cooling medium reaching the AHU coil, or are DX circuits available, with expected entering conditions?",
+      "answers": {
+        "Yes": "q711",
+        "No": "r703"
+      }
+    },
+    "q723": {
+      "question": "Is the heating source available and are required pumps, valves, steam pressure, or electric-heat permissives proven?",
+      "answers": {
+        "Yes": "q724",
+        "No": "r704"
+      }
+    },
+    "q724": {
+      "question": "Is heating medium reaching the AHU coil with expected entering conditions?",
+      "answers": {
+        "Yes": "q721",
+        "No": "r705",
+        "Electric heat": "q721"
+      }
+    },
+    "r702": {
+      "diagnosis": "Cooling plant or distribution is unavailable",
+      "action": "Restore the required chiller/condensing system, pump proof, valve lineup, flow, and plant enable before troubleshooting the AHU cooling output."
+    },
+    "r703": {
+      "diagnosis": "Cooling medium is not reaching the AHU coil",
+      "action": "Check isolation/control valves, pump operation, strainers, air, bypasses, coil piping, refrigerant circuit availability, and entering conditions."
+    },
+    "r704": {
+      "diagnosis": "Heating source or distribution is unavailable",
+      "action": "Restore boiler/steam/electric-heat availability, required pump or pressure proof, valve lineup, and safeties before troubleshooting the AHU output."
+    },
+    "r705": {
+      "diagnosis": "Heating medium is not reaching the AHU coil",
+      "action": "Check pump operation, isolation/control valves, steam pressure, traps, strainers, air, bypasses, and coil entering conditions."
+    },
     "r701": {
       "diagnosis": "AHU safety/interlock is preventing operation",
-      "action": "Identify freeze stat, smoke, high static, fire alarm, overload, proof, or other active safety; reset only after cause is corrected."
+      "action": "Identify the exact active permissive or safety, including smoke/fire interface, freeze protection, high static, overload, fan proof, airflow proof, condensate, or local emergency stop. Do not bypass a life-safety or equipment-protection circuit. Correct the initiating cause and follow the approved reset procedure."
     },
     "q801": {
       "question": "What RTU symptom are you troubleshooting?",
@@ -986,7 +1165,8 @@
         "No Heating": "q820",
         "Temperature Issue": "q121",
         "Offline": "q501"
-      }
+      },
+      "notes": "RBravo equipment notes: RB-002, RB-003, RB-005, RB-006, RB-014, RB-015"
     },
     "q802": {
       "question": "Is the RTU enabled by schedule/occupancy?",
@@ -1005,42 +1185,82 @@
     "q804": {
       "question": "Is the fan command ON?",
       "answers": {
-        "Yes": "q201",
+        "Yes": "q1601",
         "No": "r995"
       }
     },
     "q810": {
       "question": "Is space/supply-air temperature accurate and is cooling enabled?",
       "answers": {
-        "Yes": "q811",
+        "Yes": "q813",
         "No": "q121"
       }
     },
     "q811": {
       "question": "Is a compressor/cooling-stage command present?",
       "answers": {
-        "Yes": "q201",
+        "Yes": "q1601",
         "No": "r995"
       }
     },
     "q820": {
       "question": "Is temperature accurate and is heating enabled?",
       "answers": {
-        "Yes": "q821",
+        "Yes": "q823",
         "No": "q121"
       }
     },
     "q821": {
       "question": "Is a heating-stage or valve command present?",
       "answers": {
-        "Digital Stage": "q201",
-        "Modulating Valve": "q301",
+        "Digital Stage": "q1601",
+        "Modulating Valve": "q1501",
         "No Command": "r995"
       }
     },
+    "q813": {
+      "question": "Is the RTU supply fan proven and is airflow established across the unit?",
+      "answers": {
+        "Yes": "q814",
+        "No": "r802"
+      }
+    },
+    "q814": {
+      "question": "Are outdoor/return-air dampers, filters, and unit airflow path in an operating condition that permits cooling?",
+      "answers": {
+        "Yes": "q811",
+        "No": "r803"
+      }
+    },
+    "q823": {
+      "question": "Is the RTU supply fan proven and is airflow established across the unit?",
+      "answers": {
+        "Yes": "q824",
+        "No": "r802"
+      }
+    },
+    "q824": {
+      "question": "Is the heating source available and are local unit safeties/permissives satisfied?",
+      "answers": {
+        "Yes": "q821",
+        "No": "r804"
+      }
+    },
+    "r802": {
+      "diagnosis": "RTU airflow is not established",
+      "action": "Troubleshoot supply fan proof, VFD/starter, belts, filters, dampers, duct restrictions, and unit safeties before cooling or heating output checks."
+    },
+    "r803": {
+      "diagnosis": "RTU air path is restricting cooling operation",
+      "action": "Inspect filters, outdoor/return dampers, economizer position, fire/smoke dampers, coil condition, and duct restrictions."
+    },
+    "r804": {
+      "diagnosis": "RTU heating source or local permissive is unavailable",
+      "action": "Review unit controller faults and verify gas/electric/hydronic source availability, airflow proof, limits, and manufacturer safeties."
+    },
     "r801": {
       "diagnosis": "RTU safety/interlock is preventing operation",
-      "action": "Identify smoke, freeze, pressure switch, overload, condensate, proof, or manufacturer lockout; correct cause before reset."
+      "action": "Read the unit controller/manufacturer fault status. Check smoke, freeze, high/low refrigerant pressure, condensate, overload, fan proof, compressor anti-short-cycle, phase/power, and local HOA/service switches. Do not bypass a safety; correct the cause before reset."
     },
     "q901": {
       "question": "What pump symptom are you troubleshooting?",
@@ -1069,7 +1289,7 @@
     "q904": {
       "question": "Is start command ON?",
       "answers": {
-        "Yes": "q201",
+        "Yes": "q1601",
         "No": "r995"
       }
     },
@@ -1097,13 +1317,13 @@
     "q930": {
       "question": "Is speed command changing as expected?",
       "answers": {
-        "Yes": "q301",
+        "Yes": "q1501",
         "No": "r995"
       }
     },
     "r901": {
       "diagnosis": "Pump interlock/selection is preventing operation",
-      "action": "Verify HOA, lead-lag selection, low-water/flow safeties, VFD fault, and permissives."
+      "action": "Verify HOA/local-remote state, VFD/starter readiness, lead-lag selection, differential-pressure demand, low-water/flow permissives, valve end switches, freeze protection, and motor protection. Do not force a start against a closed valve or unsatisfied safety."
     },
     "r902": {
       "diagnosis": "Pump runs but system flow/DP is inadequate",
@@ -1133,7 +1353,7 @@
     "q1003": {
       "question": "Are flow proof, safeties, and manufacturer enable normal?",
       "answers": {
-        "Yes": "q201",
+        "Yes": "q1601",
         "No": "r1001"
       }
     },
@@ -1141,27 +1361,38 @@
       "question": "Is the BMS enable command present at the boiler?",
       "answers": {
         "Yes": "r1002",
-        "No": "q201"
+        "No": "q1601"
       }
     },
     "q1020": {
       "question": "Are supply/return temperatures accurate and pumps proven?",
       "answers": {
-        "Yes": "q1021",
+        "Yes": "q1022",
         "No": "q121"
       }
     },
     "q1021": {
       "question": "Is firing-rate command increasing?",
       "answers": {
-        "Yes": "q301",
+        "Yes": "q1501",
         "No": "r995",
-        "Staged boiler": "q201"
+        "Staged boiler": "q1601"
       }
+    },
+    "q1022": {
+      "question": "Is heating-water flow available through the boiler loop and are required pumps and valves proven?",
+      "answers": {
+        "Yes": "q1021",
+        "No": "r1003"
+      }
+    },
+    "r1003": {
+      "diagnosis": "Boiler-loop flow is not established",
+      "action": "Verify pump proof, valve lineup, strainers, air, bypass, low-water/flow permissives, and system differential pressure before evaluating firing rate."
     },
     "r1001": {
       "diagnosis": "Boiler safety/permissive is not satisfied",
-      "action": "Identify flow, low-water, gas, vent, temperature, pressure, or manufacturer lockout. Escalate per site procedure."
+      "action": "Identify the boiler-controller lockout and verify flow, low-water cutoff, gas train, combustion-air/vent proving, temperature/pressure limits, flame safeguard, and manufacturer permissives. Do not bypass combustion safeties; use qualified boiler service personnel."
     },
     "r1002": {
       "diagnosis": "BMS enable reaches boiler but boiler does not fire",
@@ -1187,7 +1418,7 @@
     "q1103": {
       "question": "Are CHW/CW pumps, flow proofs, and safeties satisfied?",
       "answers": {
-        "Yes": "q201",
+        "Yes": "q1601",
         "No": "r1101"
       }
     },
@@ -1195,13 +1426,13 @@
       "question": "Does the chiller receive the BMS enable?",
       "answers": {
         "Yes": "r1102",
-        "No": "q201"
+        "No": "q1601"
       }
     },
     "q1120": {
       "question": "Are entering/leaving CHW temperatures accurate?",
       "answers": {
-        "Yes": "q1121",
+        "Yes": "q1122",
         "No": "q121"
       }
     },
@@ -1215,13 +1446,31 @@
     "q1130": {
       "question": "Is flow/DP reading accurate compared with field measurement?",
       "answers": {
-        "Yes": "r1104",
+        "Yes": "q1131",
         "No": "q107"
       }
     },
+    "q1122": {
+      "question": "Are chilled-water flow and load established, with required pumps and valves in the correct state?",
+      "answers": {
+        "Yes": "q1121",
+        "No": "r1105"
+      }
+    },
+    "q1131": {
+      "question": "Are required pumps running and are isolation/control valves open for the affected circuit?",
+      "answers": {
+        "Yes": "r1104",
+        "No": "r1105"
+      }
+    },
+    "r1105": {
+      "diagnosis": "Chilled-water circulation path is not established",
+      "action": "Verify pump proof, valve lineup, strainers, air, bypass, flow switches, and differential pressure before troubleshooting chiller capacity."
+    },
     "r1101": {
       "diagnosis": "Chiller permissive is not satisfied",
-      "action": "Verify pump status, flow, condenser-water conditions, safeties, and manufacturer interlocks."
+      "action": "Verify CHW and condenser-water pump status, proven flow, valve positions, entering-water conditions, demand limit, anti-recycle timers, and manufacturer safeties. Do not repeatedly reset a chiller lockout; use qualified chiller service personnel."
     },
     "r1102": {
       "diagnosis": "Chiller receives enable but remains off",
@@ -1243,12 +1492,13 @@
         "Low Temperature/Freeze Risk": "q1220",
         "Basin Level Issue": "q1230",
         "Offline": "q501"
-      }
+      },
+      "notes": "RBravo equipment notes: RB-004"
     },
     "q1202": {
       "question": "Is the tower enabled and staged by sequence?",
       "answers": {
-        "Yes": "q201",
+        "Yes": "q1601",
         "No": "r995"
       }
     },
@@ -1262,8 +1512,8 @@
     "q1211": {
       "question": "Is fan-speed/stage command increasing?",
       "answers": {
-        "Analog Speed": "q301",
-        "Digital Stage": "q201",
+        "Analog Speed": "q1501",
+        "Digital Stage": "q1601",
         "No": "r995"
       }
     },
@@ -1283,7 +1533,7 @@
     },
     "r1201": {
       "diagnosis": "Tower controls appear to be responding",
-      "action": "Investigate weather conditions, bypass valve, fan capability, freeze-protection hardware, and water flow."
+      "action": "Verify condenser-water flow, fan rotation, gearbox/belt condition, fill condition, nozzles, strainers, bypass valve, ambient wet-bulb conditions, staging, basin heater, freeze protection, and manufacturer limits. Follow site water-treatment and freeze-protection procedures."
     },
     "r1202": {
       "diagnosis": "Basin-level input appears accurate",
@@ -1296,7 +1546,8 @@
         "Status Incorrect": "q1310",
         "Speed/Airflow Issue": "q1320",
         "Offline": "q501"
-      }
+      },
+      "notes": "RBravo equipment notes: RB-017"
     },
     "q1302": {
       "question": "Is the fan enabled by schedule, occupancy, or interlock?",
@@ -1308,7 +1559,7 @@
     "q1303": {
       "question": "Is start command ON?",
       "answers": {
-        "Yes": "q201",
+        "Yes": "q1601",
         "No": "r995"
       }
     },
@@ -1322,7 +1573,7 @@
     "q1320": {
       "question": "Is speed command changing?",
       "answers": {
-        "Yes": "q301",
+        "Yes": "q1501",
         "No": "r995",
         "Constant speed": "r1302"
       }
@@ -1333,7 +1584,7 @@
     },
     "r1302": {
       "diagnosis": "Controls command path appears normal",
-      "action": "Investigate belts, rotation, dampers, duct restrictions, motor/VFD setup, and mechanical condition."
+      "action": "Verify motor/VFD current and speed, rotation, belts/coupling, backdraft/fire/smoke dampers, duct restrictions, proof-switch pickup, and mechanical condition. Do not bypass fire/smoke interlocks."
     },
     "q1401": {
       "question": "What supply-fan symptom are you troubleshooting?",
@@ -1354,7 +1605,7 @@
     "q1403": {
       "question": "Is start command ON?",
       "answers": {
-        "Yes": "q201",
+        "Yes": "q1601",
         "No": "r995"
       }
     },
@@ -1375,7 +1626,7 @@
     "q1421": {
       "question": "Is speed command changing to maintain setpoint?",
       "answers": {
-        "Yes": "q301",
+        "Yes": "q1501",
         "No": "r995"
       }
     },
@@ -1387,25 +1638,197 @@
       "diagnosis": "Supply-fan status input operates correctly",
       "action": "Investigate display/logic expectations or intermittent fan operation."
     },
+    "q1501": {
+      "question": "Where is the analog output physically provided?",
+      "answers": {
+        "Controller onboard output": "q1502",
+        "Central AO-8 module": "q301",
+        "Third-party or packaged-unit controller": "q1505",
+        "Network command only": "q1507",
+        "Unknown": "r1501"
+      },
+      "notes": "This identification step prevents asking AO-8 module-health questions when no AO-8 is installed."
+    },
+    "q1502": {
+      "question": "Is the controller online, healthy, and is the analog output object commanded to the expected value without an override?",
+      "answers": {
+        "Yes": "q1503",
+        "No": "r1502"
+      }
+    },
+    "q1503": {
+      "question": "Does the measured onboard output signal match the command and configured range?",
+      "answers": {
+        "Yes": "q1504",
+        "No": "r1503",
+        "Integral actuator/no accessible signal": "q1506"
+      }
+    },
+    "q1504": {
+      "question": "Does the same signal reach the field device and cause the expected response?",
+      "answers": {
+        "Yes": "r1504",
+        "No": "r1505"
+      }
+    },
+    "q1505": {
+      "question": "Does the packaged or third-party controller report the expected output command with no local fault or override?",
+      "answers": {
+        "Yes": "q1504",
+        "No": "r1506"
+      }
+    },
+    "q1506": {
+      "question": "Does reported position/feedback and observed mechanical movement follow the command?",
+      "answers": {
+        "Yes": "r1504",
+        "No": "r1507"
+      }
+    },
+    "q1507": {
+      "question": "Does the receiving device accept the network command and report matching feedback/status?",
+      "answers": {
+        "Yes": "r1504",
+        "No": "r1508"
+      }
+    },
+    "r1501": {
+      "diagnosis": "Analog output source is not identified",
+      "action": "Identify the controller, physical output location, signal type, and controlled device from drawings, labels, submittals, and software references before testing."
+    },
+    "r1502": {
+      "diagnosis": "Controller, command, override, or sequence issue",
+      "action": "Verify controller health, output object, priority array, operating mode, safeties, setpoints, bindings, and application logic."
+    },
+    "r1503": {
+      "diagnosis": "Controller onboard analog output does not match command",
+      "action": "Verify configured signal range, common/reference, loading, polarity, channel assignment, and controller documentation. Compare with a safe known-good test only when approved."
+    },
+    "r1504": {
+      "diagnosis": "Analog command path appears normal",
+      "action": "Continue with actuator/VFD setup, linkage, valve or damper mechanics, local parameters, process availability, and system conditions."
+    },
+    "r1505": {
+      "diagnosis": "Signal is lost between controller and field device",
+      "action": "Check conductor identity, continuity, common/reference, polarity, shorts/grounds, terminations, and signal loading."
+    },
+    "r1506": {
+      "diagnosis": "Packaged or third-party controller is not issuing the expected output",
+      "action": "Review local controller mode, faults, safeties, OEM sequence, network mapping, and local overrides."
+    },
+    "r1507": {
+      "diagnosis": "Integral actuator or feedback is not following command",
+      "action": "Verify actuator calibration, mechanical engagement, obstruction, controller faults, and the manufacturer-approved service procedure."
+    },
+    "r1508": {
+      "diagnosis": "Network command or feedback path is not responding",
+      "action": "Verify object mapping, write priority, permissions, communication health, local control mode, and OEM controller status."
+    },
+    "q1601": {
+      "question": "Where is the start/stage/output command physically provided?",
+      "answers": {
+        "Controller onboard output": "q1602",
+        "Central DO module": "q201",
+        "Third-party or packaged-unit controller": "q1605",
+        "Network command only": "q1607",
+        "Unknown": "r1601"
+      },
+      "notes": "Do not ask DO module-health questions unless a Central IO digital-output module is physically installed."
+    },
+    "q1602": {
+      "question": "Is the controller online, healthy, and is the binary output commanded correctly without an override?",
+      "answers": {
+        "Yes": "q1603",
+        "No": "r1602"
+      }
+    },
+    "q1603": {
+      "question": "Does the onboard output/contact change state as commanded?",
+      "answers": {
+        "Yes": "q1604",
+        "No": "r1603",
+        "No accessible physical contact": "q1606"
+      }
+    },
+    "q1604": {
+      "question": "Does the command state reach the field device and cause the expected response?",
+      "answers": {
+        "Yes": "r1604",
+        "No": "r1605"
+      }
+    },
+    "q1605": {
+      "question": "Does the packaged or third-party controller report the expected stage/start command with no local fault or override?",
+      "answers": {
+        "Yes": "q1604",
+        "No": "r1606"
+      }
+    },
+    "q1606": {
+      "question": "Does reported status/feedback and observed operation follow the command?",
+      "answers": {
+        "Yes": "r1604",
+        "No": "r1607"
+      }
+    },
+    "q1607": {
+      "question": "Does the receiving device accept the network command and report matching status?",
+      "answers": {
+        "Yes": "r1604",
+        "No": "r1608"
+      }
+    },
+    "r1601": {
+      "diagnosis": "Binary output source is not identified",
+      "action": "Identify the controller, physical output/contact location, interposing relay or network object, and controlled device before testing."
+    },
+    "r1602": {
+      "diagnosis": "Controller, command, override, or sequence issue",
+      "action": "Verify controller health, output object, priority array, operating mode, safeties, setpoints, bindings, and application logic."
+    },
+    "r1603": {
+      "diagnosis": "Controller onboard binary output does not change state",
+      "action": "Verify output type, common/source wiring, channel assignment, load/interposing relay, and controller documentation."
+    },
+    "r1604": {
+      "diagnosis": "Binary command path appears normal",
+      "action": "Continue downstream to relay, starter, contactor, VFD, equipment safeties, motor, or mechanical system."
+    },
+    "r1605": {
+      "diagnosis": "Binary command is lost between controller and field device",
+      "action": "Check external control power, conductor identity, continuity, contact selection, interposing relay, terminations, and field wiring."
+    },
+    "r1606": {
+      "diagnosis": "Packaged or third-party controller is not issuing the expected command",
+      "action": "Review local controller mode, faults, safeties, OEM sequence, network mapping, and local overrides."
+    },
+    "r1607": {
+      "diagnosis": "Equipment status does not follow the command",
+      "action": "Check local safeties, starter/VFD readiness, interposing relays, equipment power, and mechanical condition."
+    },
+    "r1608": {
+      "diagnosis": "Network binary command or feedback path is not responding",
+      "action": "Verify object mapping, write priority, permissions, communication health, local/remote mode, and OEM controller status."
+    },
     "r995": {
       "diagnosis": "Programming / sequence issue",
-      "action": "Verify schedules, occupancy, modes, setpoints, safeties, interlocks, priorities, and application logic."
+      "action": "Verify schedule, occupancy, operating mode, setpoints, enables, safeties, interlocks, priority array/overrides, bindings, and application logic. Trend command, feedback, and key conditions before editing logic; document and approve changes."
     },
     "r996": {
       "diagnosis": "Controller hardware issue",
-      "action": "Verify power/status, application, I/O bus, and known-good test signal; replace only after isolation."
+      "action": "Verify specified power, status LEDs, terminal-base seating, I/O bus, firmware/application state, and a safe known-good test. Compare with a known-good channel/module where approved; replace only after power, configuration, wiring, and load are isolated."
     },
     "r997": {
       "diagnosis": "Field device failure",
-      "action": "Verify correct power/configuration and mechanical freedom; repair or replace the device."
+      "action": "Verify exact device model, power, input/output range, polarity, setup, local overrides, mechanical freedom, and field condition. Remove power and isolate wiring as required before repair or replacement."
     },
     "r998": {
       "diagnosis": "Field wiring issue",
-      "action": "Verify conductor identity, continuity, polarity, shorts/grounds, shield, and terminations."
+      "action": "Verify conductor identity, point-to-point continuity, polarity, shorts to other conductors/ground, shield termination, insulation condition, and terminal torque. Disconnect sensitive electronics before resistance/insulation testing."
     },
     "r999": {
       "diagnosis": "Point configuration issue",
-      "action": "Verify object exists, correct controller/channel, signal type, bindings, download, online state, and overrides/forces."
+      "action": "Verify object exists, correct server/module/channel, electrical type, engineering range, reliability/status, bindings, download, online state, priority array, forced/override state, and graphic reference. Release only authorized overrides and document changes."
     }
   }
 }
