@@ -4,13 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BMS Troubleshooter</title>
-  <meta name="theme-color" content="#16a34a" />
-  <meta name="application-name" content="BMS Troubleshooter" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="BMS Troubleshooter" />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -641,37 +634,65 @@
     @media(max-width:760px){ .session-dialog{max-height:94dvh}.session-dialog-head{padding:13px}.saved-session-title{display:block}.header-action{padding:5px 7px;font-size:9px} }
 
 
-    /* v0.6.0 evidence notes, optional photos, and evidence-based conclusion */
-    .step-notes-box { margin:12px 0; padding:12px; border:1px solid var(--border); border-radius:9px; background:var(--surface2); }
-    .step-notes-box label,.conclusion-field label { display:block; margin-bottom:6px; color:var(--text-muted); font:500 10px var(--mono); text-transform:uppercase; letter-spacing:.05em; }
-    .step-notes-box textarea,.conclusion-field textarea { width:100%; min-height:72px; resize:vertical; border:1px solid var(--border); border-radius:8px; background:var(--surface); color:var(--text); padding:9px 10px; font:13px/1.45 var(--sans); }
-    .step-notes-help,.photo-help { margin-top:5px; color:var(--text-dim); font-size:10px; line-height:1.4; }
-    .photo-capture { margin-top:12px; padding:12px; border:1px dashed var(--border-bright); border-radius:10px; background:var(--surface2); }
-    .photo-capture input { width:100%; margin-top:8px; }
-    .photo-gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:9px; margin-top:12px; }
-    .photo-card { border:1px solid var(--border); border-radius:9px; overflow:hidden; background:var(--surface); }
-    .photo-card img { width:100%; height:100px; object-fit:cover; display:block; background:#e2e8f0; }
-    .photo-card-body { padding:7px; font-size:10px; color:var(--text-muted); overflow-wrap:anywhere; }
-    .photo-remove { margin-top:6px; border:0; background:transparent; color:#b91c1c; font:10px var(--mono); cursor:pointer; }
-    .conclusion-report { margin:14px 0; padding:13px; border:1px solid var(--border-bright); border-radius:10px; background:var(--surface); }
-    .conclusion-report h3 { margin-bottom:10px; font:500 12px var(--mono); text-transform:uppercase; letter-spacing:.06em; }
-    .conclusion-grid { display:grid; gap:11px; }
-    .compiled-notes { max-height:240px; overflow:auto; border:1px solid var(--border); border-radius:8px; padding:9px; background:var(--surface2); }
-    .compiled-note { padding:7px 0; border-bottom:1px solid var(--border); font-size:11px; line-height:1.45; }
-    .compiled-note:last-child { border-bottom:0; }
-    @media(max-width:760px){.photo-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.step-notes-box textarea,.conclusion-field textarea{font-size:16px}}
-    @media print {.workspace-tabs,.gemini-integrated-box,.nav-row,.read-step-btn,.photo-capture input,.photo-remove{display:none!important}.main{display:block!important}.flow-panel{display:none!important}.right-panel{display:block!important}.q-content{overflow:visible!important}}
-    /* Installable PWA controls - v0.6.2 */
-    #install-app-btn { display:inline-flex; align-items:center; justify-content:center; gap:5px; min-height:34px; padding:6px 10px; border:1px solid var(--accent); border-radius:7px; background:var(--accent-dim); color:var(--accent); font:500 10px var(--mono); cursor:pointer; white-space:nowrap; }
-    #install-app-btn:hover { background:#bbf7d0; }
-    #install-app-btn.installed { border-color:var(--border); background:var(--surface2); color:var(--text-muted); cursor:default; }
-    .pwa-overlay { position:fixed; inset:0; z-index:1500; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(30,41,59,.58); backdrop-filter:blur(4px); }
-    .pwa-overlay.show { display:flex; }
-    .pwa-dialog { width:min(460px,100%); padding:20px; border:1px solid var(--border-bright); border-radius:14px; background:var(--surface); box-shadow:0 20px 60px rgba(15,23,42,.24); }
-    .pwa-dialog h2 { margin-bottom:8px; font-size:18px; }
-    .pwa-dialog p,.pwa-dialog li { color:var(--text-muted); font-size:13px; line-height:1.55; }
-    .pwa-dialog ol { margin:12px 0 0 20px; }
-    @media(max-width:760px){ #install-app-btn { min-height:34px; padding:5px 7px; font-size:9px; } }
+
+    /* iPad/tablet Diagnose scrolling fix - v0.5.1 */
+    @media (min-width: 761px) and (max-width: 1180px), (hover: none) and (pointer: coarse) {
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
+      body.view-diagnose .main {
+        height: calc(100dvh - 105px);
+        min-height: 0;
+        overflow: hidden;
+      }
+      body.view-diagnose .right-panel {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+      }
+      body.view-diagnose .q-content {
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: none;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        padding-bottom: max(40px, env(safe-area-inset-bottom));
+      }
+      body.view-diagnose .gemini-integrated-box {
+        height: min(280px, 32dvh);
+        min-height: 200px;
+        flex: 0 0 auto;
+      }
+    }
+
+    /* Phones use normal document scrolling rather than a nested fixed panel. */
+    @media (max-width: 760px) {
+      html, body {
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      body.view-diagnose .main,
+      body.view-diagnose .right-panel {
+        height: auto !important;
+        min-height: 0;
+        overflow: visible !important;
+      }
+      body.view-diagnose .q-content {
+        flex: none;
+        min-height: 0;
+        max-height: none;
+        overflow: visible !important;
+        touch-action: pan-y;
+        padding-bottom: max(56px, env(safe-area-inset-bottom));
+      }
+    }
 
   </style>
 </head>
@@ -703,7 +724,6 @@
   <span class="header-badge">BMS</span>
   <h1>Troubleshooter</h1>
   <button class="header-action" type="button" onclick="openSessionManager()">Sessions</button>
-  <button id="install-app-btn" type="button" onclick="requestAppInstall()">Install app</button>
   <div id="user-chip" style="margin-left:auto;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text-muted);"></div>
   <div class="status-dot" style="margin-left:0"></div>
 </header>
@@ -776,7 +796,7 @@
         <div class="case-card"><h3>Reported / unverified</h3><ul id="unverified-list" class="evidence-list"></ul></div>
         <div class="case-card"><h3>Ruled out</h3><ul id="ruledout-list" class="evidence-list"></ul></div>
         <div class="case-card"><h3>Current status</h3><div id="case-status" class="empty-state"></div></div>
-        <div class="case-card full"><h3>Optional photographs</h3><div class="photo-capture"><strong>Add field evidence</strong><p class="photo-help">Optional. Capture controller labels, terminations, actuator mounting, damper shafts, tubing, equipment nameplates, EBO screens, or meter readings. Images are compressed and stored locally with the saved session.</p><input id="case-photo-input" type="file" accept="image/*" capture="environment" multiple onchange="addCasePhotos(this.files)"><div id="photo-gallery" class="photo-gallery"></div></div></div>
+        <div class="case-card full"><h3>Photographs</h3><div class="photo-placeholder"><div class="photo-icon">📷</div><div><strong>Photo evidence is designed into the case model.</strong><p>Permanent upload, storage, and image analysis will be implemented later. The schema supports controller labels, wiring, actuator mounting, damper shafts, sensor tubing, nameplates, meter readings, EBO screens, and equipment condition.</p><div class="photo-chips"><span class="photo-chip">Controller label</span><span class="photo-chip">Wiring</span><span class="photo-chip">Actuator mounting</span><span class="photo-chip">Damper shaft</span><span class="photo-chip">Sensor tubing</span><span class="photo-chip">Nameplate</span><span class="photo-chip">Meter reading</span></div></div></div></div>
         <div class="case-card full"><h3>Session tools</h3><div class="app-actions"><button class="app-btn" onclick="exportCase()">Export case JSON</button><button class="app-btn" onclick="copySummary()">Copy summary</button><button class="app-btn" onclick="resetCase()">Start new case</button></div></div>
       </div>
     </div>
@@ -791,14 +811,6 @@
   </section>
 </div>
 
-<div id="pwa-help" class="pwa-overlay" role="dialog" aria-modal="true" aria-labelledby="pwa-help-title">
-  <div class="pwa-dialog">
-    <h2 id="pwa-help-title">Install BMS Troubleshooter</h2>
-    <div id="pwa-help-content"></div>
-    <div class="app-actions"><button class="app-btn primary" type="button" onclick="closePwaHelp()">Done</button></div>
-  </div>
-</div>
-
 <div id="session-manager" class="session-overlay" role="dialog" aria-modal="true" aria-labelledby="session-manager-title">
   <div class="session-dialog">
     <div class="session-dialog-head"><div><h2 id="session-manager-title">Saved troubleshooting sessions</h2><div class="empty-state">Resume an incomplete session or discard it.</div></div><button class="app-btn" onclick="closeSessionManager()">Close</button></div>
@@ -807,7 +819,7 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.3-safety-review-top
+// BMS Troubleshooter Version: 0.5.1-ipad-scroll-fix
 // Saved/resumable sessions, photo-ready schema, and draft safety framework.
 // ─── Supabase config ──────────────────────────────────────────────────────────
 const SB_URL = "https://emkehdoofgaztuqmuyxw.supabase.co";
@@ -1174,46 +1186,6 @@ function appendStepNavigation(panel) {
   panel.appendChild(row);
 }
 
-
-function notesForStep(stepId){
-  currentCase.technicianNotes=currentCase.technicianNotes||[];
-  return currentCase.technicianNotes.find(n=>n.stepId===stepId)||null;
-}
-function saveStepNote(stepId,text){
-  currentCase.technicianNotes=currentCase.technicianNotes||[];
-  currentCase.technicianNotes=currentCase.technicianNotes.filter(n=>n.stepId!==stepId);
-  if(text.trim()) currentCase.technicianNotes.push({stepId,text:text.trim(),updatedAt:new Date().toISOString()});
-  saveCaseLocal();
-}
-function addStepNotes(panel,stepId){
-  const existing=notesForStep(stepId)?.text||'';
-  const box=document.createElement('div');box.className='step-notes-box';
-  box.innerHTML=`<label for="step-note-${escapeHtml(stepId)}">Optional technician notes</label><textarea id="step-note-${escapeHtml(stepId)}" placeholder="Record wiring, terminations, readings, mechanical condition, observations, or why a condition could not be verified.">${escapeHtml(existing)}</textarea><div class="step-notes-help">Saved with this step and compiled into the final report.</div>`;
-  box.querySelector('textarea').addEventListener('change',e=>saveStepNote(stepId,e.target.value));
-  panel.appendChild(box);
-}
-function compressPhoto(file){
-  return new Promise((resolve,reject)=>{const img=new Image(),reader=new FileReader();reader.onerror=reject;reader.onload=()=>img.src=reader.result;img.onerror=reject;img.onload=()=>{const max=1280,scale=Math.min(1,max/Math.max(img.width,img.height)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL('image/jpeg',.72));};reader.readAsDataURL(file);});
-}
-async function addCasePhotos(files){
-  currentCase.photographs=currentCase.photographs||[];
-  for(const file of [...files]){if(!file.type.startsWith('image/'))continue;try{const dataUrl=await compressPhoto(file);currentCase.photographs.push({id:'PHOTO-'+cryptoRandom(),name:file.name,stepId:current||null,caption:'',dataUrl,addedAt:new Date().toISOString()});}catch(e){showToast('Could not add '+file.name,'err');}}
-  saveCaseLocal();renderPhotoGallery();const input=document.getElementById('case-photo-input');if(input)input.value='';showToast('Photo evidence saved locally','ok');
-}
-function removeCasePhoto(id){currentCase.photographs=(currentCase.photographs||[]).filter(p=>p.id!==id);saveCaseLocal();renderPhotoGallery();}
-function renderPhotoGallery(){const el=document.getElementById('photo-gallery');if(!el)return;const photos=currentCase.photographs||[];el.innerHTML=photos.length?photos.map(p=>`<div class="photo-card"><img src="${p.dataUrl}" alt="${escapeHtml(p.name)}"><div class="photo-card-body">${escapeHtml(p.name)}<br>Step: ${escapeHtml(p.stepId||'general')}<button class="photo-remove" onclick="removeCasePhoto('${p.id}')">Remove</button></div></div>`).join(''):'<div class="empty-state">No photos added. Photo evidence is optional.</div>';}
-function compiledNotesHtml(){const notes=currentCase.technicianNotes||[];return notes.length?notes.map(n=>`<div class="compiled-note"><strong>${escapeHtml(n.stepId)}</strong><br>${escapeHtml(n.text)}</div>`).join(''):'<div class="empty-state">No technician notes were entered.</div>';}
-function addConclusionReport(panel,step){
-  currentCase.conclusion=currentCase.conclusion||{primaryCause:'',remainingPossibilities:'',unverifiedConditions:''};
-  currentCase.conclusion.primaryCause=step.diagnosis||currentCase.conclusion.primaryCause||'';
-  const automatic=(currentCase.evidence||[]).filter(e=>!['physically_measured','physically_observed','document_confirmed'].includes(e.verificationStatus)).map(e=>e.statement);
-  if(!currentCase.conclusion.unverifiedConditions&&automatic.length)currentCase.conclusion.unverifiedConditions=automatic.join('\n');
-  const wrap=document.createElement('div');wrap.className='conclusion-report';
-  wrap.innerHTML=`<h3>Evidence-based conclusion</h3><div class="conclusion-grid"><div class="conclusion-field"><label>Primary likely cause</label><textarea id="primary-cause">${escapeHtml(currentCase.conclusion.primaryCause)}</textarea></div><div class="conclusion-field"><label>Remaining possibilities</label><textarea id="remaining-possibilities" placeholder="Record plausible causes that have not been completely eliminated.">${escapeHtml(currentCase.conclusion.remainingPossibilities||'')}</textarea></div><div class="conclusion-field"><label>Conditions not verified</label><textarea id="unverified-conditions" placeholder="Record inaccessible, unsafe, unavailable, or incomplete checks.">${escapeHtml(currentCase.conclusion.unverifiedConditions||'')}</textarea></div><div><label class="evidence-label">Compiled technician notes</label><div class="compiled-notes">${compiledNotesHtml()}</div></div><div class="app-actions"><button class="app-btn primary" onclick="exportCase()">Download complete report data</button><button class="app-btn" onclick="window.print()">Print / Save PDF</button></div></div>`;
-  ['primary-cause','remaining-possibilities','unverified-conditions'].forEach(id=>wrap.querySelector('#'+id).addEventListener('change',e=>{const key=id==='primary-cause'?'primaryCause':id==='remaining-possibilities'?'remainingPossibilities':'unverifiedConditions';currentCase.conclusion[key]=e.target.value.trim();saveCaseLocal();}));
-  panel.appendChild(wrap);saveCaseLocal();
-}
-
 function renderQuestion() {
   const panel = document.getElementById('q-content');
   const trail = document.getElementById('history-trail');
@@ -1448,14 +1420,13 @@ function renderEvidence(){
   renderTextList('ruledout-list',currentCase.ruledOutCauses,'No cause areas have been formally ruled out.');
   const status=document.getElementById('case-status'); if(status) status.innerHTML=`<strong>Current step:</strong> ${escapeHtml(currentCase.currentStep||current||'Not started')}<br><strong>Evidence items:</strong> ${currentCase.evidence.length}<br><strong>Path steps:</strong> ${currentCase.path.length}<br><strong>Next action:</strong> ${escapeHtml(currentCase.recommendedNextAction||'Continue the deterministic workflow.')}`;
   renderDocuments();
-  renderPhotoGallery();
 }
 function renderEvidenceList(id,items,empty){ const el=document.getElementById(id); if(!el)return; el.innerHTML=''; if(!items.length){el.innerHTML=`<li class="empty-state">${empty}</li>`;return;} items.slice().reverse().forEach(e=>{const li=document.createElement('li');li.className='evidence-item';li.innerHTML=`<strong>${escapeHtml(e.statement)}</strong><div class="evidence-meta"><span class="status-pill ${e.verificationStatus==='inferred'?'inferred':'verified'}">${escapeHtml(e.verificationStatus)}</span><span>${escapeHtml(e.evidenceType)}</span><span>${new Date(e.timestamp).toLocaleString()}</span></div>`;el.appendChild(li);}); }
 function renderTextList(id,items,empty){ const el=document.getElementById(id);if(!el)return;el.innerHTML=items.length?items.map(x=>`<li class="evidence-item"><strong>${escapeHtml(x)}</strong></li>`).join(''):`<li class="empty-state">${empty}</li>`; }
 function escapeHtml(v){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function setWorkspace(view){ document.body.classList.remove('view-diagnose','view-evidence','view-documents','view-copilot'); document.body.classList.add('view-'+view); document.querySelectorAll('.workspace-tab').forEach(b=>b.classList.toggle('active',b.dataset.view===view)); if(view==='evidence'||view==='documents')renderEvidence(); window.scrollTo({top:0,behavior:'smooth'}); }
 function resetCase(){ if(!confirm('Start a new case? The current local case will be replaced.'))return; currentCase=newCase(); history=[]; if(tree){current=tree.start;currentCase.currentStep=current;} saveCaseLocal();renderEvidence();render(); }
-function caseSummary(){ const facts=currentCase.evidence.map(e=>`- [${e.verificationStatus}] ${e.statement}`).join('\n')||'- None recorded'; const notes=(currentCase.technicianNotes||[]).map(n=>`- ${n.stepId}: ${n.text}`).join('\n')||'- None entered'; const c=currentCase.conclusion||{}; return `${currentCase.caseId}\nEquipment: ${currentCase.equipment.tag||'Unknown'} ${currentCase.equipment.type||''}\nIssue: ${currentCase.reportedIssue||'Not entered'}\nCurrent step: ${currentCase.currentStep||current||'Not started'}\n\nPrimary likely cause: ${c.primaryCause||'Not concluded'}\nRemaining possibilities: ${c.remainingPossibilities||'None entered'}\nConditions not verified: ${c.unverifiedConditions||'None entered'}\n\nEvidence:\n${facts}\n\nTechnician notes:\n${notes}`; }
+function caseSummary(){ const facts=currentCase.evidence.map(e=>`- [${e.verificationStatus}] ${e.statement}`).join('\n')||'- None recorded'; return `${currentCase.caseId}\nEquipment: ${currentCase.equipment.tag||'Unknown'} ${currentCase.equipment.type||''}\nIssue: ${currentCase.reportedIssue||'Not entered'}\nCurrent step: ${currentCase.currentStep||current||'Not started'}\n\nEvidence:\n${facts}`; }
 async function copySummary(){ try{await navigator.clipboard.writeText(caseSummary());showToast('Summary copied','ok');}catch{showToast('Copy failed','err');} }
 function exportCase(){ const blob=new Blob([JSON.stringify(currentCase,null,2)],{type:'application/json'}); const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`${currentCase.caseId}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
 function attachDocuments(files){ [...files].forEach(file=>{ currentCase.documents.push({id:'DOC-'+cryptoRandom(),name:file.name,type:file.type,size:file.size,sourceType:'PROJECT DOCUMENT',modelMatch:'Unconfirmed',revision:'Unconfirmed',addedAt:new Date().toISOString()}); }); saveCaseLocal();renderDocuments();showToast(`${files.length} document(s) attached to this browser session`,'ok'); }
@@ -1481,7 +1452,7 @@ document.addEventListener('DOMContentLoaded',()=>renderEvidence());
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.0-evidence-reporting';
+const APP_LOGIC_VERSION = '0.5.1-ipad-scroll-fix';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
@@ -1494,7 +1465,6 @@ function normalizeCase(c){
   c.unverifiedConditions=Array.isArray(c.unverifiedConditions)?c.unverifiedConditions:[];
   c.confirmedFacts=Array.isArray(c.confirmedFacts)?c.confirmedFacts:[];
   c.measurements=Array.isArray(c.measurements)?c.measurements:[];
-  c.conclusion=c.conclusion||{primaryCause:'',remainingPossibilities:'',unverifiedConditions:''};
   c.controllerName=c.controllerName||''; c.bacnetInstance=c.bacnetInstance||'';
   return c;
 }
@@ -1541,7 +1511,7 @@ const SAFETY_RULES=[
   {id:'combustion-refrigeration',pattern:/boiler|combustion|refrigerant|chiller|flame/i,title:'Specialized equipment safety',text:'Do not bypass combustion, refrigerant, pressure, flame-safeguard, or manufacturer safety controls. Use qualified service personnel and approved procedures.'}
 ];
 function safetyRulesForStep(step){ const text=[step?.question,step?.notes,step?.diagnosis,step?.action].filter(Boolean).join(' '); return SAFETY_RULES.filter(r=>r.pattern.test(text)); }
-function addSafetyGate(panel,step){ const rules=safetyRulesForStep(step); if(!rules.length)return; const wrap=document.createElement('div');wrap.className='safety-gate';wrap.innerHTML=`<h4>Safety review required</h4><p>${escapeHtml(SAFETY_REVIEW_STATUS)}</p>`; rules.forEach(rule=>{ const checked=currentCase.safetyAcknowledgments.some(a=>a.stepId===current&&a.ruleId===rule.id); const row=document.createElement('label');row.className='safety-check';row.innerHTML=`<input type="checkbox" ${checked?'checked':''}><span><strong>${escapeHtml(rule.title)}:</strong> ${escapeHtml(rule.text)}</span>`; row.querySelector('input').onchange=e=>{currentCase.safetyAcknowledgments=currentCase.safetyAcknowledgments.filter(a=>!(a.stepId===current&&a.ruleId===rule.id));if(e.target.checked)currentCase.safetyAcknowledgments.push({stepId:current,ruleId:rule.id,acknowledgedAt:new Date().toISOString(),status:'technician_acknowledged_draft_warning'});saveCaseLocal();};wrap.appendChild(row);}); panel.insertBefore(wrap, panel.firstChild); }
+function addSafetyGate(panel,step){ const rules=safetyRulesForStep(step); if(!rules.length)return; const wrap=document.createElement('div');wrap.className='safety-gate';wrap.innerHTML=`<h4>Safety review required</h4><p>${escapeHtml(SAFETY_REVIEW_STATUS)}</p>`; rules.forEach(rule=>{ const checked=currentCase.safetyAcknowledgments.some(a=>a.stepId===current&&a.ruleId===rule.id); const row=document.createElement('label');row.className='safety-check';row.innerHTML=`<input type="checkbox" ${checked?'checked':''}><span><strong>${escapeHtml(rule.title)}:</strong> ${escapeHtml(rule.text)}</span>`; row.querySelector('input').onchange=e=>{currentCase.safetyAcknowledgments=currentCase.safetyAcknowledgments.filter(a=>!(a.stepId===current&&a.ruleId===rule.id));if(e.target.checked)currentCase.safetyAcknowledgments.push({stepId:current,ruleId:rule.id,acknowledgedAt:new Date().toISOString(),status:'technician_acknowledged_draft_warning'});saveCaseLocal();};wrap.appendChild(row);}); panel.insertBefore(wrap,panel.querySelector('.nav-row')); }
 const originalRenderQuestion=renderQuestion;
 renderQuestion=function(){ originalRenderQuestion(); const panel=document.getElementById('q-content'); const step=tree?.steps?.[current]; if(panel&&step)addSafetyGate(panel,step); };
 
@@ -1552,29 +1522,6 @@ checkAppReady=function(){ originalCheckAppReady(); if(tree&&currentUser&&!sessio
 
 // Ensure schema is persisted even before photo implementation.
 currentCase.photographs=currentCase.photographs||[]; saveCaseLocal();
-
-
-// PWA install support - button intentionally remains visible on all browsers.
-let deferredInstallPrompt = null;
-function appIsInstalled(){ return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }
-function appleMobileDevice(){ return /iphone|ipad|ipod/i.test(navigator.userAgent); }
-function refreshInstallButton(){
-  const btn=document.getElementById('install-app-btn'); if(!btn)return;
-  if(appIsInstalled()){btn.textContent='Installed';btn.disabled=true;btn.classList.add('installed');}
-  else {btn.textContent=deferredInstallPrompt?'Install app':(appleMobileDevice()?'Add to Home':'Install app');btn.disabled=false;btn.classList.remove('installed');}
-}
-window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstallPrompt=event;refreshInstallButton();});
-window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;refreshInstallButton();showToast('BMS Troubleshooter installed','ok');});
-async function requestAppInstall(){
-  if(appIsInstalled())return;
-  if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;refreshInstallButton();return;}
-  const help=document.getElementById('pwa-help-content');
-  if(appleMobileDevice()) help.innerHTML='<p>Install using Safari:</p><ol><li>Tap the Share button.</li><li>Choose <strong>Add to Home Screen</strong>.</li><li>Tap <strong>Add</strong>.</li></ol>';
-  else help.innerHTML='<p>The native installation prompt is not currently available.</p><ol><li>Refresh once after the service worker installs.</li><li>In Microsoft Edge or Google Chrome, open the browser menu.</li><li>Select <strong>Install BMS Troubleshooter</strong> or <strong>Install app</strong>.</li></ol>';
-  document.getElementById('pwa-help').classList.add('show');
-}
-function closePwaHelp(){document.getElementById('pwa-help').classList.remove('show');}
-if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./service-worker.js',{scope:'./'});reg.update();}catch(error){console.error('Service worker registration failed:',error);showToast('Offline installation could not be enabled','err');}refreshInstallButton();});}else{window.addEventListener('load',refreshInstallButton);}
 
 </script>
 </body>
