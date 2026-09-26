@@ -655,7 +655,6 @@
         flex: 1 1 auto;
         min-height: 0;
         max-height: none;
-        overflow-x: hidden;
         overflow-y: auto;
         overscroll-behavior: contain;
         -webkit-overflow-scrolling: touch;
@@ -669,7 +668,6 @@
       }
     }
 
-    /* Phones use normal document scrolling rather than a nested fixed panel. */
     @media (max-width: 760px) {
       html, body {
         height: auto;
@@ -691,6 +689,57 @@
         overflow: visible !important;
         touch-action: pan-y;
         padding-bottom: max(56px, env(safe-area-inset-bottom));
+      }
+    }
+
+
+    /* iPad landscape Diagnose scrolling fix - v0.5.2 */
+    @media (orientation: landscape) and (min-width: 761px) and (max-width: 1400px) {
+      html, body {
+        width: 100%;
+        height: 100%;
+        height: 100dvh;
+        overflow: hidden;
+      }
+      body.view-diagnose {
+        height: 100dvh;
+      }
+      body.view-diagnose .main {
+        height: calc(100dvh - 106px);
+        min-height: 0;
+        overflow: hidden;
+      }
+      body.view-diagnose .right-panel {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+      }
+      body.view-diagnose .q-panel-label,
+      body.view-diagnose .session-strip,
+      body.view-diagnose .history-trail,
+      body.view-diagnose .gem-panel-divider {
+        flex: 0 0 auto;
+      }
+      body.view-diagnose .q-content {
+        flex: 1 1 0;
+        min-height: 0;
+        max-height: none;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        padding-bottom: max(64px, env(safe-area-inset-bottom));
+      }
+      body.view-diagnose .gemini-integrated-box {
+        height: min(220px, 29dvh);
+        min-height: 170px;
+        flex: 0 0 auto;
+      }
+      body.view-diagnose .ans-btn,
+      body.view-diagnose .nav-btn,
+      body.view-diagnose .read-step-btn {
+        touch-action: manipulation;
       }
     }
 
@@ -819,7 +868,7 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.5.1-ipad-scroll-fix
+// BMS Troubleshooter Version: 0.5.2-ipad-landscape-scroll-fix
 // Saved/resumable sessions, photo-ready schema, and draft safety framework.
 // ─── Supabase config ──────────────────────────────────────────────────────────
 const SB_URL = "https://emkehdoofgaztuqmuyxw.supabase.co";
@@ -1452,7 +1501,7 @@ document.addEventListener('DOMContentLoaded',()=>renderEvidence());
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.5.1-ipad-scroll-fix';
+const APP_LOGIC_VERSION = '0.5.2-ipad-landscape-scroll-fix';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
