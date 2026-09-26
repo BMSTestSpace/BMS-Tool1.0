@@ -807,7 +807,7 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.2-pwa-button-visible
+// BMS Troubleshooter Version: 0.6.3-safety-review-top
 // Saved/resumable sessions, photo-ready schema, and draft safety framework.
 // ─── Supabase config ──────────────────────────────────────────────────────────
 const SB_URL = "https://emkehdoofgaztuqmuyxw.supabase.co";
@@ -1541,7 +1541,7 @@ const SAFETY_RULES=[
   {id:'combustion-refrigeration',pattern:/boiler|combustion|refrigerant|chiller|flame/i,title:'Specialized equipment safety',text:'Do not bypass combustion, refrigerant, pressure, flame-safeguard, or manufacturer safety controls. Use qualified service personnel and approved procedures.'}
 ];
 function safetyRulesForStep(step){ const text=[step?.question,step?.notes,step?.diagnosis,step?.action].filter(Boolean).join(' '); return SAFETY_RULES.filter(r=>r.pattern.test(text)); }
-function addSafetyGate(panel,step){ const rules=safetyRulesForStep(step); if(!rules.length)return; const wrap=document.createElement('div');wrap.className='safety-gate';wrap.innerHTML=`<h4>Safety review required</h4><p>${escapeHtml(SAFETY_REVIEW_STATUS)}</p>`; rules.forEach(rule=>{ const checked=currentCase.safetyAcknowledgments.some(a=>a.stepId===current&&a.ruleId===rule.id); const row=document.createElement('label');row.className='safety-check';row.innerHTML=`<input type="checkbox" ${checked?'checked':''}><span><strong>${escapeHtml(rule.title)}:</strong> ${escapeHtml(rule.text)}</span>`; row.querySelector('input').onchange=e=>{currentCase.safetyAcknowledgments=currentCase.safetyAcknowledgments.filter(a=>!(a.stepId===current&&a.ruleId===rule.id));if(e.target.checked)currentCase.safetyAcknowledgments.push({stepId:current,ruleId:rule.id,acknowledgedAt:new Date().toISOString(),status:'technician_acknowledged_draft_warning'});saveCaseLocal();};wrap.appendChild(row);}); panel.insertBefore(wrap,panel.querySelector('.nav-row')); }
+function addSafetyGate(panel,step){ const rules=safetyRulesForStep(step); if(!rules.length)return; const wrap=document.createElement('div');wrap.className='safety-gate';wrap.innerHTML=`<h4>Safety review required</h4><p>${escapeHtml(SAFETY_REVIEW_STATUS)}</p>`; rules.forEach(rule=>{ const checked=currentCase.safetyAcknowledgments.some(a=>a.stepId===current&&a.ruleId===rule.id); const row=document.createElement('label');row.className='safety-check';row.innerHTML=`<input type="checkbox" ${checked?'checked':''}><span><strong>${escapeHtml(rule.title)}:</strong> ${escapeHtml(rule.text)}</span>`; row.querySelector('input').onchange=e=>{currentCase.safetyAcknowledgments=currentCase.safetyAcknowledgments.filter(a=>!(a.stepId===current&&a.ruleId===rule.id));if(e.target.checked)currentCase.safetyAcknowledgments.push({stepId:current,ruleId:rule.id,acknowledgedAt:new Date().toISOString(),status:'technician_acknowledged_draft_warning'});saveCaseLocal();};wrap.appendChild(row);}); panel.insertBefore(wrap, panel.firstChild); }
 const originalRenderQuestion=renderQuestion;
 renderQuestion=function(){ originalRenderQuestion(); const panel=document.getElementById('q-content'); const step=tree?.steps?.[current]; if(panel&&step)addSafetyGate(panel,step); };
 
