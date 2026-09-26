@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BMS Troubleshooter</title>
+  <meta name="theme-color" content="#16a34a" />
+  <meta name="application-name" content="BMS Troubleshooter" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="BMS Troubleshooter" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -654,6 +661,18 @@
     .compiled-note:last-child { border-bottom:0; }
     @media(max-width:760px){.photo-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.step-notes-box textarea,.conclusion-field textarea{font-size:16px}}
     @media print {.workspace-tabs,.gemini-integrated-box,.nav-row,.read-step-btn,.photo-capture input,.photo-remove{display:none!important}.main{display:block!important}.flow-panel{display:none!important}.right-panel{display:block!important}.q-content{overflow:visible!important}}
+    /* Installable PWA controls - v0.6.2 */
+    #install-app-btn { display:inline-flex; align-items:center; justify-content:center; gap:5px; min-height:34px; padding:6px 10px; border:1px solid var(--accent); border-radius:7px; background:var(--accent-dim); color:var(--accent); font:500 10px var(--mono); cursor:pointer; white-space:nowrap; }
+    #install-app-btn:hover { background:#bbf7d0; }
+    #install-app-btn.installed { border-color:var(--border); background:var(--surface2); color:var(--text-muted); cursor:default; }
+    .pwa-overlay { position:fixed; inset:0; z-index:1500; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(30,41,59,.58); backdrop-filter:blur(4px); }
+    .pwa-overlay.show { display:flex; }
+    .pwa-dialog { width:min(460px,100%); padding:20px; border:1px solid var(--border-bright); border-radius:14px; background:var(--surface); box-shadow:0 20px 60px rgba(15,23,42,.24); }
+    .pwa-dialog h2 { margin-bottom:8px; font-size:18px; }
+    .pwa-dialog p,.pwa-dialog li { color:var(--text-muted); font-size:13px; line-height:1.55; }
+    .pwa-dialog ol { margin:12px 0 0 20px; }
+    @media(max-width:760px){ #install-app-btn { min-height:34px; padding:5px 7px; font-size:9px; } }
+
   </style>
 </head>
 <body>
@@ -684,6 +703,7 @@
   <span class="header-badge">BMS</span>
   <h1>Troubleshooter</h1>
   <button class="header-action" type="button" onclick="openSessionManager()">Sessions</button>
+  <button id="install-app-btn" type="button" onclick="requestAppInstall()">Install app</button>
   <div id="user-chip" style="margin-left:auto;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text-muted);"></div>
   <div class="status-dot" style="margin-left:0"></div>
 </header>
@@ -771,6 +791,14 @@
   </section>
 </div>
 
+<div id="pwa-help" class="pwa-overlay" role="dialog" aria-modal="true" aria-labelledby="pwa-help-title">
+  <div class="pwa-dialog">
+    <h2 id="pwa-help-title">Install BMS Troubleshooter</h2>
+    <div id="pwa-help-content"></div>
+    <div class="app-actions"><button class="app-btn primary" type="button" onclick="closePwaHelp()">Done</button></div>
+  </div>
+</div>
+
 <div id="session-manager" class="session-overlay" role="dialog" aria-modal="true" aria-labelledby="session-manager-title">
   <div class="session-dialog">
     <div class="session-dialog-head"><div><h2 id="session-manager-title">Saved troubleshooting sessions</h2><div class="empty-state">Resume an incomplete session or discard it.</div></div><button class="app-btn" onclick="closeSessionManager()">Close</button></div>
@@ -779,7 +807,7 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.0-evidence-reporting
+// BMS Troubleshooter Version: 0.6.2-pwa-button-visible
 // Saved/resumable sessions, photo-ready schema, and draft safety framework.
 // ─── Supabase config ──────────────────────────────────────────────────────────
 const SB_URL = "https://emkehdoofgaztuqmuyxw.supabase.co";
@@ -1524,6 +1552,29 @@ checkAppReady=function(){ originalCheckAppReady(); if(tree&&currentUser&&!sessio
 
 // Ensure schema is persisted even before photo implementation.
 currentCase.photographs=currentCase.photographs||[]; saveCaseLocal();
+
+
+// PWA install support - button intentionally remains visible on all browsers.
+let deferredInstallPrompt = null;
+function appIsInstalled(){ return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }
+function appleMobileDevice(){ return /iphone|ipad|ipod/i.test(navigator.userAgent); }
+function refreshInstallButton(){
+  const btn=document.getElementById('install-app-btn'); if(!btn)return;
+  if(appIsInstalled()){btn.textContent='Installed';btn.disabled=true;btn.classList.add('installed');}
+  else {btn.textContent=deferredInstallPrompt?'Install app':(appleMobileDevice()?'Add to Home':'Install app');btn.disabled=false;btn.classList.remove('installed');}
+}
+window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstallPrompt=event;refreshInstallButton();});
+window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;refreshInstallButton();showToast('BMS Troubleshooter installed','ok');});
+async function requestAppInstall(){
+  if(appIsInstalled())return;
+  if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;refreshInstallButton();return;}
+  const help=document.getElementById('pwa-help-content');
+  if(appleMobileDevice()) help.innerHTML='<p>Install using Safari:</p><ol><li>Tap the Share button.</li><li>Choose <strong>Add to Home Screen</strong>.</li><li>Tap <strong>Add</strong>.</li></ol>';
+  else help.innerHTML='<p>The native installation prompt is not currently available.</p><ol><li>Refresh once after the service worker installs.</li><li>In Microsoft Edge or Google Chrome, open the browser menu.</li><li>Select <strong>Install BMS Troubleshooter</strong> or <strong>Install app</strong>.</li></ol>';
+  document.getElementById('pwa-help').classList.add('show');
+}
+function closePwaHelp(){document.getElementById('pwa-help').classList.remove('show');}
+if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./service-worker.js',{scope:'./'});reg.update();}catch(error){console.error('Service worker registration failed:',error);showToast('Offline installation could not be enabled','err');}refreshInstallButton();});}else{window.addEventListener('load',refreshInstallButton);}
 
 </script>
 </body>
