@@ -1830,5 +1830,23 @@
       "diagnosis": "Point configuration issue",
       "action": "Verify object exists, correct server/module/channel, electrical type, engineering range, reliability/status, bindings, download, online state, priority array, forced/override state, and graphic reference. Release only authorized overrides and document changes."
     }
+  },
+  "product": {
+    "version": "0.6.0-evidence-reporting",
+    "evidenceCapture": {
+      "technicianNotes": "optional_every_step",
+      "photographs": "optional_local_compressed",
+      "measurements": "optional"
+    },
+    "safety": {
+      "requiredApproach": "Follow site LOTO, PPE, arc-flash, rotating equipment, combustion, refrigerant, life-safety and authorization procedures. Never bypass safety devices."
+    },
+    "conclusionFormat": [
+      "primary_likely_cause",
+      "remaining_possibilities",
+      "conditions_not_verified",
+      "recommended_action",
+      "compiled_evidence_and_notes"
+    ]
   }
 }
