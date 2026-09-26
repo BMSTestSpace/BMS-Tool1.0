@@ -1,0 +1,52 @@
+name: Deploy Supabase Edge Function
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "supabase/functions/ai-chat/**"
+      - "supabase/config.toml"**     - ".github/workflows/deploy-**pabase-function.yml"
+
+  workflow_**spatch:
+
+permissions:
+  contents:**ead
+
+jobs:
+  deploy:
+    name: De**oy ai-chat
+    runs-on: ubuntu-la**st
+
+    env:
+      SUPABASE_ACCES**TOKEN: ${{ secrets.SUPABASE_ACCES**TOKEN }}
+      SUPABASE_PROJECT_I** ${{ secrets.SUPABASE_PROJECT_ID **
+
+    steps:
+      - name: Check **t repository
+        uses: action**checkout@v4
+
+      - name: Instal**Supabase CLI
+        uses: supaba**/setup-cli@v1
+        with:
+     **   version: latest
+
+      - name:**erify deployment secrets
+        **ell: bash
+        run: |
+        **if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
+            echo "SUPABASE_**CESS_TOKEN is not configured."
+  **        exit 1
+          fi
+
+    **    if [ -z "$SUPABASE_PROJECT_ID" ]; then
+            echo "SUPABAS**PROJECT_ID is not configured."
+  **        exit 1
+          fi
+
+    **    echo "Required deployment sec**ts are configured."
+
+      - name**Deploy ai-chat
+        run: |
+   **     supabase functions deploy ai**hat \
+            --project-ref "**UPABASE_PROJECT_ID"
