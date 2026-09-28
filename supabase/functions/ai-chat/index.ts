@@ -1,17 +1,47 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-const CORS={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST, OPTIONS","Access-Control-Allow-Headers":"Content-Type, Authorization, x-request-id, x-attempt","Access-Control-Expose-Headers":"Content-Type, x-request-id"};
-serve(async(req)=>{
- if(req.method==="OPTIONS")return new Response(null,{headers:CORS});
- if(req.method!=="POST")return new Response(JSON.stringify({error:"Method not allowed"}),{status:405,headers:{...CORS,"Content-Type":"application/json"}});
- const requestId=req.headers.get("x-request-id")||crypto.randomUUID(),attempt=req.headers.get("x-attempt")||"1";
- try{
-  const key=Deno.env.get("GEMINI_API_KEY");if(!key)throw new Error("GEMINI_API_KEY is not configured");
-  const {contents,generationConfig={},stream=true}=await req.json();if(!Array.isArray(contents)||!contents.length)throw new Error("contents is required");
-  console.log(JSON.stringify({requestId,attempt,event:"gemini_start",stream}));
-  const method=stream?"streamGenerateContent":"generateContent",suffix=stream?"&alt=sse":"";
-  const upstream=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:${method}?key=${key}${suffix}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents,generationConfig:{...generationConfig,maxOutputTokens:generationConfig.maxOutputTokens??1200}})});
-  if(!upstream.ok){const detail=await upstream.text();console.error(JSON.stringify({requestId,attempt,event:"gemini_error",status:upstream.status}));return new Response(JSON.stringify({error:`Gemini HTTP ${upstream.status}`,detail,requestId}),{status:upstream.status,headers:{...CORS,"Content-Type":"application/json"}});}
-  if(!stream)return new Response(await upstream.text(),{headers:{...CORS,"Content-Type":"application/json","x-request-id":requestId}});
-  return new Response(upstream.body,{headers:{...CORS,"Content-Type":"text/event-stream; charset=utf-8","Cache-Control":"no-cache","x-request-id":requestId}});
- }catch(e){const message=e instanceof Error?e.message:String(e);console.error(JSON.stringify({requestId,attempt,event:"function_error",message}));return new Response(JSON.stringify({error:message,requestId}),{status:500,headers:{...CORS,"Content-Type":"application/json"}});}
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, x-request-id, x-attempt, x-continuation",
+  "Access-Control-Expose-Headers": "x-request-id",
+};
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  if (req.method !== "POST") return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  const requestId = req.headers.get("x-request-id") || crypto.randomUUID();
+  const attempt = req.headers.get("x-attempt") || "1";
+  const continuation = req.headers.get("x-continuation") || "0";
+  try {
+    const apiKey = Deno.env.get("GEMINI_API_KEY");
+    if (!apiKey) throw new Error("GEMINI_API_KEY is not configured");
+    const body = await req.json();
+    const { contents, generationConfig = {} } = body;
+    if (!Array.isArray(contents) || !contents.length) {
+      return new Response(JSON.stringify({ error: "contents is required", requestId }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json", "x-request-id": requestId } });
+    }
+    const safeConfig = {
+      ...generationConfig,
+      temperature: Math.min(Math.max(Number(generationConfig.temperature ?? 0.5), 0), 1),
+      maxOutputTokens: Math.max(Number(generationConfig.maxOutputTokens ?? 4096), 4096),
+      thinkingConfig: { thinkingBudget: 256 },
+    };
+    console.log(JSON.stringify({ requestId, attempt, continuation, state: "stream_start", maxOutputTokens: safeConfig.maxOutputTokens, thinkingBudget: 256 }));
+    const upstream = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse&key=${apiKey}`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents, generationConfig: safeConfig }) },
+    );
+    if (!upstream.ok) {
+      const detail = await upstream.text();
+      console.error(JSON.stringify({ requestId, attempt, continuation, state: "upstream_error", status: upstream.status, detail: detail.slice(0, 1000) }));
+      return new Response(JSON.stringify({ error: `Gemini upstream HTTP ${upstream.status}`, detail, requestId }), { status: upstream.status, headers: { ...corsHeaders, "Content-Type": "application/json", "x-request-id": requestId } });
+    }
+    if (!upstream.body) throw new Error("Gemini returned no streaming body");
+    return new Response(upstream.body, { status: 200, headers: { ...corsHeaders, "Content-Type": "text/event-stream; charset=utf-8", "Cache-Control": "no-cache, no-transform", "x-request-id": requestId } });
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    console.error(JSON.stringify({ requestId, attempt, continuation, state: "function_error", error: message }));
+    return new Response(JSON.stringify({ error: message, requestId }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json", "x-request-id": requestId } });
+  }
 });
