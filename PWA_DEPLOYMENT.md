@@ -27,4 +27,17 @@ Publish the files from the same repository folder. The application uses relative
 - Windows/Android: open the site in a supporting browser and select **Install app**.
 - iPhone/iPad: open the site in Safari, use **Share**, then choose **Add to Home Screen**.
 
-The troubleshooting tree is cached for offline use. AI assistance and cloud session logging still require network connectivity.
+The troubleshooting tree is cached for offline use. AI assistance requires network connectivity. Technician identity, troubleshooting, safety review, evidence, conclusions, and saved sessions work locally. Session logs created while offline are queued in the browser and automatically retried when the device returns online.
+
+
+### Remembered technician
+- The app can remember the technician name and @se.com email in local browser storage.
+- This is not a password or formal authentication.
+- Use **Change technician** to switch names.
+- Use **Forget** on shared devices.
+- Safety review remains case-specific and is not skipped.
+
+### Offline synchronization
+- If Supabase cannot be reached, the completed session log is kept in a local queue.
+- The app retries this queue when the browser reports that connectivity has returned.
+- The full troubleshooting case remains available in local saved sessions even if cloud logging fails.
