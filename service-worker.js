@@ -1,5 +1,5 @@
-// BMS Troubleshooter service worker - application version 0.6.13 r1
-const CACHE_NAME = 'bms-troubleshooter-v0-6-13-r1';
+// BMS Troubleshooter service worker - application version 0.6.16 BMS electrical scope
+const CACHE_NAME = 'bms-troubleshooter-v0-6-16-bms-scope';
 const CORE_FILES = [
   './',
   './index.html',

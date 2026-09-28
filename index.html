@@ -607,6 +607,13 @@
     }
 
 
+    /* BMS technician electrical-scope gate - v0.6.16 */
+    .scope-gate { margin:0 0 14px; padding:14px; border:2px solid #dc2626; border-radius:10px; background:#fef2f2; }
+    .scope-gate h3 { color:#991b1b; font:500 12px var(--mono); margin-bottom:7px; letter-spacing:.04em; }
+    .scope-gate p { color:#7f1d1d; font-size:12px; line-height:1.5; margin-bottom:10px; }
+    .scope-option { width:100%; display:flex; align-items:flex-start; gap:9px; padding:10px 11px; margin:7px 0; border:1px solid #fecaca; border-radius:8px; background:#fff; color:#7f1d1d; font-size:13px; cursor:pointer; }
+    .scope-option input { width:18px; height:18px; flex:0 0 auto; margin-top:1px; }
+    .scope-stop { margin-top:9px; color:#b91c1c; font:500 11px/1.5 var(--mono); }
     /* Mandatory POWRA gate - v0.6.15 */
     .powra-gate { margin:0 0 16px; padding:14px; border:2px solid #f59e0b; border-radius:10px; background:#fffbeb; }
     .powra-gate h3 { color:#92400e; font:500 12px var(--mono); margin-bottom:7px; letter-spacing:.04em; }
@@ -809,7 +816,7 @@
 
   <div class="right-panel">
     <div class="q-panel-label">current step</div>
-    <div class="session-strip">Draft safety language. Formal company review required before production use.</div>
+    <div class="session-strip">BMS technician scope: normal guided work is limited to circuits at or below 24 VAC and 50 VDC. Higher or unknown exposure requires stop-work and escalation under approved safety procedures.</div>
     <div class="history-trail" id="history-trail"></div>
     
     <div class="q-content" id="q-content"></div>
@@ -883,8 +890,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.15-powra-gate
-// v0.6.15: adds a mandatory POWRA review gate with a required note for Not applicable; Copilot JSON/SSE fallback retained.
+// BMS Troubleshooter Version: 0.6.16-bms-electrical-scope
+// v0.6.16: limits normal guided work to BMS technician scope at or below 24 VAC and 50 VDC. Higher or unknown exposure stops the workflow and requires escalation under approved safety procedures.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -935,7 +942,7 @@ async function installApp() {
 // Register the existing offline service worker.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js?v=0.6.15', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
+    navigator.serviceWorker.register('./service-worker.js?v=0.6.16', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
       console.error('Service worker registration failed:', error);
     });
   });
@@ -1433,7 +1440,7 @@ ${pathStr || '(just started — no steps taken yet)'}${resultInfo}
 
 Structured case state: ${JSON.stringify(currentCase)}
 
-Use the deterministic current question as the routing authority. Distinguish reported values from physical observations and measurements. If the user's answer does not satisfy the current question, ask one concise clarification. Be concise and practical. Plain language. If listing steps, number them. Default to concise, practical answers, but when the technician asks for detail, provide a complete detailed explanation. Never stop mid-sentence merely to stay concise.`;
+Use the deterministic current question as the routing authority. Distinguish reported values from physical observations and measurements. The users are BMS technicians. Do not guide work that could expose the technician above 24 VAC or 50 VDC. For higher or unknown exposure, instruct the technician to stop the normal workflow, avoid accessing or testing the circuit, and escalate to appropriately authorized personnel using the required Schneider Electric/site safety procedure and protective equipment. If the user's answer does not satisfy the current question, ask one concise clarification. Be concise and practical. Plain language. If listing steps, number them. Default to concise, practical answers, but when the technician asks for detail, provide a complete detailed explanation. Never stop mid-sentence merely to stay concise.`;
 }
 
 function geminiRequestId(){ return 'AI-'+Date.now().toString(36).toUpperCase()+'-'+cryptoRandom(); }
@@ -1585,7 +1592,7 @@ function geminiAddMsg(role, text) {
 // Structured troubleshooting session, evidence, documents, and voice
 const CASE_STORAGE_KEY = 'bmsTroubleshooter.activeCase.v1';
 function newCase() {
-  return { caseId:'CASE-'+new Date().toISOString().replace(/[-:TZ.]/g,'').slice(0,14), status:'active', createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(), equipment:{tag:'',type:'',manufacturer:'',model:'',controllerModel:'',servingEquipment:''}, reportedIssue:'', currentStep:null, path:[], evidence:[], documents:[], ruledOutCauses:[], remainingCauseAreas:[], recommendedNextAction:'' };
+  return { caseId:'CASE-'+new Date().toISOString().replace(/[-:TZ.]/g,'').slice(0,14), status:'active', createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(), equipment:{tag:'',type:'',manufacturer:'',model:'',controllerModel:'',servingEquipment:''}, reportedIssue:'', currentStep:null, path:[], evidence:[], documents:[], ruledOutCauses:[], remainingCauseAreas:[], recommendedNextAction:'', electricalScope:{status:'',recordedAt:null} };
 }
 let currentCase;
 try { currentCase = JSON.parse(localStorage.getItem(CASE_STORAGE_KEY)) || newCase(); } catch { currentCase = newCase(); }
@@ -1596,6 +1603,7 @@ function saveCaseLocal(){ currentCase.updatedAt=new Date().toISOString(); localS
 function evidenceStatus(answer){ const a=String(answer).toLowerCase(); return /unknown|not |cannot|no /.test(a)?'unverified':'reported'; }
 function recordTreeAnswer(stepId,step,answer,nextId){
   if(!currentCase) currentCase=newCase();
+  if(!electricalScopeAllowsWork()) return;
   if(!powraAllowsWork()) return;
   currentCase.currentStep=nextId;
   currentCase.path.push({stepId,question:step.question||stepId,answer,nextId,timestamp:new Date().toISOString()});
@@ -1653,7 +1661,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.15-powra-gate';
+const APP_LOGIC_VERSION = '0.6.16-bms-electrical-scope';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
@@ -1667,6 +1675,7 @@ function normalizeCase(c){
   c.confirmedFacts=Array.isArray(c.confirmedFacts)?c.confirmedFacts:[];
   c.measurements=Array.isArray(c.measurements)?c.measurements:[];
   c.powra=c.powra&&typeof c.powra==='object'?c.powra:{status:'',note:'',recordedAt:null};
+  c.electricalScope=c.electricalScope&&typeof c.electricalScope==='object'?c.electricalScope:{status:'',recordedAt:null};
   c.controllerName=c.controllerName||''; c.bacnetInstance=c.bacnetInstance||'';
   return c;
 }
@@ -1705,6 +1714,35 @@ function createAndStartCase(){ currentCase=normalizeCase(newCase()); if(tree){cu
 const originalJumpTo=jumpTo;
 jumpTo=function(id){ const allowed=id===current||history.some(h=>h.stepId===id); if(!allowed){showToast('Strict workflow: complete the current step first','err');return;} originalJumpTo(id); };
 
+function renderElectricalScopeGate(panel){
+  if(!panel||!currentCase)return;
+  panel.querySelector('.scope-gate')?.remove();
+  const status=currentCase.electricalScope?.status||'';
+  const gate=document.createElement('section'); gate.className='scope-gate'; gate.setAttribute('aria-labelledby','scope-title');
+  gate.innerHTML=`<h3 id="scope-title">BMS technician electrical scope</h3>
+    <p>This assistant guides normal BMS work only where the circuit and accessible work area are confirmed at or below <strong>24 VAC</strong> and <strong>50 VDC</strong>. Do not access, test, reset, disconnect, or repair higher-voltage or unknown-voltage equipment through this workflow.</p>
+    <label class="scope-option"><input type="radio" name="electrical-scope" value="within-bms-limits" ${status==='within-bms-limits'?'checked':''}><strong>Confirmed: work is at or below 24 VAC and 50 VDC</strong></label>
+    <label class="scope-option"><input type="radio" name="electrical-scope" value="above-or-unknown" ${status==='above-or-unknown'?'checked':''}><strong>Above these limits or voltage/exposure is unknown: stop and escalate</strong></label>
+    <div class="scope-stop" aria-live="polite"></div>`;
+  const stop=gate.querySelector('.scope-stop');
+  gate.querySelectorAll('input[name="electrical-scope"]').forEach(input=>input.onchange=()=>{
+    currentCase.electricalScope={status:input.value,recordedAt:new Date().toISOString()};
+    stop.textContent=input.value==='above-or-unknown'?scopeStopMessage():'';
+    saveCaseLocal();
+  });
+  if(status==='above-or-unknown')stop.textContent=scopeStopMessage();
+  panel.insertBefore(gate,panel.firstChild);
+}
+function scopeStopMessage(){
+  return 'STOP: Do not continue testing or access the circuit through this workflow. Escalate to appropriately authorized personnel and follow the required Schneider Electric/site safety procedure and protective-equipment requirements.';
+}
+function electricalScopeAllowsWork(){
+  const status=currentCase?.electricalScope?.status||'';
+  if(status==='within-bms-limits')return true;
+  showToast(status==='above-or-unknown'?'Stop and escalate: voltage is above the BMS limit or unknown':'Confirm the BMS electrical scope before continuing','err');
+  document.querySelector('.scope-gate')?.scrollIntoView({behavior:'smooth',block:'start'});
+  return false;
+}
 function renderPowraGate(panel){
   if(!panel||!currentCase)return;
   const existing=panel.querySelector('.powra-gate'); if(existing)existing.remove();
@@ -1740,7 +1778,7 @@ function powraAllowsWork(){
   return false;
 }
 const SAFETY_RULES=[
-  {id:'live-electrical',pattern:/voltage|current|energized|power present|signal.*measur|meter/i,title:'Energized electrical measurement',text:'Proceed only if qualified and authorized, using required PPE, properly rated test equipment, and the site electrical-safety procedure. Otherwise select the applicable cannot-test or escalation response.'},
+  {id:'live-electrical',pattern:/voltage|current|energized|power present|signal.*measur|meter/i,title:'Energized electrical measurement',text:'This BMS workflow is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not test or access the circuit; stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements.'},
   {id:'loto',pattern:/continuity|resistance|wires removed|disconnect|terminal|mechanical inspection/i,title:'Energy isolation / lockout-tagout',text:'Follow the site-approved energy-control and lockout/tagout procedure before disconnecting conductors, resistance testing, or physical adjustment.'},
   {id:'rotating',pattern:/fan|pump|shaft|belt|linkage|damper blade|actuator mounting/i,title:'Moving or automatic-start equipment',text:'Keep clear of moving equipment and automatic starts. Use approved shutdown and energy-control procedures before physical inspection or adjustment.'},
   {id:'life-safety',pattern:/fire|smoke|life-safety|emergency/i,title:'Life-safety function',text:'Do not bypass, defeat, force, or disable fire, smoke, emergency shutdown, or other life-safety functions. Coordinate testing with qualified personnel.'},
@@ -1749,7 +1787,7 @@ const SAFETY_RULES=[
 function safetyRulesForStep(step){ const text=[step?.question,step?.notes,step?.diagnosis,step?.action].filter(Boolean).join(' '); return SAFETY_RULES.filter(r=>r.pattern.test(text)); }
 function addSafetyGate(panel,step){ const rules=safetyRulesForStep(step); if(!rules.length)return; const wrap=document.createElement('div');wrap.className='safety-gate';wrap.innerHTML=`<h4>Safety review required</h4><p>${escapeHtml(SAFETY_REVIEW_STATUS)}</p>`; rules.forEach(rule=>{ const checked=currentCase.safetyAcknowledgments.some(a=>a.stepId===current&&a.ruleId===rule.id); const row=document.createElement('label');row.className='safety-check';row.innerHTML=`<input type="checkbox" ${checked?'checked':''}><span><strong>${escapeHtml(rule.title)}:</strong> ${escapeHtml(rule.text)}</span>`; row.querySelector('input').onchange=e=>{currentCase.safetyAcknowledgments=currentCase.safetyAcknowledgments.filter(a=>!(a.stepId===current&&a.ruleId===rule.id));if(e.target.checked)currentCase.safetyAcknowledgments.push({stepId:current,ruleId:rule.id,acknowledgedAt:new Date().toISOString(),status:'technician_acknowledged_draft_warning'});saveCaseLocal();};wrap.appendChild(row);}); panel.insertBefore(wrap,panel.querySelector('.nav-row')); }
 const originalRenderQuestion=renderQuestion;
-renderQuestion=function(){ originalRenderQuestion(); const panel=document.getElementById('q-content'); const step=tree?.steps?.[current]; if(panel&&step){ renderPowraGate(panel); addSafetyGate(panel,step); } };
+renderQuestion=function(){ originalRenderQuestion(); const panel=document.getElementById('q-content'); const step=tree?.steps?.[current]; if(panel&&step){ renderPowraGate(panel); renderElectricalScopeGate(panel); addSafetyGate(panel,step); } };
 
 // Auto-offer active sessions once login and tree are ready.
 const originalCheckAppReady=checkAppReady;
