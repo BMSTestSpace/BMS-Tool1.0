@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BMS Troubleshooter</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="theme-color" content="#16a34a">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -773,6 +776,7 @@
   <span class="header-badge">BMS</span>
   <h1>Troubleshooter</h1>
   <button class="header-action" type="button" onclick="openSessionManager()">Sessions</button>
+  <button class="header-action" id="install-app-btn" type="button" onclick="installApp()" hidden>Install App</button>
   <div id="user-chip" style="margin-left:auto;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text-muted);"></div>
   <div class="status-dot" style="margin-left:0"></div>
 </header>
@@ -868,7 +872,61 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.5.2-ipad-landscape-scroll-fix
+// BMS Troubleshooter Version: 0.6.6-pwa-install-ipad-landscape
+// PWA install support restored in v0.6.6 while preserving v0.5.2 iPad landscape fixes.
+let deferredInstallPrompt = null;
+
+function isStandaloneMode() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+function updateInstallButton() {
+  const btn = document.getElementById('install-app-btn');
+  if (!btn) return;
+  if (isStandaloneMode()) {
+    btn.hidden = true;
+    return;
+  }
+  // Chromium browsers expose an install prompt event. iOS/iPadOS Safari does not.
+  btn.hidden = !deferredInstallPrompt;
+}
+
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  updateInstallButton();
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  updateInstallButton();
+  showToast('App installed', 'ok');
+});
+
+async function installApp() {
+  if (isStandaloneMode()) {
+    updateInstallButton();
+    return;
+  }
+  if (!deferredInstallPrompt) {
+    showToast('Install prompt is not available in this browser. On iPhone/iPad Safari, use Share > Add to Home Screen.', 'err');
+    return;
+  }
+  const promptEvent = deferredInstallPrompt;
+  deferredInstallPrompt = null;
+  await promptEvent.prompt();
+  try { await promptEvent.userChoice; } catch (_) {}
+  updateInstallButton();
+}
+
+// Register the existing offline service worker.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(error => {
+      console.error('Service worker registration failed:', error);
+    });
+  });
+}
 // Saved/resumable sessions, photo-ready schema, and draft safety framework.
 // ─── Supabase config ──────────────────────────────────────────────────────────
 const SB_URL = "https://emkehdoofgaztuqmuyxw.supabase.co";
@@ -1501,7 +1559,7 @@ document.addEventListener('DOMContentLoaded',()=>renderEvidence());
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.5.2-ipad-landscape-scroll-fix';
+const APP_LOGIC_VERSION = '0.6.6-pwa-install-ipad-landscape';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
