@@ -428,6 +428,19 @@
       line-height: 1.4;
     }
 
+    .conclusion-box { margin:12px 0; border:1px solid #94a3b8; border-radius:10px; overflow:hidden; background:#fff; }
+    .conclusion-head { display:flex; justify-content:space-between; gap:10px; align-items:center; padding:11px 12px; background:#f8fafc; border-bottom:1px solid var(--border); }
+    .conclusion-head strong { font:600 12px var(--mono); color:var(--text); }
+    .confidence-pill { padding:3px 8px; border-radius:999px; font:600 9px var(--mono); text-transform:uppercase; }
+    .confidence-pill.high { background:#dcfce7; color:#166534; }
+    .confidence-pill.moderate { background:#fef3c7; color:#92400e; }
+    .confidence-pill.low { background:#fee2e2; color:#991b1b; }
+    .conclusion-section { padding:10px 12px; border-top:1px solid var(--border); }
+    .conclusion-section:first-of-type { border-top:0; }
+    .conclusion-section h4 { margin-bottom:5px; color:var(--text-muted); font:500 9px var(--mono); letter-spacing:.09em; text-transform:uppercase; }
+    .conclusion-section p, .conclusion-section li { font-size:12px; line-height:1.45; color:var(--text); }
+    .conclusion-section ul { margin:0; padding-left:18px; }
+    .conclusion-caution { background:#fff7ed; }
     .restart-btn {
       width: 100%;
       padding: 10px;
@@ -906,8 +919,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.18-safety-review-modal
-// v0.6.18: restores the consolidated safety review as a blocking popup, retains one non-redundant review, and preserves all Copilot/offline fixes.
+// BMS Troubleshooter Version: 0.6.19-evidence-conclusion-engine
+// v0.6.19: adds deterministic evidence-based draft conclusions with primary cause, confidence, supporting evidence, ruled-out areas, remaining possibilities, unverified conditions, next action, and safety status.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -958,7 +971,7 @@ async function installApp() {
 // Register the existing offline service worker.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js?v=0.6.18', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
+    navigator.serviceWorker.register('./service-worker.js?v=0.6.19', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
       console.error('Service worker registration failed:', error);
     });
   });
@@ -1407,14 +1420,100 @@ function renderQuestion() {
       box.appendChild(s2);
     }
     panel.appendChild(box);
-
+    const conclusion=generateDeterministicConclusion(current,step);
+    panel.appendChild(renderConclusionBox(conclusion));
     appendStepNavigation(panel);
-
     // Call Supabase insertion automatically upon reaching conclusion node
     saveSession(step);
   }
 }
 
+// Deterministic evidence-based conclusion engine - v0.6.19
+function uniqueText(items){ return [...new Set((items||[]).filter(Boolean).map(x=>String(x).trim()).filter(Boolean))]; }
+function causeArea(text){
+  const t=String(text||'').toLowerCase();
+  if(/program|sequence|schedule|setpoint|override|priority|binding|logic|config/.test(t))return 'Programming, configuration, or sequence';
+  if(/wire|conductor|termination|polarity|short|ground|cable/.test(t))return 'Field wiring and terminations';
+  if(/sensor|transmitter|thermistor|input|measurement|scale|calibr/.test(t))return 'Sensor, input, or measurement chain';
+  if(/actuator|damper|valve|linkage|shaft|mechanic|airflow|flow|pressure/.test(t))return 'Mechanical or process condition';
+  if(/network|bacnet|mstp|ms\/tp|ethernet|ip |communication|offline/.test(t))return 'Communications and network';
+  if(/power|breaker|fuse|transformer|voltage|current|supply/.test(t))return 'Power and electrical supply';
+  if(/controller|module|channel|hardware|server/.test(t))return 'Controller or I/O hardware';
+  if(/safety|interlock|permissive|smoke|fire|freeze/.test(t))return 'Safety or permissive condition';
+  return 'Related equipment or field condition';
+}
+function branchDiagnosis(nextId){ const n=tree?.steps?.[nextId]; return n?.diagnosis||''; }
+function deriveRemainingPossibilities(resultId,primaryArea){
+  const possibilities=[];
+  (currentCase.path||[]).forEach(item=>{
+    const step=tree?.steps?.[item.stepId];
+    Object.entries(step?.answers||{}).forEach(([label,nextId])=>{
+      if(nextId===item.nextId||nextId===resultId)return;
+      const diagnosis=branchDiagnosis(nextId);
+      if(diagnosis && causeArea(diagnosis)!==primaryArea)possibilities.push(diagnosis);
+    });
+  });
+  return uniqueText([...(currentCase.remainingCauseAreas||[]),...possibilities]).slice(0,5);
+}
+function deriveUnverifiedConditions(){
+  const items=[];
+  (currentCase.evidence||[]).forEach(e=>{ if(!['physically_measured','physically_observed','document_confirmed'].includes(e.verificationStatus))items.push(e.statement); });
+  (currentCase.path||[]).forEach(p=>{ if(/unknown|cannot|not verified|not available|no accessible/i.test(String(p.answer)))items.push(`${p.question} - ${p.answer}`); });
+  if(!(currentCase.evidence||[]).some(e=>e.verificationStatus==='physically_measured'))items.push('No optional physical measurement was recorded in the case.');
+  return uniqueText([...(currentCase.unverifiedConditions||[]),...items]).slice(0,8);
+}
+function deriveRuledOut(primaryArea){
+  const areas=[];
+  (currentCase.path||[]).forEach(p=>{
+    if(/^(yes|normal|correct|present|online|healthy)$/i.test(String(p.answer).trim())){
+      const area=causeArea(p.question);
+      if(area!==primaryArea)areas.push(area);
+    }
+  });
+  return uniqueText([...(currentCase.ruledOutCauses||[]),...areas]).slice(0,6);
+}
+function conclusionConfidence(supporting,unverified,remaining){
+  const measured=supporting.some(e=>e.verificationStatus==='physically_measured');
+  const observed=supporting.some(e=>['physically_observed','document_confirmed'].includes(e.verificationStatus));
+  if(measured && unverified.length===0 && remaining.length<=1)return 'high';
+  if((measured||observed) && unverified.length<=4)return 'moderate';
+  return 'low';
+}
+function generateDeterministicConclusion(resultId,step){
+  const primaryCause=step?.diagnosis||'Conclusion not available';
+  const primaryArea=causeArea(primaryCause);
+  const supporting=(currentCase.evidence||[]).filter(e=>e && e.statement).slice(-10);
+  const remaining=deriveRemainingPossibilities(resultId,primaryArea);
+  const unverified=deriveUnverifiedConditions();
+  const ruledOut=deriveRuledOut(primaryArea);
+  const confidence=conclusionConfidence(supporting,unverified,remaining);
+  const safetyRestrictions=[];
+  if(!safetyReviewComplete())safetyRestrictions.push('Safety review is incomplete. Do not proceed with field work.');
+  safetyRestrictions.push('BMS technician work is limited to authorized scope and confirmed circuits at or below 24 VAC and 50 VDC. Higher or unknown exposure requires stop-work and escalation.');
+  const conclusion={status:'draft',resultId,primaryCause,primaryCauseArea:primaryArea,confidence,
+    supportingEvidenceIds:supporting.map(e=>e.id),supportingEvidence:supporting.map(e=>({id:e.id,statement:e.statement,verificationStatus:e.verificationStatus})),
+    ruledOutCauses:ruledOut,remainingPossibilities:remaining.length?remaining:['No distinct alternative cause was established by the completed path.'],
+    unverifiedConditions:unverified.length?unverified:['No additional unverified condition was identified from the recorded case data.'],
+    recommendedNextAction:step?.action||currentCase.recommendedNextAction||'Review the recorded evidence and determine the next authorized action.',
+    safetyRestrictions,powraStatus:currentCase.powra?.status||'not-recorded',electricalScopeStatus:'BMS scope acknowledged through safety review',
+    technicianNotes:currentCase.conclusion?.technicianNotes||'',generatedAt:new Date().toISOString(),finalizedAt:null,logicVersion:APP_LOGIC_VERSION};
+  currentCase.conclusion=conclusion; currentCase.recommendedNextAction=conclusion.recommendedNextAction; saveCaseLocal();
+  return conclusion;
+}
+function listHtml(items,empty){ return `<ul>${(items&&items.length?items:[empty]).map(x=>`<li>${escapeHtml(typeof x==='string'?x:x.statement)}</li>`).join('')}</ul>`; }
+function renderConclusionBox(c){
+  const box=document.createElement('section'); box.className='conclusion-box';
+  box.innerHTML=`<div class="conclusion-head"><strong>Evidence-based draft conclusion</strong><span class="confidence-pill ${escapeHtml(c.confidence)}">${escapeHtml(c.confidence)} confidence</span></div>
+    <div class="conclusion-section"><h4>Primary likely cause</h4><p><strong>${escapeHtml(c.primaryCause)}</strong></p></div>
+    <div class="conclusion-section"><h4>Supporting evidence</h4>${listHtml(c.supportingEvidence,'No supporting evidence was recorded.')}</div>
+    <div class="conclusion-section"><h4>Ruled-out cause areas</h4>${listHtml(c.ruledOutCauses,'No cause area was deterministically ruled out.')}</div>
+    <div class="conclusion-section"><h4>Remaining possibilities</h4>${listHtml(c.remainingPossibilities,'No remaining possibility was identified.')}</div>
+    <div class="conclusion-section conclusion-caution"><h4>Conditions not verified</h4>${listHtml(c.unverifiedConditions,'No unverified condition was identified.')}</div>
+    <div class="conclusion-section"><h4>Recommended next action</h4><p>${escapeHtml(c.recommendedNextAction)}</p></div>
+    <div class="conclusion-section conclusion-caution"><h4>Safety and authorization restrictions</h4>${listHtml(c.safetyRestrictions,'Follow approved site safety procedures.')}</div>
+    <div class="conclusion-section"><h4>Case status</h4><p>Draft conclusion. POWRA: ${escapeHtml(c.powraStatus)}. Generated ${new Date(c.generatedAt).toLocaleString()}.</p></div>`;
+  return box;
+}
 // ─── Gemini Core Placeholders ─────────────────────────────────────────────────
 // ─── Gemini AI ────────────────────────────────────────────────────────────────
 function geminiWelcome() {
@@ -1609,7 +1708,7 @@ function geminiAddMsg(role, text) {
 // Structured troubleshooting session, evidence, documents, and voice
 const CASE_STORAGE_KEY = 'bmsTroubleshooter.activeCase.v1';
 function newCase() {
-  return { caseId:'CASE-'+new Date().toISOString().replace(/[-:TZ.]/g,'').slice(0,14), status:'active', createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(), equipment:{tag:'',type:'',manufacturer:'',model:'',controllerModel:'',servingEquipment:''}, reportedIssue:'', currentStep:null, path:[], evidence:[], documents:[], ruledOutCauses:[], remainingCauseAreas:[], recommendedNextAction:'' };
+  return { caseId:'CASE-'+new Date().toISOString().replace(/[-:TZ.]/g,'').slice(0,14), status:'active', createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(), equipment:{tag:'',type:'',manufacturer:'',model:'',controllerModel:'',servingEquipment:''}, reportedIssue:'', currentStep:null, path:[], evidence:[], documents:[], ruledOutCauses:[], remainingCauseAreas:[], recommendedNextAction:'', conclusion:null };
 }
 let currentCase;
 try { currentCase = JSON.parse(localStorage.getItem(CASE_STORAGE_KEY)) || newCase(); } catch { currentCase = newCase(); }
@@ -1621,12 +1720,13 @@ function evidenceStatus(answer){ const a=String(answer).toLowerCase(); return /u
 function recordTreeAnswer(stepId,step,answer,nextId){
   if(!currentCase) currentCase=newCase();
   currentCase.currentStep=nextId;
+  currentCase.conclusion=null;
   currentCase.path.push({stepId,question:step.question||stepId,answer,nextId,timestamp:new Date().toISOString()});
   currentCase.evidence.push({id:'EV-'+cryptoRandom(),statement:`${step.question} Answer: ${answer}`,evidenceType:'workflow_answer',verificationStatus:evidenceStatus(answer),source:'technician_selection',relatedStep:stepId,timestamp:new Date().toISOString()});
   saveCaseLocal(); renderEvidence();
 }
 function cryptoRandom(){ return (globalThis.crypto?.randomUUID?.()||Math.random().toString(36).slice(2)).slice(0,8).toUpperCase(); }
-function removeEvidenceForStep(stepId){ currentCase.path=currentCase.path.filter(x=>x.stepId!==stepId); currentCase.evidence=currentCase.evidence.filter(x=>x.relatedStep!==stepId); currentCase.currentStep=stepId; saveCaseLocal(); renderEvidence(); }
+function removeEvidenceForStep(stepId){ currentCase.conclusion=null; currentCase.path=currentCase.path.filter(x=>x.stepId!==stepId); currentCase.evidence=currentCase.evidence.filter(x=>x.relatedStep!==stepId); currentCase.currentStep=stepId; saveCaseLocal(); renderEvidence(); }
 function addManualEvidence(){
   const finding=document.getElementById('ev-finding').value.trim(), value=document.getElementById('ev-value').value.trim(), units=document.getElementById('ev-units').value.trim(), location=document.getElementById('ev-location').value.trim();
   if(!finding) return showToast('Enter a finding first','err');
@@ -1650,7 +1750,7 @@ function renderTextList(id,items,empty){ const el=document.getElementById(id);if
 function escapeHtml(v){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function setWorkspace(view){ document.body.classList.remove('view-diagnose','view-evidence','view-documents','view-copilot'); document.body.classList.add('view-'+view); document.querySelectorAll('.workspace-tab').forEach(b=>b.classList.toggle('active',b.dataset.view===view)); if(view==='evidence'||view==='documents')renderEvidence(); window.scrollTo({top:0,behavior:'smooth'}); }
 function resetCase(){ if(!confirm('Start a new case? The current local case will be replaced.'))return; currentCase=newCase(); history=[]; if(tree){current=tree.start;currentCase.currentStep=current;} saveCaseLocal();renderEvidence();render(); }
-function caseSummary(){ const facts=currentCase.evidence.map(e=>`- [${e.verificationStatus}] ${e.statement}`).join('\n')||'- None recorded'; return `${currentCase.caseId}\nEquipment: ${currentCase.equipment.tag||'Unknown'} ${currentCase.equipment.type||''}\nIssue: ${currentCase.reportedIssue||'Not entered'}\nCurrent step: ${currentCase.currentStep||current||'Not started'}\n\nEvidence:\n${facts}`; }
+function caseSummary(){ const facts=currentCase.evidence.map(e=>`- [${e.verificationStatus}] ${e.statement}`).join('\n')||'- None recorded'; const c=currentCase.conclusion; const conclusion=c?`\n\nDRAFT CONCLUSION\nPrimary likely cause: ${c.primaryCause}\nConfidence: ${c.confidence}\nRemaining possibilities:\n- ${c.remainingPossibilities.join('\n- ')}\nConditions not verified:\n- ${c.unverifiedConditions.join('\n- ')}\nRecommended next action: ${c.recommendedNextAction}`:''; return `${currentCase.caseId}\nEquipment: ${currentCase.equipment.tag||'Unknown'} ${currentCase.equipment.type||''}\nIssue: ${currentCase.reportedIssue||'Not entered'}\nCurrent step: ${currentCase.currentStep||current||'Not started'}\n\nEvidence:\n${facts}${conclusion}`; }
 async function copySummary(){ try{await navigator.clipboard.writeText(caseSummary());showToast('Summary copied','ok');}catch{showToast('Copy failed','err');} }
 function exportCase(){ const blob=new Blob([JSON.stringify(currentCase,null,2)],{type:'application/json'}); const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`${currentCase.caseId}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
 function attachDocuments(files){ [...files].forEach(file=>{ currentCase.documents.push({id:'DOC-'+cryptoRandom(),name:file.name,type:file.type,size:file.size,sourceType:'PROJECT DOCUMENT',modelMatch:'Unconfirmed',revision:'Unconfirmed',addedAt:new Date().toISOString()}); }); saveCaseLocal();renderDocuments();showToast(`${files.length} document(s) attached to this browser session`,'ok'); }
@@ -1676,7 +1776,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.18-safety-review-modal';
+const APP_LOGIC_VERSION = '0.6.19-evidence-conclusion-engine';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
@@ -1691,6 +1791,7 @@ function normalizeCase(c){
   c.measurements=Array.isArray(c.measurements)?c.measurements:[];
   c.powra=c.powra&&typeof c.powra==='object'?c.powra:{status:'',note:'',recordedAt:null};
   c.safetyReview=c.safetyReview&&typeof c.safetyReview==='object'?c.safetyReview:{lifeSafetyAcknowledged:false,specializedEquipmentAcknowledged:false,updatedAt:null,technicianName:null,technicianEmail:null};
+  c.conclusion=c.conclusion&&typeof c.conclusion==='object'?c.conclusion:null;
   c.controllerName=c.controllerName||''; c.bacnetInstance=c.bacnetInstance||'';
   return c;
 }

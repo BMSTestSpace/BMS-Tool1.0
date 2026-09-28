@@ -1832,7 +1832,7 @@
     }
   },
   "product": {
-    "version": "0.6.0-evidence-reporting",
+    "version": "0.6.19-evidence-conclusion-engine",
     "evidenceCapture": {
       "technicianNotes": "optional_every_step",
       "photographs": "optional_local_compressed",
@@ -1843,10 +1843,16 @@
     },
     "conclusionFormat": [
       "primary_likely_cause",
+      "confidence",
+      "supporting_evidence",
+      "ruled_out_causes",
       "remaining_possibilities",
       "conditions_not_verified",
       "recommended_action",
-      "compiled_evidence_and_notes"
-    ]
+      "safety_restrictions",
+      "powra_status",
+      "technician_notes"
+    ],
+    "conclusionAuthority": "deterministic_path_and_recorded_evidence"
   }
 }
