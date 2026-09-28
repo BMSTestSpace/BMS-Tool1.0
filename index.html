@@ -872,8 +872,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.13-cors-body-metadata-r1
-// v0.6.13 r1: request metadata moved into JSON body to reduce CORS preflight complexity; 4096-token streaming and continuation retained.
+// BMS Troubleshooter Version: 0.6.14-json-sse-fallback
+// v0.6.14: supports both application/json and text/event-stream Copilot responses; token controls, retries, and continuation retained.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -924,7 +924,7 @@ async function installApp() {
 // Register the existing offline service worker.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js?v=0.6.13-r1', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
+    navigator.serviceWorker.register('./service-worker.js?v=0.6.14', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
       console.error('Service worker registration failed:', error);
     });
   });
@@ -1447,7 +1447,16 @@ async function callCopilot(contents, requestId, attempt, continuationText='', on
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${SB_KEY}`},
       body:JSON.stringify({contents:bodyContents,generationConfig:{temperature:0.5,maxOutputTokens:4096,thinkingConfig:{thinkingBudget:256}},requestId,attempt,continuationNumber,stream:true})
     });
-    if(!res.ok){const t=await res.text();let d={};try{d=JSON.parse(t)}catch{};throw new Error(d.error||`HTTP ${res.status}`);}
+    if(!res.ok){const t=await res.text();let d={};try{d=JSON.parse(t)}catch{};throw new Error(d.error?.message||d.error||`HTTP ${res.status}`);}
+    const contentType=(res.headers.get('content-type')||'').toLowerCase();
+    if(contentType.includes('application/json')){
+      const data=await res.json();
+      const reply=extractGeminiReply(data);
+      const finishReason=data?.candidates?.[0]?.finishReason||'UNKNOWN';
+      if(!reply)throw new Error(`AI returned JSON without content (${finishReason})`);
+      if(onChunk)onChunk(reply);
+      return {text:reply,finishReason};
+    }
     if(!res.body)throw new Error('Streaming response body unavailable');
     const reader=res.body.getReader(),decoder=new TextDecoder();
     let buffer='',reply='',finishReason='';
@@ -1632,7 +1641,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.13-cors-body-metadata-r1';
+const APP_LOGIC_VERSION = '0.6.14-json-sse-fallback';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
