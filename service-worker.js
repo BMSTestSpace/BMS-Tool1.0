@@ -1,5 +1,5 @@
-// BMS Troubleshooter service worker - application version 0.6.13
-const CACHE_NAME = 'bms-troubleshooter-v0-6-13';
+// BMS Troubleshooter service worker - application version 0.6.13 r1
+const CACHE_NAME = 'bms-troubleshooter-v0-6-13-r1';
 const CORE_FILES = [
   './',
   './index.html',

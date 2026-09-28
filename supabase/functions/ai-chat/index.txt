@@ -3,20 +3,21 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, x-request-id, x-attempt",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, apikey",
   "Access-Control-Expose-Headers": "x-request-id, x-bms-copilot-version",
 };
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
-  if (req.method !== "POST") return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  if (req.method !== "POST") return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json", "x-bms-copilot-version": "0.6.13-r1" } });
 
-  const requestId = req.headers.get("x-request-id") || crypto.randomUUID();
+  let requestId = crypto.randomUUID();
   try {
     const apiKey = Deno.env.get("GEMINI_API_KEY");
     if (!apiKey) throw new Error("GEMINI_API_KEY is not configured");
 
     const body = await req.json();
+    requestId = typeof body.requestId === "string" && body.requestId ? body.requestId : requestId;
     const { contents, generationConfig } = body;
     if (!Array.isArray(contents) || !contents.length) {
       return new Response(JSON.stringify({ error: "contents is required", requestId }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json", "x-request-id": requestId } });
@@ -50,7 +51,7 @@ serve(async (req) => {
         "Content-Type": "text/event-stream; charset=utf-8",
         "Cache-Control": "no-cache, no-transform",
         "x-request-id": requestId,
-        "x-bms-copilot-version": "0.6.13",
+        "x-bms-copilot-version": "0.6.13-r1",
       },
     });
   } catch (e) {
