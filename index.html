@@ -1811,7 +1811,7 @@ function openSessionManager(auto=false){ renderSavedSessions(); document.getElem
 function closeSessionManager(){ document.getElementById('session-manager').classList.remove('show'); }
 function renderSavedSessions(){
   const el=document.getElementById('saved-session-list'); if(!el)return;
-  const sessions=loadCaseIndex().filter(c=>c.status==='active').sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt)));
+  const sessions=loadCaseIndex().filter(c=>['active','requires_review'].includes(c.status)).sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt)));
   if(!sessions.length){el.innerHTML='<div class="empty-state">No incomplete sessions are saved in this browser.</div>';return;}
   el.innerHTML=''; sessions.forEach(c=>{
     const card=document.createElement('div');card.className='saved-session';
