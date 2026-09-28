@@ -3,7 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, x-request-id, x-attempt",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
   "Access-Control-Expose-Headers": "x-request-id",
 };
 
@@ -12,13 +12,15 @@ serve(async (req) => {
   if (req.method !== "POST") return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
   const requestId = req.headers.get("x-request-id") || crypto.randomUUID();
-  const attempt = req.headers.get("x-attempt") || "1";
+  const attempt = "body";
   try {
     const apiKey = Deno.env.get("GEMINI_API_KEY");
     if (!apiKey) throw new Error("GEMINI_API_KEY is not configured");
 
     const body = await req.json();
-    const { contents, generationConfig = {}, continuationNumber = 0 } = body;
+    const { contents, generationConfig = {}, continuationNumber = 0, attempt: bodyAttempt = 1, requestId: bodyRequestId } = body;
+    const effectiveRequestId = bodyRequestId || requestId;
+    const effectiveAttempt = Number(bodyAttempt) || 1;
     if (!Array.isArray(contents) || !contents.length) {
       return new Response(JSON.stringify({ error: "contents is required", requestId }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json", "x-request-id": requestId } });
     }
@@ -50,7 +52,7 @@ serve(async (req) => {
     }
 
     if (!upstream.body) throw new Error("Gemini returned no streaming body");
-    console.log(JSON.stringify({ requestId, attempt, continuationNumber, state: "stream_started", maxOutputTokens: 4096, thinkingBudget: 256 }));
+    console.log(JSON.stringify({ requestId: effectiveRequestId, attempt: effectiveAttempt, continuationNumber, state: "stream_started", maxOutputTokens: 4096, thinkingBudget: 256 }));
 
     return new Response(upstream.body, {
       status: 200,
