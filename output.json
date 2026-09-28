@@ -1836,7 +1836,7 @@
     }
   },
   "product": {
-    "version": "0.6.16-bms-electrical-scope",
+    "version": "0.6.17-safety-modal",
     "evidenceCapture": {
       "technicianNotes": "optional_every_step",
       "photographs": "optional_local_compressed",

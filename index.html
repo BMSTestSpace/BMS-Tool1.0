@@ -607,6 +607,29 @@
     }
 
 
+    /* Login-following safety modal - v0.6.17 */
+    .safety-modal-overlay { position:fixed; inset:0; z-index:1300; display:none; align-items:center; justify-content:center; padding:14px; background:rgba(15,23,42,.68); backdrop-filter:blur(4px); }
+    .safety-modal-overlay.show { display:flex; }
+    .safety-modal { width:min(620px,100%); max-height:calc(100dvh - 28px); overflow:auto; background:var(--surface); border:1px solid var(--border-bright); border-radius:14px; box-shadow:0 24px 70px rgba(15,23,42,.32); }
+    .safety-modal-head { position:sticky; top:0; z-index:2; padding:15px 16px; background:var(--surface); border-bottom:1px solid var(--border); }
+    .safety-modal-head h2 { font-size:18px; margin-bottom:4px; }
+    .safety-modal-head p { color:var(--text-muted); font-size:12px; line-height:1.45; }
+    .safety-modal-body { padding:14px 16px 16px; }
+    .safety-modal-section { padding:13px; margin-bottom:12px; border:1px solid var(--border); border-radius:10px; background:var(--surface2); }
+    .safety-modal-section.scope { border-color:#fecaca; background:#fef2f2; }
+    .safety-modal-section.powra { border-color:#fcd34d; background:#fffbeb; }
+    .safety-modal-section h3 { font:500 12px var(--mono); margin-bottom:7px; }
+    .safety-modal-section p { font-size:12px; line-height:1.5; margin-bottom:9px; }
+    .safety-modal-option { display:flex; align-items:flex-start; gap:9px; padding:9px 10px; margin:7px 0; border:1px solid var(--border); border-radius:8px; background:#fff; font-size:13px; cursor:pointer; }
+    .safety-modal-option input { width:18px; height:18px; flex:0 0 auto; margin-top:1px; }
+    .safety-modal-note { display:none; margin-top:9px; }
+    .safety-modal-note.show { display:block; }
+    .safety-modal-note label { display:block; margin-bottom:5px; font:500 10px var(--mono); text-transform:uppercase; }
+    .safety-modal-note textarea { width:100%; min-height:72px; resize:vertical; border:1px solid #f59e0b; border-radius:8px; padding:9px 10px; font:13px var(--sans); }
+    .safety-modal-message { min-height:18px; margin:8px 0; color:#b91c1c; font:500 11px/1.45 var(--mono); }
+    .safety-modal-actions { display:flex; gap:8px; justify-content:flex-end; }
+    .safety-summary-btn { width:100%; margin:0 0 12px; min-height:40px; border:1px solid #86efac; border-radius:8px; background:#f0fdf4; color:#166534; font:500 11px var(--mono); cursor:pointer; }
+    @media(max-width:600px){ .safety-modal-overlay{padding:0}.safety-modal{width:100%;height:100dvh;max-height:100dvh;border-radius:0}.safety-modal-head{padding:13px 14px}.safety-modal-body{padding:12px 14px 24px}.safety-modal-actions{position:sticky;bottom:0;background:var(--surface);padding-top:10px}.safety-modal-actions .app-btn{flex:1} }
     /* BMS technician electrical-scope gate - v0.6.16 */
     .scope-gate { margin:0 0 14px; padding:14px; border:2px solid #dc2626; border-radius:10px; background:#fef2f2; }
     .scope-gate h3 { color:#991b1b; font:500 12px var(--mono); margin-bottom:7px; letter-spacing:.04em; }
@@ -788,6 +811,29 @@
   </div>
 </div>
 
+<div id="safety-modal-overlay" class="safety-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="safety-modal-title">
+  <div class="safety-modal">
+    <div class="safety-modal-head"><h2 id="safety-modal-title">Safety review</h2><p>Complete this review before starting or resuming BMS troubleshooting.</p></div>
+    <div class="safety-modal-body">
+      <section class="safety-modal-section scope">
+        <h3>BMS technician electrical scope</h3>
+        <p>Normal guided work is limited to confirmed circuits and accessible work areas at or below <strong>24 VAC</strong> and <strong>50 VDC</strong>.</p>
+        <label class="safety-modal-option"><input type="radio" name="modal-electrical-scope" value="within-bms-limits"><strong>Confirmed: work is at or below 24 VAC and 50 VDC</strong></label>
+        <label class="safety-modal-option"><input type="radio" name="modal-electrical-scope" value="above-or-unknown"><strong>Above these limits or voltage/exposure is unknown: stop and escalate</strong></label>
+      </section>
+      <section class="safety-modal-section powra">
+        <h3>POWRA review</h3>
+        <p>Confirm the Point of Work Risk Assessment before beginning or continuing troubleshooting.</p>
+        <label class="safety-modal-option"><input type="radio" name="modal-powra" value="completed"><strong>Yes, POWRA is completed</strong></label>
+        <label class="safety-modal-option"><input type="radio" name="modal-powra" value="stop"><strong>No, stop and complete the POWRA</strong></label>
+        <label class="safety-modal-option"><input type="radio" name="modal-powra" value="not-applicable"><strong>Not applicable, with technician note required</strong></label>
+        <div id="modal-powra-note-wrap" class="safety-modal-note"><label for="modal-powra-note">Technician note required</label><textarea id="modal-powra-note" placeholder="Explain why POWRA is not applicable."></textarea></div>
+      </section>
+      <div id="safety-modal-message" class="safety-modal-message" aria-live="polite"></div>
+      <div class="safety-modal-actions"><button class="app-btn primary" type="button" onclick="completeSafetyReview()">Continue to troubleshooting</button></div>
+    </div>
+  </div>
+</div>
 <div id="save-toast"></div>
 
 <header>
@@ -890,8 +936,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.16-bms-electrical-scope
-// v0.6.16: limits normal guided work to BMS technician scope at or below 24 VAC and 50 VDC. Higher or unknown exposure stops the workflow and requires escalation under approved safety procedures.
+// BMS Troubleshooter Version: 0.6.17-safety-modal
+// v0.6.17: moves electrical-scope and POWRA review into a compact modal shown immediately after login; safety enforcement and session persistence remain active.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -942,7 +988,7 @@ async function installApp() {
 // Register the existing offline service worker.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js?v=0.6.16', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
+    navigator.serviceWorker.register('./service-worker.js?v=0.6.17', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
       console.error('Service worker registration failed:', error);
     });
   });
@@ -1064,6 +1110,7 @@ function submitLogin() {
   document.getElementById('login-overlay').classList.add('hidden');
   document.getElementById('user-chip').textContent = name;
   sessionStorage.setItem('bms_user', JSON.stringify(currentUser));
+  showSafetyModal(true);
   checkAppReady();
 }
 
@@ -1661,7 +1708,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.16-bms-electrical-scope';
+const APP_LOGIC_VERSION = '0.6.17-safety-modal';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
@@ -1705,15 +1752,61 @@ function renderSavedSessions(){
     card.querySelector('[data-resume]').onclick=()=>resumeCase(c.caseId); card.querySelector('[data-summary]').onclick=()=>viewSavedSummary(c.caseId); card.querySelector('[data-discard]').onclick=()=>discardSavedCase(c.caseId); el.appendChild(card);
   });
 }
-function resumeCase(id){ const c=loadCaseIndex().find(x=>x.caseId===id); if(!c)return; currentCase=normalizeCase(c); localStorage.setItem(CASE_STORAGE_KEY,JSON.stringify(currentCase)); history=(currentCase.path||[]).map(p=>({stepId:p.stepId,answer:p.answer,nextId:p.nextId})); if(tree?.steps?.[currentCase.currentStep])current=currentCase.currentStep; else if(tree)current=tree.start; closeSessionManager();renderEvidence();render();showToast('Session resumed','ok'); }
+function resumeCase(id){ const c=loadCaseIndex().find(x=>x.caseId===id); if(!c)return; currentCase=normalizeCase(c); localStorage.setItem(CASE_STORAGE_KEY,JSON.stringify(currentCase)); history=(currentCase.path||[]).map(p=>({stepId:p.stepId,answer:p.answer,nextId:p.nextId})); if(tree?.steps?.[currentCase.currentStep])current=currentCase.currentStep; else if(tree)current=tree.start; closeSessionManager();renderEvidence();render();showSafetyModal(true);showToast('Session resumed','ok'); }
 function viewSavedSummary(id){ const c=loadCaseIndex().find(x=>x.caseId===id); if(!c)return; alert(`${c.caseId}\nEquipment: ${c.equipment?.tag||'Unknown'} ${c.equipment?.type||''}\nIssue: ${c.reportedIssue||'Not entered'}\nCurrent step: ${c.currentStep||'Not started'}\nChecks completed: ${(c.path||[]).length}\nEvidence items: ${(c.evidence||[]).length}`); }
 function discardSavedCase(id){ if(!confirm('Discard this session? Its path, evidence, notes, and incomplete conclusion will be removed from the active list.'))return; const idx=loadCaseIndex(); const c=idx.find(x=>x.caseId===id); if(c){c.status='discarded';c.discardedAt=new Date().toISOString();saveCaseIndex(idx);} if(currentCase.caseId===id){currentCase=normalizeCase(newCase());saveCaseLocal();}renderSavedSessions();renderEvidence(); }
-function createAndStartCase(){ currentCase=normalizeCase(newCase()); if(tree){current=tree.start;currentCase.currentStep=current;} history=[];saveCaseLocal();closeSessionManager();renderEvidence();render();showToast('New case started','ok'); }
+function createAndStartCase(){ currentCase=normalizeCase(newCase()); if(tree){current=tree.start;currentCase.currentStep=current;} history=[];saveCaseLocal();closeSessionManager();renderEvidence();render();showSafetyModal(true);showToast('New case started','ok'); }
 
 // Production technician mode: flow map can review completed/current nodes only, never jump forward.
 const originalJumpTo=jumpTo;
 jumpTo=function(id){ const allowed=id===current||history.some(h=>h.stepId===id); if(!allowed){showToast('Strict workflow: complete the current step first','err');return;} originalJumpTo(id); };
 
+function safetyReviewIsComplete(){
+  const scope=currentCase?.electricalScope?.status||'';
+  const powra=currentCase?.powra?.status||'';
+  const note=(currentCase?.powra?.note||'').trim();
+  return scope==='within-bms-limits' && (powra==='completed' || (powra==='not-applicable' && note));
+}
+function showSafetyModal(force=false){
+  if(!currentCase)currentCase=normalizeCase(newCase());
+  const overlay=document.getElementById('safety-modal-overlay'); if(!overlay)return;
+  if(!force && safetyReviewIsComplete())return;
+  document.querySelectorAll('input[name="modal-electrical-scope"]').forEach(i=>i.checked=i.value===(currentCase.electricalScope?.status||''));
+  document.querySelectorAll('input[name="modal-powra"]').forEach(i=>i.checked=i.value===(currentCase.powra?.status||''));
+  const note=document.getElementById('modal-powra-note'); if(note)note.value=currentCase.powra?.note||'';
+  updateSafetyModalState(); overlay.classList.add('show');
+}
+function updateSafetyModalState(){
+  const powra=document.querySelector('input[name="modal-powra"]:checked')?.value||'';
+  document.getElementById('modal-powra-note-wrap')?.classList.toggle('show',powra==='not-applicable');
+  const scope=document.querySelector('input[name="modal-electrical-scope"]:checked')?.value||'';
+  const message=document.getElementById('safety-modal-message'); if(!message)return;
+  if(scope==='above-or-unknown')message.textContent=scopeStopMessage();
+  else if(powra==='stop')message.textContent='Stop work and complete the POWRA before proceeding.';
+  else message.textContent='';
+}
+document.addEventListener('change',e=>{ if(e.target?.matches('input[name="modal-electrical-scope"],input[name="modal-powra"]'))updateSafetyModalState(); });
+function completeSafetyReview(){
+  const scope=document.querySelector('input[name="modal-electrical-scope"]:checked')?.value||'';
+  const powra=document.querySelector('input[name="modal-powra"]:checked')?.value||'';
+  const note=(document.getElementById('modal-powra-note')?.value||'').trim();
+  const message=document.getElementById('safety-modal-message');
+  if(!scope){message.textContent='Confirm the BMS electrical scope.';return;}
+  if(scope!=='within-bms-limits'){message.textContent=scopeStopMessage();return;}
+  if(!powra){message.textContent='Complete the POWRA review.';return;}
+  if(powra==='stop'){message.textContent='Stop work and complete the POWRA before proceeding.';return;}
+  if(powra==='not-applicable'&&!note){message.textContent='A technician note is required when POWRA is not applicable.';return;}
+  const now=new Date().toISOString();
+  currentCase.electricalScope={status:scope,recordedAt:now};
+  currentCase.powra={status:powra,note:powra==='not-applicable'?note:'',recordedAt:now};
+  saveCaseLocal(); document.getElementById('safety-modal-overlay').classList.remove('show');
+  showToast('Safety review recorded','ok'); render();
+}
+function addSafetyReviewButton(panel){
+  const btn=document.createElement('button'); btn.type='button'; btn.className='safety-summary-btn';
+  btn.textContent=safetyReviewIsComplete()?'Safety review completed - view or update':'Safety review required';
+  btn.onclick=()=>showSafetyModal(true); panel.insertBefore(btn,panel.firstChild);
+}
 function renderElectricalScopeGate(panel){
   if(!panel||!currentCase)return;
   panel.querySelector('.scope-gate')?.remove();
@@ -1740,7 +1833,7 @@ function electricalScopeAllowsWork(){
   const status=currentCase?.electricalScope?.status||'';
   if(status==='within-bms-limits')return true;
   showToast(status==='above-or-unknown'?'Stop and escalate: voltage is above the BMS limit or unknown':'Confirm the BMS electrical scope before continuing','err');
-  document.querySelector('.scope-gate')?.scrollIntoView({behavior:'smooth',block:'start'});
+  showSafetyModal(true);
   return false;
 }
 function renderPowraGate(panel){
@@ -1774,7 +1867,7 @@ function powraAllowsWork(){
   if(status==='not-applicable')showToast('Technician note is required when POWRA is not applicable','err');
   else if(status==='stop')showToast('Stop and complete the POWRA before continuing','err');
   else showToast('Complete the POWRA review before continuing','err');
-  document.querySelector('.powra-gate')?.scrollIntoView({behavior:'smooth',block:'start'});
+  showSafetyModal(true);
   return false;
 }
 const SAFETY_RULES=[
@@ -1787,7 +1880,7 @@ const SAFETY_RULES=[
 function safetyRulesForStep(step){ const text=[step?.question,step?.notes,step?.diagnosis,step?.action].filter(Boolean).join(' '); return SAFETY_RULES.filter(r=>r.pattern.test(text)); }
 function addSafetyGate(panel,step){ const rules=safetyRulesForStep(step); if(!rules.length)return; const wrap=document.createElement('div');wrap.className='safety-gate';wrap.innerHTML=`<h4>Safety review required</h4><p>${escapeHtml(SAFETY_REVIEW_STATUS)}</p>`; rules.forEach(rule=>{ const checked=currentCase.safetyAcknowledgments.some(a=>a.stepId===current&&a.ruleId===rule.id); const row=document.createElement('label');row.className='safety-check';row.innerHTML=`<input type="checkbox" ${checked?'checked':''}><span><strong>${escapeHtml(rule.title)}:</strong> ${escapeHtml(rule.text)}</span>`; row.querySelector('input').onchange=e=>{currentCase.safetyAcknowledgments=currentCase.safetyAcknowledgments.filter(a=>!(a.stepId===current&&a.ruleId===rule.id));if(e.target.checked)currentCase.safetyAcknowledgments.push({stepId:current,ruleId:rule.id,acknowledgedAt:new Date().toISOString(),status:'technician_acknowledged_draft_warning'});saveCaseLocal();};wrap.appendChild(row);}); panel.insertBefore(wrap,panel.querySelector('.nav-row')); }
 const originalRenderQuestion=renderQuestion;
-renderQuestion=function(){ originalRenderQuestion(); const panel=document.getElementById('q-content'); const step=tree?.steps?.[current]; if(panel&&step){ renderPowraGate(panel); renderElectricalScopeGate(panel); addSafetyGate(panel,step); } };
+renderQuestion=function(){ originalRenderQuestion(); const panel=document.getElementById('q-content'); const step=tree?.steps?.[current]; if(panel&&step){ addSafetyReviewButton(panel); addSafetyGate(panel,step); } };
 
 // Auto-offer active sessions once login and tree are ready.
 const originalCheckAppReady=checkAppReady;
