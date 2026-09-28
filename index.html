@@ -872,8 +872,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.7-pwa-install-reinstall-fix
-// PWA install/reinstall UX corrected in v0.6.7 while preserving iPad landscape fixes.
+// BMS Troubleshooter Version: 0.6.8-permanent-install-button
+// Permanent Install App button in v0.6.8 while preserving PWA and iPad landscape fixes.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -883,8 +883,9 @@ function isStandaloneMode() {
 function updateInstallButton() {
   const btn = document.getElementById('install-app-btn');
   if (!btn) return;
-  // Keep installation discoverable in every normal browser session. Hide only inside the installed PWA.
-  btn.hidden = isStandaloneMode();
+  // v0.6.8: Install App is permanent. Browser/PWA state can never hide this control.
+  btn.hidden = false;
+  btn.style.display = 'inline-flex';
 }
 
 window.addEventListener('beforeinstallprompt', (event) => {
@@ -901,7 +902,7 @@ window.addEventListener('appinstalled', () => {
 
 async function installApp() {
   if (isStandaloneMode()) {
-    updateInstallButton();
+    alert('BMS Troubleshooter appears to already be running as an installed app. The Install App control remains visible by design.');
     return;
   }
   if (!deferredInstallPrompt) {
@@ -1560,7 +1561,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.7-pwa-install-reinstall-fix';
+const APP_LOGIC_VERSION = '0.6.8-permanent-install-button';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
