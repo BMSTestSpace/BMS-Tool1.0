@@ -872,8 +872,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.8-permanent-install-button
-// Permanent Install App button in v0.6.8 while preserving PWA and iPad landscape fixes.
+// BMS Troubleshooter Version: 0.6.9-copilot-resilience
+// Copilot resilience upgrade in v0.6.9; permanent Install App and iPad fixes preserved.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -1425,49 +1425,83 @@ Structured case state: ${JSON.stringify(currentCase)}
 Use the deterministic current question as the routing authority. Distinguish reported values from physical observations and measurements. If the user's answer does not satisfy the current question, ask one concise clarification. Be concise and practical. Plain language. If listing steps, number them. Keep responses under 150 words unless detail is truly needed.`;
 }
 
+function geminiRequestId(){ return 'AI-'+Date.now().toString(36).toUpperCase()+'-'+cryptoRandom(); }
+function sleep(ms){ return new Promise(resolve=>setTimeout(resolve,ms)); }
+function extractGeminiReply(data){ return data?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('') || ''; }
+function setCopilotStatus(el,text,isError=false){ el.textContent=text; el.style.color=isError?'var(--red)':'var(--text-dim)'; el.style.fontStyle='italic'; }
+function addRetryButton(el,userText){
+  const b=document.createElement('button'); b.className='gem-quick-btn'; b.textContent='Try again'; b.style.marginTop='7px';
+  b.onclick=()=>{ el.remove(); geminiAsk(userText); }; el.appendChild(document.createElement('br')); el.appendChild(b);
+}
+async function callCopilot(contents, requestId, attempt, continuationText='', onChunk=null) {
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(), 90000);
+  const bodyContents=contents.slice();
+  if(continuationText){
+    bodyContents.push({role:'model',parts:[{text:continuationText}]});
+    bodyContents.push({role:'user',parts:[{text:'Continue exactly where the previous response stopped. Do not repeat completed content.'}]});
+  }
+  try{
+    const res=await fetch(`${SB_URL}/functions/v1/ai-chat`,{
+      method:'POST', signal:controller.signal,
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${SB_KEY}`,'x-request-id':requestId,'x-attempt':String(attempt)},
+      body:JSON.stringify({contents:bodyContents,generationConfig:{temperature:0.7,maxOutputTokens:1200},requestId,attempt,stream:true})
+    });
+    if(!res.ok){const t=await res.text();let d={};try{d=JSON.parse(t)}catch{};throw new Error(d.error||`HTTP ${res.status}`);}
+    if(!res.body)throw new Error('Streaming response body unavailable');
+    const reader=res.body.getReader(),decoder=new TextDecoder();let buffer='',reply='';
+    while(true){const {value,done}=await reader.read();if(done)break;buffer+=decoder.decode(value,{stream:true});const events=buffer.split(/\r?\n\r?\n/);buffer=events.pop()||'';for(const event of events){for(const line of event.split(/\r?\n/)){if(!line.startsWith('data:'))continue;const payload=line.slice(5).trim();if(!payload||payload==='[DONE]')continue;try{const chunk=extractGeminiReply(JSON.parse(payload));if(chunk){reply+=chunk;if(onChunk)onChunk(chunk);}}catch(_){}}}}
+    if(!reply)throw new Error('AI stream ended without content');
+    return reply;
+  } finally {clearTimeout(timer);}
+}
 async function geminiAsk(userText) {
   if (!userText.trim()) return;
   geminiAddMsg('user', userText);
   document.getElementById('gem-input').value = '';
-  const typingEl = geminiAddMsg('ai', '…thinking…');
-  typingEl.style.color = 'var(--text-dim)';
-  typingEl.style.fontStyle = 'italic';
-  const sendBtn = document.getElementById('gem-send');
-  if (sendBtn) sendBtn.disabled = true;
-
-  const contents = [];
-  contents.push({ role: 'user', parts: [{ text: geminiContext() }] });
-  contents.push({ role: 'model', parts: [{ text: 'Understood. Ready to assist with BMS troubleshooting.' }] });
-  geminiMessages.slice(0, -1).forEach(m => {
-    contents.push({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.text }] });
-  });
-  contents.push({ role: 'user', parts: [{ text: userText }] });
-
-  try {
-    const res = await fetch("https://emkehdoofgaztuqmuyxw.supabase.co/functions/v1/ai-chat", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SB_KEY}`
-      },
-      body: JSON.stringify({ contents, generationConfig: { temperature: 0.7, maxOutputTokens: 400 } })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error?.message || `HTTP ${res.status}`);
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated.';
-    typingEl.textContent = reply;
-    typingEl.style.color = '';
-    typingEl.style.fontStyle = '';
-    geminiMessages[geminiMessages.length - 1].text = reply;
-  } catch (e) {
-    console.error('[Gemini] Error:', e);
-    typingEl.textContent = '⚠ Error: ' + e.message;
-    typingEl.style.color = 'var(--red)';
-    typingEl.style.fontStyle = '';
-  }
-  if (sendBtn) sendBtn.disabled = false;
+  const typingEl = geminiAddMsg('ai', 'Connecting…');
+  const messageIndex=geminiMessages.length-1;
+  const sendBtn=document.getElementById('gem-send'); if(sendBtn)sendBtn.disabled=true;
+  const contents=[
+    {role:'user',parts:[{text:geminiContext()}]},
+    {role:'model',parts:[{text:'Understood. Ready to assist with BMS troubleshooting.'}]}
+  ];
+  geminiMessages.slice(0,-2).forEach(m=>contents.push({role:m.role==='user'?'user':'model',parts:[{text:m.text}]}));
+  contents.push({role:'user',parts:[{text:userText}]});
+  const requestId=geminiRequestId();
+  let partial=''; let lastError=null;
+  try{
+    for(let attempt=1;attempt<=3;attempt++){
+      try{
+        setCopilotStatus(typingEl, attempt===1?'Generating…':`Connection interrupted. Retrying… (${attempt}/3)`);
+        console.info('[Copilot]',{requestId,attempt,state:'start'});
+        let attemptText='';
+        const reply=await callCopilot(contents,requestId,attempt,partial,(chunk)=>{
+          attemptText+=chunk;
+          typingEl.textContent=partial+(partial&&attemptText?'\n':'')+attemptText;
+          typingEl.style.color=''; typingEl.style.fontStyle='';
+          const box=document.getElementById('gem-messages'); box.scrollTop=box.scrollHeight;
+        });
+        if(!reply) throw new Error('AI returned an empty response');
+        partial += (partial?'\n':'') + reply;
+        geminiMessages[messageIndex].text=partial;
+        console.info('[Copilot]',{requestId,attempt,state:'complete',chars:partial.length});
+        return;
+      }catch(e){
+        lastError=e;
+        console.warn('[Copilot]',{requestId,attempt,state:'failed',error:e.message});
+        if(attempt<3){ await sleep(750*Math.pow(2,attempt-1)); continue; }
+      }
+    }
+    throw lastError||new Error('Copilot request failed');
+  }catch(e){
+    console.error('[Copilot] final failure',{requestId,error:e.message});
+    typingEl.textContent=partial ? `${partial}\n\n⚠ Response interrupted. You can try again.` : `⚠ Copilot could not complete the response: ${e.message}`;
+    typingEl.style.color=partial?'':'var(--red)'; typingEl.style.fontStyle='';
+    geminiMessages[messageIndex].text=partial;
+    addRetryButton(typingEl,userText);
+  }finally{ if(sendBtn)sendBtn.disabled=false; }
 }
-
 function geminiSend() {
   const val = document.getElementById('gem-input').value.trim();
   if (val) geminiAsk(val);
@@ -1561,7 +1595,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.8-permanent-install-button';
+const APP_LOGIC_VERSION = '0.6.9-copilot-resilience';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }

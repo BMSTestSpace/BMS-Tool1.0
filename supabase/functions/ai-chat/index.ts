@@ -1,124 +1,17 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods*: "POST, OPTIONS",
-  "Access-Contr*l-Allow-Headers":
-    "Content-Typ*, Authorization, apikey, x-client-*nfo",
-};
-
-serve(async (req: Reques*) => {
-  if (req.method === "OPTIO*S") {
-    return new Response(null* {
-      status: 204,
-      header*: corsHeaders,
-    });
-  }
-
-  if (*eq.method !== "POST") {
-    return*new Response(
-      JSON.stringify*{
-        error: "Method not allow*d",
-      }),
-      {
-        stat*s: 405,
-        headers: {
-       *  ...corsHeaders,
-          "Conte*t-Type": "application/json",
-     *  },
-      }
-    );
-  }
-
-  try {
- *  const apiKey = Deno.env.get("GEM*NI_API_KEY");
-
-    if (!apiKey) {
-*     throw new Error("GEMINI_API_K*Y is not configured.");
-    }
-
-   *const requestBody = await req.json*);
-    const { contents, generatio*Config } = requestBody;
-
-    if (!*rray.isArray(contents) || contents*length === 0) {
-      return new R*sponse(
-        JSON.stringify({
- *        error: "A non-empty conten*s array is required.",
-        }),*        {
-          status: 400,
- *        headers: {
-            ...*orsHeaders,
-            "Content-T*pe": "application/json",
-         *},
-        }
-      );
-    }
-
-    c*nst geminiResponse = await fetch(
-*     `https://generativelanguage.g*ogleapis.com/v1beta/models/gemini-*.5-flash:generateContent?key=${api*ey}`,
-      {
-        method: "POS*",
-        headers: {
-          "C*ntent-Type": "application/json",
- *      },
-        body: JSON.string*fy({
-          contents,
-         *generationConfig: {
-            te*perature: 0.4,
-            maxOutp*tTokens: 600,
-            ...gener*tionConfig,
-          },
-        }*,
-      }
-    );
-
-    const data =*await geminiResponse.json();
-
-    *f (!geminiResponse.ok) {
-      con*ole.error(
-        "Gemini request*failed:",
-        geminiResponse.s*atus,
-        JSON.stringify(data)*      );
-
-      return new Respons*(
-        JSON.stringify({
-       *  error:
-            data?.error?.*essage ||
-            `Gemini requ*st failed with HTTP ${geminiRespon*e.status}.`,
-        }),
-        {*          status: geminiResponse.s*atus,
-          headers: {
-       *    ...corsHeaders,
-            "C*ntent-Type": "application/json",
- *        },
-        }
-      );
-    *
-
-    return new Response(JSON.str*ngify(data), {
-      status: 200,
-*     headers: {
-        ...corsHea*ers,
-        "Content-Type": "appl*cation/json",
-      },
-    });
-  }*catch (error) {
-    console.error(*ai-chat error:", error);
-
-    retu*n new Response(
-      JSON.stringi*y({
-        error:
-          error*instanceof Error
-            ? err*r.message
-            : "An unexpe*ted server error occurred.",
-     *}),
-      {
-        status: 500,
- *      headers: {
-          ...cors*eaders,
-          "Content-Type": *application/json",
-        },
-    * }
-    );
-  }
+const CORS={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST, OPTIONS","Access-Control-Allow-Headers":"Content-Type, Authorization, x-request-id, x-attempt","Access-Control-Expose-Headers":"Content-Type, x-request-id"};
+serve(async(req)=>{
+ if(req.method==="OPTIONS")return new Response(null,{headers:CORS});
+ if(req.method!=="POST")return new Response(JSON.stringify({error:"Method not allowed"}),{status:405,headers:{...CORS,"Content-Type":"application/json"}});
+ const requestId=req.headers.get("x-request-id")||crypto.randomUUID(),attempt=req.headers.get("x-attempt")||"1";
+ try{
+  const key=Deno.env.get("GEMINI_API_KEY");if(!key)throw new Error("GEMINI_API_KEY is not configured");
+  const {contents,generationConfig={},stream=true}=await req.json();if(!Array.isArray(contents)||!contents.length)throw new Error("contents is required");
+  console.log(JSON.stringify({requestId,attempt,event:"gemini_start",stream}));
+  const method=stream?"streamGenerateContent":"generateContent",suffix=stream?"&alt=sse":"";
+  const upstream=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:${method}?key=${key}${suffix}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents,generationConfig:{...generationConfig,maxOutputTokens:generationConfig.maxOutputTokens??1200}})});
+  if(!upstream.ok){const detail=await upstream.text();console.error(JSON.stringify({requestId,attempt,event:"gemini_error",status:upstream.status}));return new Response(JSON.stringify({error:`Gemini HTTP ${upstream.status}`,detail,requestId}),{status:upstream.status,headers:{...CORS,"Content-Type":"application/json"}});}
+  if(!stream)return new Response(await upstream.text(),{headers:{...CORS,"Content-Type":"application/json","x-request-id":requestId}});
+  return new Response(upstream.body,{headers:{...CORS,"Content-Type":"text/event-stream; charset=utf-8","Cache-Control":"no-cache","x-request-id":requestId}});
+ }catch(e){const message=e instanceof Error?e.message:String(e);console.error(JSON.stringify({requestId,attempt,event:"function_error",message}));return new Response(JSON.stringify({error:message,requestId}),{status:500,headers:{...CORS,"Content-Type":"application/json"}});}
 });
