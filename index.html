@@ -607,36 +607,6 @@
     }
 
 
-    /* Login-following safety modal - v0.6.17 */
-    .safety-modal-overlay { position:fixed; inset:0; z-index:1300; display:none; align-items:center; justify-content:center; padding:14px; background:rgba(15,23,42,.68); backdrop-filter:blur(4px); }
-    .safety-modal-overlay.show { display:flex; }
-    .safety-modal { width:min(620px,100%); max-height:calc(100dvh - 28px); overflow:auto; background:var(--surface); border:1px solid var(--border-bright); border-radius:14px; box-shadow:0 24px 70px rgba(15,23,42,.32); }
-    .safety-modal-head { position:sticky; top:0; z-index:2; padding:15px 16px; background:var(--surface); border-bottom:1px solid var(--border); }
-    .safety-modal-head h2 { font-size:18px; margin-bottom:4px; }
-    .safety-modal-head p { color:var(--text-muted); font-size:12px; line-height:1.45; }
-    .safety-modal-body { padding:14px 16px 16px; }
-    .safety-modal-section { padding:13px; margin-bottom:12px; border:1px solid var(--border); border-radius:10px; background:var(--surface2); }
-    .safety-modal-section.scope { border-color:#fecaca; background:#fef2f2; }
-    .safety-modal-section.powra { border-color:#fcd34d; background:#fffbeb; }
-    .safety-modal-section h3 { font:500 12px var(--mono); margin-bottom:7px; }
-    .safety-modal-section p { font-size:12px; line-height:1.5; margin-bottom:9px; }
-    .safety-modal-option { display:flex; align-items:flex-start; gap:9px; padding:9px 10px; margin:7px 0; border:1px solid var(--border); border-radius:8px; background:#fff; font-size:13px; cursor:pointer; }
-    .safety-modal-option input { width:18px; height:18px; flex:0 0 auto; margin-top:1px; }
-    .safety-modal-note { display:none; margin-top:9px; }
-    .safety-modal-note.show { display:block; }
-    .safety-modal-note label { display:block; margin-bottom:5px; font:500 10px var(--mono); text-transform:uppercase; }
-    .safety-modal-note textarea { width:100%; min-height:72px; resize:vertical; border:1px solid #f59e0b; border-radius:8px; padding:9px 10px; font:13px var(--sans); }
-    .safety-modal-message { min-height:18px; margin:8px 0; color:#b91c1c; font:500 11px/1.45 var(--mono); }
-    .safety-modal-actions { display:flex; gap:8px; justify-content:flex-end; }
-    .safety-summary-btn { width:100%; margin:0 0 12px; min-height:40px; border:1px solid #86efac; border-radius:8px; background:#f0fdf4; color:#166534; font:500 11px var(--mono); cursor:pointer; }
-    @media(max-width:600px){ .safety-modal-overlay{padding:0}.safety-modal{width:100%;height:100dvh;max-height:100dvh;border-radius:0}.safety-modal-head{padding:13px 14px}.safety-modal-body{padding:12px 14px 24px}.safety-modal-actions{position:sticky;bottom:0;background:var(--surface);padding-top:10px}.safety-modal-actions .app-btn{flex:1} }
-    /* BMS technician electrical-scope gate - v0.6.16 */
-    .scope-gate { margin:0 0 14px; padding:14px; border:2px solid #dc2626; border-radius:10px; background:#fef2f2; }
-    .scope-gate h3 { color:#991b1b; font:500 12px var(--mono); margin-bottom:7px; letter-spacing:.04em; }
-    .scope-gate p { color:#7f1d1d; font-size:12px; line-height:1.5; margin-bottom:10px; }
-    .scope-option { width:100%; display:flex; align-items:flex-start; gap:9px; padding:10px 11px; margin:7px 0; border:1px solid #fecaca; border-radius:8px; background:#fff; color:#7f1d1d; font-size:13px; cursor:pointer; }
-    .scope-option input { width:18px; height:18px; flex:0 0 auto; margin-top:1px; }
-    .scope-stop { margin-top:9px; color:#b91c1c; font:500 11px/1.5 var(--mono); }
     /* Mandatory POWRA gate - v0.6.15 */
     .powra-gate { margin:0 0 16px; padding:14px; border:2px solid #f59e0b; border-radius:10px; background:#fffbeb; }
     .powra-gate h3 { color:#92400e; font:500 12px var(--mono); margin-bottom:7px; letter-spacing:.04em; }
@@ -648,6 +618,11 @@
     .powra-note label { display:block; margin-bottom:5px; color:#92400e; font:500 10px var(--mono); text-transform:uppercase; }
     .powra-note textarea { width:100%; min-height:72px; resize:vertical; border:1px solid #f59e0b; border-radius:8px; background:#fff; color:var(--text); padding:9px 10px; font:13px var(--sans); }
     .powra-stop { margin-top:9px; color:#b91c1c; font:500 11px/1.45 var(--mono); }
+    .safety-review-intro { margin-bottom:10px; color:#78350f; font-size:12px; line-height:1.5; }
+    .safety-review-divider { height:1px; margin:12px 0; background:#fcd34d; }
+    .safety-review-lock { margin-top:10px; color:#b91c1c; font:500 11px/1.45 var(--mono); }
+    .ans-btn.safety-locked, .ans-btn:disabled { opacity:.45; cursor:not-allowed; border-color:var(--border); background:#f1f5f9; color:var(--text-dim); }
+    .ans-btn.safety-locked:hover, .ans-btn:disabled:hover { border-color:var(--border); background:#f1f5f9; color:var(--text-dim); }
     /* First-half product updates: sessions, photo-ready schema, safety framework v0.5.0 */
     .header-action { min-height:34px; padding:6px 10px; border:1px solid var(--border); border-radius:7px; background:var(--surface2); color:var(--text-muted); font:500 10px var(--mono); cursor:pointer; }
     .safety-banner { margin:0 0 14px; padding:12px 13px; border:1px solid #f59e0b; border-radius:9px; background:#fffbeb; color:#78350f; font-size:12px; line-height:1.5; }
@@ -811,29 +786,6 @@
   </div>
 </div>
 
-<div id="safety-modal-overlay" class="safety-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="safety-modal-title">
-  <div class="safety-modal">
-    <div class="safety-modal-head"><h2 id="safety-modal-title">Safety review</h2><p>Complete this review before starting or resuming BMS troubleshooting.</p></div>
-    <div class="safety-modal-body">
-      <section class="safety-modal-section scope">
-        <h3>BMS technician electrical scope</h3>
-        <p>Normal guided work is limited to confirmed circuits and accessible work areas at or below <strong>24 VAC</strong> and <strong>50 VDC</strong>.</p>
-        <label class="safety-modal-option"><input type="radio" name="modal-electrical-scope" value="within-bms-limits"><strong>Confirmed: work is at or below 24 VAC and 50 VDC</strong></label>
-        <label class="safety-modal-option"><input type="radio" name="modal-electrical-scope" value="above-or-unknown"><strong>Above these limits or voltage/exposure is unknown: stop and escalate</strong></label>
-      </section>
-      <section class="safety-modal-section powra">
-        <h3>POWRA review</h3>
-        <p>Confirm the Point of Work Risk Assessment before beginning or continuing troubleshooting.</p>
-        <label class="safety-modal-option"><input type="radio" name="modal-powra" value="completed"><strong>Yes, POWRA is completed</strong></label>
-        <label class="safety-modal-option"><input type="radio" name="modal-powra" value="stop"><strong>No, stop and complete the POWRA</strong></label>
-        <label class="safety-modal-option"><input type="radio" name="modal-powra" value="not-applicable"><strong>Not applicable, with technician note required</strong></label>
-        <div id="modal-powra-note-wrap" class="safety-modal-note"><label for="modal-powra-note">Technician note required</label><textarea id="modal-powra-note" placeholder="Explain why POWRA is not applicable."></textarea></div>
-      </section>
-      <div id="safety-modal-message" class="safety-modal-message" aria-live="polite"></div>
-      <div class="safety-modal-actions"><button class="app-btn primary" type="button" onclick="completeSafetyReview()">Continue to troubleshooting</button></div>
-    </div>
-  </div>
-</div>
 <div id="save-toast"></div>
 
 <header>
@@ -862,7 +814,7 @@
 
   <div class="right-panel">
     <div class="q-panel-label">current step</div>
-    <div class="session-strip">BMS technician scope: normal guided work is limited to circuits at or below 24 VAC and 50 VDC. Higher or unknown exposure requires stop-work and escalation under approved safety procedures.</div>
+    <div class="session-strip">Draft safety language. Formal company review required before production use.</div>
     <div class="history-trail" id="history-trail"></div>
     
     <div class="q-content" id="q-content"></div>
@@ -936,8 +888,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.17-safety-modal
-// v0.6.17: moves electrical-scope and POWRA review into a compact modal shown immediately after login; safety enforcement and session persistence remain active.
+// BMS Troubleshooter Version: 0.6.17-consolidated-safety-review
+// v0.6.17: consolidates POWRA, life-safety, and specialized-equipment acknowledgements into one top safety review; removes the redundant contextual safety card.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -1110,7 +1062,6 @@ function submitLogin() {
   document.getElementById('login-overlay').classList.add('hidden');
   document.getElementById('user-chip').textContent = name;
   sessionStorage.setItem('bms_user', JSON.stringify(currentUser));
-  showSafetyModal(true);
   checkAppReady();
 }
 
@@ -1410,6 +1361,7 @@ function renderQuestion() {
       btn.className = 'ans-btn';
       btn.textContent = ans;
       btn.onclick = () => {
+        if (!safetyReviewAllowsWork()) return;
         recordTreeAnswer(current, step, ans, nid);
         history.push({ stepId: current, answer: ans, nextId: nid });
         current = nid;
@@ -1487,7 +1439,7 @@ ${pathStr || '(just started — no steps taken yet)'}${resultInfo}
 
 Structured case state: ${JSON.stringify(currentCase)}
 
-Use the deterministic current question as the routing authority. Distinguish reported values from physical observations and measurements. The users are BMS technicians. Do not guide work that could expose the technician above 24 VAC or 50 VDC. For higher or unknown exposure, instruct the technician to stop the normal workflow, avoid accessing or testing the circuit, and escalate to appropriately authorized personnel using the required Schneider Electric/site safety procedure and protective equipment. If the user's answer does not satisfy the current question, ask one concise clarification. Be concise and practical. Plain language. If listing steps, number them. Default to concise, practical answers, but when the technician asks for detail, provide a complete detailed explanation. Never stop mid-sentence merely to stay concise.`;
+Use the deterministic current question as the routing authority. Distinguish reported values from physical observations and measurements. If the user's answer does not satisfy the current question, ask one concise clarification. Be concise and practical. Plain language. If listing steps, number them. Default to concise, practical answers, but when the technician asks for detail, provide a complete detailed explanation. Never stop mid-sentence merely to stay concise.`;
 }
 
 function geminiRequestId(){ return 'AI-'+Date.now().toString(36).toUpperCase()+'-'+cryptoRandom(); }
@@ -1639,7 +1591,7 @@ function geminiAddMsg(role, text) {
 // Structured troubleshooting session, evidence, documents, and voice
 const CASE_STORAGE_KEY = 'bmsTroubleshooter.activeCase.v1';
 function newCase() {
-  return { caseId:'CASE-'+new Date().toISOString().replace(/[-:TZ.]/g,'').slice(0,14), status:'active', createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(), equipment:{tag:'',type:'',manufacturer:'',model:'',controllerModel:'',servingEquipment:''}, reportedIssue:'', currentStep:null, path:[], evidence:[], documents:[], ruledOutCauses:[], remainingCauseAreas:[], recommendedNextAction:'', electricalScope:{status:'',recordedAt:null} };
+  return { caseId:'CASE-'+new Date().toISOString().replace(/[-:TZ.]/g,'').slice(0,14), status:'active', createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(), equipment:{tag:'',type:'',manufacturer:'',model:'',controllerModel:'',servingEquipment:''}, reportedIssue:'', currentStep:null, path:[], evidence:[], documents:[], ruledOutCauses:[], remainingCauseAreas:[], recommendedNextAction:'' };
 }
 let currentCase;
 try { currentCase = JSON.parse(localStorage.getItem(CASE_STORAGE_KEY)) || newCase(); } catch { currentCase = newCase(); }
@@ -1650,8 +1602,6 @@ function saveCaseLocal(){ currentCase.updatedAt=new Date().toISOString(); localS
 function evidenceStatus(answer){ const a=String(answer).toLowerCase(); return /unknown|not |cannot|no /.test(a)?'unverified':'reported'; }
 function recordTreeAnswer(stepId,step,answer,nextId){
   if(!currentCase) currentCase=newCase();
-  if(!electricalScopeAllowsWork()) return;
-  if(!powraAllowsWork()) return;
   currentCase.currentStep=nextId;
   currentCase.path.push({stepId,question:step.question||stepId,answer,nextId,timestamp:new Date().toISOString()});
   currentCase.evidence.push({id:'EV-'+cryptoRandom(),statement:`${step.question} Answer: ${answer}`,evidenceType:'workflow_answer',verificationStatus:evidenceStatus(answer),source:'technician_selection',relatedStep:stepId,timestamp:new Date().toISOString()});
@@ -1708,7 +1658,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.17-safety-modal';
+const APP_LOGIC_VERSION = '0.6.17-consolidated-safety-review';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
@@ -1722,7 +1672,7 @@ function normalizeCase(c){
   c.confirmedFacts=Array.isArray(c.confirmedFacts)?c.confirmedFacts:[];
   c.measurements=Array.isArray(c.measurements)?c.measurements:[];
   c.powra=c.powra&&typeof c.powra==='object'?c.powra:{status:'',note:'',recordedAt:null};
-  c.electricalScope=c.electricalScope&&typeof c.electricalScope==='object'?c.electricalScope:{status:'',recordedAt:null};
+  c.safetyReview=c.safetyReview&&typeof c.safetyReview==='object'?c.safetyReview:{lifeSafetyAcknowledged:false,specializedEquipmentAcknowledged:false,updatedAt:null,technicianName:null,technicianEmail:null};
   c.controllerName=c.controllerName||''; c.bacnetInstance=c.bacnetInstance||'';
   return c;
 }
@@ -1752,136 +1702,79 @@ function renderSavedSessions(){
     card.querySelector('[data-resume]').onclick=()=>resumeCase(c.caseId); card.querySelector('[data-summary]').onclick=()=>viewSavedSummary(c.caseId); card.querySelector('[data-discard]').onclick=()=>discardSavedCase(c.caseId); el.appendChild(card);
   });
 }
-function resumeCase(id){ const c=loadCaseIndex().find(x=>x.caseId===id); if(!c)return; currentCase=normalizeCase(c); localStorage.setItem(CASE_STORAGE_KEY,JSON.stringify(currentCase)); history=(currentCase.path||[]).map(p=>({stepId:p.stepId,answer:p.answer,nextId:p.nextId})); if(tree?.steps?.[currentCase.currentStep])current=currentCase.currentStep; else if(tree)current=tree.start; closeSessionManager();renderEvidence();render();showSafetyModal(true);showToast('Session resumed','ok'); }
+function resumeCase(id){ const c=loadCaseIndex().find(x=>x.caseId===id); if(!c)return; currentCase=normalizeCase(c); localStorage.setItem(CASE_STORAGE_KEY,JSON.stringify(currentCase)); history=(currentCase.path||[]).map(p=>({stepId:p.stepId,answer:p.answer,nextId:p.nextId})); if(tree?.steps?.[currentCase.currentStep])current=currentCase.currentStep; else if(tree)current=tree.start; closeSessionManager();renderEvidence();render();showToast('Session resumed','ok'); }
 function viewSavedSummary(id){ const c=loadCaseIndex().find(x=>x.caseId===id); if(!c)return; alert(`${c.caseId}\nEquipment: ${c.equipment?.tag||'Unknown'} ${c.equipment?.type||''}\nIssue: ${c.reportedIssue||'Not entered'}\nCurrent step: ${c.currentStep||'Not started'}\nChecks completed: ${(c.path||[]).length}\nEvidence items: ${(c.evidence||[]).length}`); }
 function discardSavedCase(id){ if(!confirm('Discard this session? Its path, evidence, notes, and incomplete conclusion will be removed from the active list.'))return; const idx=loadCaseIndex(); const c=idx.find(x=>x.caseId===id); if(c){c.status='discarded';c.discardedAt=new Date().toISOString();saveCaseIndex(idx);} if(currentCase.caseId===id){currentCase=normalizeCase(newCase());saveCaseLocal();}renderSavedSessions();renderEvidence(); }
-function createAndStartCase(){ currentCase=normalizeCase(newCase()); if(tree){current=tree.start;currentCase.currentStep=current;} history=[];saveCaseLocal();closeSessionManager();renderEvidence();render();showSafetyModal(true);showToast('New case started','ok'); }
+function createAndStartCase(){ currentCase=normalizeCase(newCase()); if(tree){current=tree.start;currentCase.currentStep=current;} history=[];saveCaseLocal();closeSessionManager();renderEvidence();render();showToast('New case started','ok'); }
 
 // Production technician mode: flow map can review completed/current nodes only, never jump forward.
 const originalJumpTo=jumpTo;
 jumpTo=function(id){ const allowed=id===current||history.some(h=>h.stepId===id); if(!allowed){showToast('Strict workflow: complete the current step first','err');return;} originalJumpTo(id); };
 
-function safetyReviewIsComplete(){
-  const scope=currentCase?.electricalScope?.status||'';
-  const powra=currentCase?.powra?.status||'';
+function safetyReviewAllowsWork(){
+  const status=currentCase?.powra?.status||'';
   const note=(currentCase?.powra?.note||'').trim();
-  return scope==='within-bms-limits' && (powra==='completed' || (powra==='not-applicable' && note));
-}
-function showSafetyModal(force=false){
-  if(!currentCase)currentCase=normalizeCase(newCase());
-  const overlay=document.getElementById('safety-modal-overlay'); if(!overlay)return;
-  if(!force && safetyReviewIsComplete())return;
-  document.querySelectorAll('input[name="modal-electrical-scope"]').forEach(i=>i.checked=i.value===(currentCase.electricalScope?.status||''));
-  document.querySelectorAll('input[name="modal-powra"]').forEach(i=>i.checked=i.value===(currentCase.powra?.status||''));
-  const note=document.getElementById('modal-powra-note'); if(note)note.value=currentCase.powra?.note||'';
-  updateSafetyModalState(); overlay.classList.add('show');
-}
-function updateSafetyModalState(){
-  const powra=document.querySelector('input[name="modal-powra"]:checked')?.value||'';
-  document.getElementById('modal-powra-note-wrap')?.classList.toggle('show',powra==='not-applicable');
-  const scope=document.querySelector('input[name="modal-electrical-scope"]:checked')?.value||'';
-  const message=document.getElementById('safety-modal-message'); if(!message)return;
-  if(scope==='above-or-unknown')message.textContent=scopeStopMessage();
-  else if(powra==='stop')message.textContent='Stop work and complete the POWRA before proceeding.';
-  else message.textContent='';
-}
-document.addEventListener('change',e=>{ if(e.target?.matches('input[name="modal-electrical-scope"],input[name="modal-powra"]'))updateSafetyModalState(); });
-function completeSafetyReview(){
-  const scope=document.querySelector('input[name="modal-electrical-scope"]:checked')?.value||'';
-  const powra=document.querySelector('input[name="modal-powra"]:checked')?.value||'';
-  const note=(document.getElementById('modal-powra-note')?.value||'').trim();
-  const message=document.getElementById('safety-modal-message');
-  if(!scope){message.textContent='Confirm the BMS electrical scope.';return;}
-  if(scope!=='within-bms-limits'){message.textContent=scopeStopMessage();return;}
-  if(!powra){message.textContent='Complete the POWRA review.';return;}
-  if(powra==='stop'){message.textContent='Stop work and complete the POWRA before proceeding.';return;}
-  if(powra==='not-applicable'&&!note){message.textContent='A technician note is required when POWRA is not applicable.';return;}
-  const now=new Date().toISOString();
-  currentCase.electricalScope={status:scope,recordedAt:now};
-  currentCase.powra={status:powra,note:powra==='not-applicable'?note:'',recordedAt:now};
-  saveCaseLocal(); document.getElementById('safety-modal-overlay').classList.remove('show');
-  showToast('Safety review recorded','ok'); render();
-}
-function addSafetyReviewButton(panel){
-  const btn=document.createElement('button'); btn.type='button'; btn.className='safety-summary-btn';
-  btn.textContent=safetyReviewIsComplete()?'Safety review completed - view or update':'Safety review required';
-  btn.onclick=()=>showSafetyModal(true); panel.insertBefore(btn,panel.firstChild);
-}
-function renderElectricalScopeGate(panel){
-  if(!panel||!currentCase)return;
-  panel.querySelector('.scope-gate')?.remove();
-  const status=currentCase.electricalScope?.status||'';
-  const gate=document.createElement('section'); gate.className='scope-gate'; gate.setAttribute('aria-labelledby','scope-title');
-  gate.innerHTML=`<h3 id="scope-title">BMS technician electrical scope</h3>
-    <p>This assistant guides normal BMS work only where the circuit and accessible work area are confirmed at or below <strong>24 VAC</strong> and <strong>50 VDC</strong>. Do not access, test, reset, disconnect, or repair higher-voltage or unknown-voltage equipment through this workflow.</p>
-    <label class="scope-option"><input type="radio" name="electrical-scope" value="within-bms-limits" ${status==='within-bms-limits'?'checked':''}><strong>Confirmed: work is at or below 24 VAC and 50 VDC</strong></label>
-    <label class="scope-option"><input type="radio" name="electrical-scope" value="above-or-unknown" ${status==='above-or-unknown'?'checked':''}><strong>Above these limits or voltage/exposure is unknown: stop and escalate</strong></label>
-    <div class="scope-stop" aria-live="polite"></div>`;
-  const stop=gate.querySelector('.scope-stop');
-  gate.querySelectorAll('input[name="electrical-scope"]').forEach(input=>input.onchange=()=>{
-    currentCase.electricalScope={status:input.value,recordedAt:new Date().toISOString()};
-    stop.textContent=input.value==='above-or-unknown'?scopeStopMessage():'';
-    saveCaseLocal();
-  });
-  if(status==='above-or-unknown')stop.textContent=scopeStopMessage();
-  panel.insertBefore(gate,panel.firstChild);
-}
-function scopeStopMessage(){
-  return 'STOP: Do not continue testing or access the circuit through this workflow. Escalate to appropriately authorized personnel and follow the required Schneider Electric/site safety procedure and protective-equipment requirements.';
-}
-function electricalScopeAllowsWork(){
-  const status=currentCase?.electricalScope?.status||'';
-  if(status==='within-bms-limits')return true;
-  showToast(status==='above-or-unknown'?'Stop and escalate: voltage is above the BMS limit or unknown':'Confirm the BMS electrical scope before continuing','err');
-  showSafetyModal(true);
+  const powraReady=status==='completed'||(status==='not-applicable'&&note);
+  const lifeReady=!!currentCase?.safetyReview?.lifeSafetyAcknowledged;
+  const specializedReady=!!currentCase?.safetyReview?.specializedEquipmentAcknowledged;
+  if(powraReady&&lifeReady&&specializedReady)return true;
+  if(status==='stop')showToast('Stop and complete the POWRA before continuing','err');
+  else if(status==='not-applicable'&&!note)showToast('Technician note is required when POWRA is not applicable','err');
+  else showToast('Complete the Safety Review Required section before continuing','err');
+  document.querySelector('.powra-gate')?.scrollIntoView({behavior:'smooth',block:'start'});
   return false;
 }
-function renderPowraGate(panel){
+function updateSafetyReviewLock(){
+  const locked=!safetyReviewAllowsWorkSilent();
+  document.querySelectorAll('#q-content .ans-btn').forEach(btn=>{btn.disabled=locked;btn.classList.toggle('safety-locked',locked);});
+  const status=document.querySelector('.safety-review-lock');
+  if(status)status.textContent=locked?'Complete all required safety items before diagnostic answers are enabled.':'Safety review completed for this case.';
+}
+function safetyReviewAllowsWorkSilent(){
+  const status=currentCase?.powra?.status||'';
+  const note=(currentCase?.powra?.note||'').trim();
+  return (status==='completed'||(status==='not-applicable'&&note))&&!!currentCase?.safetyReview?.lifeSafetyAcknowledged&&!!currentCase?.safetyReview?.specializedEquipmentAcknowledged;
+}
+function renderConsolidatedSafetyReview(panel){
   if(!panel||!currentCase)return;
-  const existing=panel.querySelector('.powra-gate'); if(existing)existing.remove();
-  const gate=document.createElement('section'); gate.className='powra-gate'; gate.setAttribute('aria-labelledby','powra-title');
-  const status=currentCase.powra?.status||''; const note=currentCase.powra?.note||'';
-  gate.innerHTML=`<h3 id="powra-title">POWRA review</h3><p>Confirm the Point of Work Risk Assessment before beginning or continuing troubleshooting.</p>
-    <label class="powra-option"><input type="radio" name="powra-status" value="completed" ${status==='completed'?'checked':''}><strong>Yes, POWRA is completed</strong></label>
-    <label class="powra-option"><input type="radio" name="powra-status" value="stop" ${status==='stop'?'checked':''}><strong>No, stop and complete the POWRA</strong></label>
-    <label class="powra-option"><input type="radio" name="powra-status" value="not-applicable" ${status==='not-applicable'?'checked':''}><strong>Not applicable, with technician note required</strong></label>
-    <div class="powra-note ${status==='not-applicable'?'show':''}"><label for="powra-note">Technician note required</label><textarea id="powra-note" placeholder="Explain why POWRA is not applicable.">${escapeHtml(note)}</textarea></div>
-    <div class="powra-stop" aria-live="polite"></div>`;
-  const noteWrap=gate.querySelector('.powra-note'), noteInput=gate.querySelector('#powra-note'), stop=gate.querySelector('.powra-stop');
+  panel.querySelectorAll('.powra-gate,.safety-gate').forEach(el=>el.remove());
+  const powra=currentCase.powra||{status:'',note:''};
+  const safety=currentCase.safetyReview||{};
+  const gate=document.createElement('section');
+  gate.className='powra-gate';
+  gate.setAttribute('aria-labelledby','safety-review-title');
+  gate.innerHTML=`
+    <h3 id="safety-review-title">Safety Review Required</h3>
+    <div class="safety-review-intro">${escapeHtml(SAFETY_REVIEW_STATUS)}</div>
+    <p><strong>Is the Point of Work Risk Assessment (POWRA) done?</strong></p>
+    <label class="powra-option"><input type="radio" name="powra-status" value="completed" ${powra.status==='completed'?'checked':''}><span><strong>Yes, POWRA is completed</strong></span></label>
+    <label class="powra-option"><input type="radio" name="powra-status" value="stop" ${powra.status==='stop'?'checked':''}><span><strong>No, stop and complete the POWRA</strong></span></label>
+    <label class="powra-option"><input type="radio" name="powra-status" value="not-applicable" ${powra.status==='not-applicable'?'checked':''}><span><strong>Not applicable, technician note required</strong></span></label>
+    <div class="powra-note ${powra.status==='not-applicable'?'show':''}"><label for="powra-note">Technician note required</label><textarea id="powra-note" placeholder="Explain why POWRA is not applicable.">${escapeHtml(powra.note||'')}</textarea></div>
+    <div class="powra-stop" aria-live="polite"></div>
+    <div class="safety-review-divider"></div>
+    <label class="safety-check"><input id="life-safety-ack" type="checkbox" ${safety.lifeSafetyAcknowledged?'checked':''}><span><strong>Life-safety systems:</strong> Do not bypass, disable, force, override, or otherwise impair fire alarm, smoke-control, fire/smoke damper, emergency shutdown, stair-pressurization, smoke-exhaust, fire-pump, sprinkler-supervisory, or other life-safety functions. Coordinate testing with authorized site personnel, follow required impairment and notification procedures, and restore and verify normal operation before leaving the work area.</span></label>
+    <label class="safety-check"><input id="specialized-safety-ack" type="checkbox" ${safety.specializedEquipmentAcknowledged?'checked':''}><span><strong>Specialized-equipment safety:</strong> Do not bypass combustion, refrigerant, pressure, flame-safeguard, boiler, chiller, cooling-tower, gas-train, low-water-cutoff, high-limit, freeze-protection, rotating-equipment, or manufacturer safety controls. Follow approved lockout/tagout and site procedures, use properly rated tools and PPE, and involve qualified service personnel whenever the work exceeds authorization, training, or equipment-specific qualification.</span></label>
+    <div class="safety-review-lock" aria-live="polite"></div>`;
+  const noteWrap=gate.querySelector('.powra-note');
+  const noteInput=gate.querySelector('#powra-note');
+  const stop=gate.querySelector('.powra-stop');
   gate.querySelectorAll('input[name="powra-status"]').forEach(input=>input.onchange=()=>{
-    currentCase.powra={status:input.value,note:input.value==='not-applicable'?(currentCase.powra?.note||''):'',recordedAt:new Date().toISOString()};
+    currentCase.powra={status:input.value,note:input.value==='not-applicable'?(currentCase.powra?.note||''):'',recordedAt:new Date().toISOString(),technicianName:currentUser?.name||null,technicianEmail:currentUser?.email||null};
     noteWrap.classList.toggle('show',input.value==='not-applicable');
     noteInput.value=currentCase.powra.note;
     stop.textContent=input.value==='stop'?'Stop work and complete the POWRA before proceeding.':'';
-    saveCaseLocal();
+    saveCaseLocal();updateSafetyReviewLock();
   });
-  noteInput.oninput=()=>{ currentCase.powra.note=noteInput.value; currentCase.powra.recordedAt=new Date().toISOString(); saveCaseLocal(); };
-  if(status==='stop')stop.textContent='Stop work and complete the POWRA before proceeding.';
+  noteInput.oninput=()=>{currentCase.powra.note=noteInput.value;currentCase.powra.recordedAt=new Date().toISOString();currentCase.powra.technicianName=currentUser?.name||null;currentCase.powra.technicianEmail=currentUser?.email||null;saveCaseLocal();updateSafetyReviewLock();};
+  gate.querySelector('#life-safety-ack').onchange=e=>{currentCase.safetyReview.lifeSafetyAcknowledged=e.target.checked;currentCase.safetyReview.updatedAt=new Date().toISOString();currentCase.safetyReview.technicianName=currentUser?.name||null;currentCase.safetyReview.technicianEmail=currentUser?.email||null;saveCaseLocal();updateSafetyReviewLock();};
+  gate.querySelector('#specialized-safety-ack').onchange=e=>{currentCase.safetyReview.specializedEquipmentAcknowledged=e.target.checked;currentCase.safetyReview.updatedAt=new Date().toISOString();currentCase.safetyReview.technicianName=currentUser?.name||null;currentCase.safetyReview.technicianEmail=currentUser?.email||null;saveCaseLocal();updateSafetyReviewLock();};
+  if(powra.status==='stop')stop.textContent='Stop work and complete the POWRA before proceeding.';
   panel.insertBefore(gate,panel.firstChild);
+  updateSafetyReviewLock();
 }
-function powraAllowsWork(){
-  const status=currentCase?.powra?.status||'';
-  const note=(currentCase?.powra?.note||'').trim();
-  if(status==='completed')return true;
-  if(status==='not-applicable'&&note)return true;
-  if(status==='not-applicable')showToast('Technician note is required when POWRA is not applicable','err');
-  else if(status==='stop')showToast('Stop and complete the POWRA before continuing','err');
-  else showToast('Complete the POWRA review before continuing','err');
-  showSafetyModal(true);
-  return false;
-}
-const SAFETY_RULES=[
-  {id:'live-electrical',pattern:/voltage|current|energized|power present|signal.*measur|meter/i,title:'Energized electrical measurement',text:'This BMS workflow is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not test or access the circuit; stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements.'},
-  {id:'loto',pattern:/continuity|resistance|wires removed|disconnect|terminal|mechanical inspection/i,title:'Energy isolation / lockout-tagout',text:'Follow the site-approved energy-control and lockout/tagout procedure before disconnecting conductors, resistance testing, or physical adjustment.'},
-  {id:'rotating',pattern:/fan|pump|shaft|belt|linkage|damper blade|actuator mounting/i,title:'Moving or automatic-start equipment',text:'Keep clear of moving equipment and automatic starts. Use approved shutdown and energy-control procedures before physical inspection or adjustment.'},
-  {id:'life-safety',pattern:/fire|smoke|life-safety|emergency/i,title:'Life-safety function',text:'Do not bypass, defeat, force, or disable fire, smoke, emergency shutdown, or other life-safety functions. Coordinate testing with qualified personnel.'},
-  {id:'combustion-refrigeration',pattern:/boiler|combustion|refrigerant|chiller|flame/i,title:'Specialized equipment safety',text:'Do not bypass combustion, refrigerant, pressure, flame-safeguard, or manufacturer safety controls. Use qualified service personnel and approved procedures.'}
-];
-function safetyRulesForStep(step){ const text=[step?.question,step?.notes,step?.diagnosis,step?.action].filter(Boolean).join(' '); return SAFETY_RULES.filter(r=>r.pattern.test(text)); }
-function addSafetyGate(panel,step){ const rules=safetyRulesForStep(step); if(!rules.length)return; const wrap=document.createElement('div');wrap.className='safety-gate';wrap.innerHTML=`<h4>Safety review required</h4><p>${escapeHtml(SAFETY_REVIEW_STATUS)}</p>`; rules.forEach(rule=>{ const checked=currentCase.safetyAcknowledgments.some(a=>a.stepId===current&&a.ruleId===rule.id); const row=document.createElement('label');row.className='safety-check';row.innerHTML=`<input type="checkbox" ${checked?'checked':''}><span><strong>${escapeHtml(rule.title)}:</strong> ${escapeHtml(rule.text)}</span>`; row.querySelector('input').onchange=e=>{currentCase.safetyAcknowledgments=currentCase.safetyAcknowledgments.filter(a=>!(a.stepId===current&&a.ruleId===rule.id));if(e.target.checked)currentCase.safetyAcknowledgments.push({stepId:current,ruleId:rule.id,acknowledgedAt:new Date().toISOString(),status:'technician_acknowledged_draft_warning'});saveCaseLocal();};wrap.appendChild(row);}); panel.insertBefore(wrap,panel.querySelector('.nav-row')); }
 const originalRenderQuestion=renderQuestion;
-renderQuestion=function(){ originalRenderQuestion(); const panel=document.getElementById('q-content'); const step=tree?.steps?.[current]; if(panel&&step){ addSafetyReviewButton(panel); addSafetyGate(panel,step); } };
-
+renderQuestion=function(){originalRenderQuestion();const panel=document.getElementById('q-content');if(panel)renderConsolidatedSafetyReview(panel);};
 // Auto-offer active sessions once login and tree are ready.
 const originalCheckAppReady=checkAppReady;
 let sessionPromptShown=false;

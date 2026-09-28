@@ -17,7 +17,7 @@
         "Communications": "q501",
         "Other": "q401"
       },
-      "notes": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. SAFETY: Follow site LOTO, electrical PPE, arc-flash, ladder, rotating-equipment, combustion, refrigerant, and life-safety procedures. Never bypass a safety or exceed product ratings. Verify exact model and approved documentation."
+      "notes": "SAFETY: Follow site LOTO, electrical PPE, arc-flash, ladder, rotating-equipment, combustion, refrigerant, and life-safety procedures. Never bypass a safety or exceed product ratings. Verify exact model and approved documentation."
     },
     "q2": {
       "question": "What BMS panel component are you troubleshooting?",
@@ -35,7 +35,7 @@
         "Yes": "q4",
         "No": "r1"
       },
-      "notes": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. RBravo equipment notes: RB-016"
+      "notes": "RBravo equipment notes: RB-016"
     },
     "q4": {
       "question": "Is the specified power supply present and within the voltage range required by the installed power-supply/server hardware?",
@@ -43,15 +43,14 @@
         "Yes": "q5",
         "No": "r2"
       },
-      "notes": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Do not assume every installation is 24 VAC only. Verify the exact PS-24V/automation-server hardware and approved documentation before testing."
+      "notes": "Do not assume every installation is 24 VAC only. Verify the exact PS-24V/automation-server hardware and approved documentation before testing."
     },
     "q5": {
       "question": "Are any breakers tripped?",
       "answers": {
         "Yes": "r3",
         "No": "q6"
-      },
-      "notes": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. "
+      }
     },
     "q6": {
       "question": "Are fuses installed and good?",
@@ -59,16 +58,14 @@
         "Yes": "q7",
         "No": "r4",
         "No fuses installed": "q7"
-      },
-      "notes": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. "
+      }
     },
     "q7": {
       "question": "Is the transformer reset/trip condition normal?",
       "answers": {
         "Yes": "q8",
         "No": "r5"
-      },
-      "notes": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. "
+      }
     },
     "q8": {
       "question": "Is the Automation Server status light normal?",
@@ -87,23 +84,23 @@
     },
     "r1": {
       "diagnosis": "No panel power",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Verify source power, disconnect, breakers, and upstream electrical supply."
+      "action": "Verify source power, disconnect, breakers, and upstream electrical supply."
     },
     "r2": {
       "diagnosis": "Automation-server/Central IO supply or backplane power is missing or out of tolerance",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Verify the installed power-supply model, source voltage, protective devices, terminal-base seating, and backplane connection. Do not energize until the source and polarity/type match the product documentation."
+      "action": "Verify the installed power-supply model, source voltage, protective devices, terminal-base seating, and backplane connection. Do not energize until the source and polarity/type match the product documentation."
     },
     "r3": {
       "diagnosis": "Breaker tripped",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Determine cause with safe electrical testing before resetting. Inspect for shorts and overloads."
+      "action": "Determine cause with safe electrical testing before resetting. Inspect for shorts and overloads."
     },
     "r4": {
       "diagnosis": "Fuse open or missing",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Test fuses, inspect hidden fuse holders and Panduit, then replace only after finding the cause."
+      "action": "Test fuses, inspect hidden fuse holders and Panduit, then replace only after finding the cause."
     },
     "r5": {
       "diagnosis": "Transformer tripped or overloaded",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Confirm transformer VA loading, correct the overload, and reset if permitted."
+      "action": "Confirm transformer VA loading, correct the overload, and reset if permitted."
     },
     "r6": {
       "diagnosis": "Automation Server status is abnormal",
@@ -447,7 +444,7 @@
         "Yes": "q208",
         "No": "r998"
       },
-      "notes": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Verify source voltage, common/reference, relay contact selection, load rating, and any interposing relay. Use safe energized testing procedures."
+      "notes": "Verify source voltage, common/reference, relay contact selection, load rating, and any interposing relay. Use safe energized testing procedures."
     },
     "q208": {
       "question": "Does the field device operate?",
@@ -586,8 +583,7 @@
       "answers": {
         "Yes": "q503",
         "No": "r501"
-      },
-      "notes": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. "
+      }
     },
     "q503": {
       "question": "Can Device Administrator communicate locally through the USB device port?",
@@ -731,7 +727,7 @@
     },
     "r501": {
       "diagnosis": "Controller power or startup issue",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Restore correct power and resolve abnormal LED/startup condition before network troubleshooting."
+      "action": "Restore correct power and resolve abnormal LED/startup condition before network troubleshooting."
     },
     "r502": {
       "diagnosis": "Controller is not locally accessible",
@@ -739,7 +735,7 @@
     },
     "r503": {
       "diagnosis": "Network-wide Ethernet infrastructure issue",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Check switch power/ports, cabling, VLAN, routing, firewall, and upstream network equipment."
+      "action": "Check switch power/ports, cabling, VLAN, routing, firewall, and upstream network equipment."
     },
     "r504": {
       "diagnosis": "Single-controller supervisory association issue",
@@ -799,11 +795,11 @@
     },
     "r560": {
       "diagnosis": "Electrical noise/grounding issue is likely",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Check VFD grounding, shield practices, cable separation, and induced noise on communications/power."
+      "action": "Check VFD grounding, shield practices, cable separation, and induced noise on communications/power."
     },
     "r561": {
       "diagnosis": "Power-quality issue is causing resets",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Measure voltage during events, verify transformer loading, grounding, and power-supply health."
+      "action": "Measure voltage during events, verify transformer loading, grounding, and power-supply health."
     },
     "r562": {
       "diagnosis": "Intermittent network issue not yet isolated",
@@ -1796,11 +1792,11 @@
     },
     "r1604": {
       "diagnosis": "Binary command path appears normal",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Continue downstream to relay, starter, contactor, VFD, equipment safeties, motor, or mechanical system."
+      "action": "Continue downstream to relay, starter, contactor, VFD, equipment safeties, motor, or mechanical system."
     },
     "r1605": {
       "diagnosis": "Binary command is lost between controller and field device",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Check external control power, conductor identity, continuity, contact selection, interposing relay, terminations, and field wiring."
+      "action": "Check external control power, conductor identity, continuity, contact selection, interposing relay, terminations, and field wiring."
     },
     "r1606": {
       "diagnosis": "Packaged or third-party controller is not issuing the expected command",
@@ -1808,7 +1804,7 @@
     },
     "r1607": {
       "diagnosis": "Equipment status does not follow the command",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Check local safeties, starter/VFD readiness, interposing relays, equipment power, and mechanical condition."
+      "action": "Check local safeties, starter/VFD readiness, interposing relays, equipment power, and mechanical condition."
     },
     "r1608": {
       "diagnosis": "Network binary command or feedback path is not responding",
@@ -1824,11 +1820,11 @@
     },
     "r997": {
       "diagnosis": "Field device failure",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Verify exact device model, power, input/output range, polarity, setup, local overrides, mechanical freedom, and field condition. Remove power and isolate wiring as required before repair or replacement."
+      "action": "Verify exact device model, power, input/output range, polarity, setup, local overrides, mechanical freedom, and field condition. Remove power and isolate wiring as required before repair or replacement."
     },
     "r998": {
       "diagnosis": "Field wiring issue",
-      "action": "BMS TECHNICIAN SCOPE: Normal guided work is limited to confirmed circuits at or below 24 VAC and 50 VDC. If voltage or exposure is higher or unknown, do not access or test the circuit through this workflow. Stop and escalate to appropriately authorized personnel under the required Schneider Electric/site safety procedure and protective-equipment requirements. Verify conductor identity, point-to-point continuity, polarity, shorts to other conductors/ground, shield termination, insulation condition, and terminal torque. Disconnect sensitive electronics before resistance/insulation testing."
+      "action": "Verify conductor identity, point-to-point continuity, polarity, shorts to other conductors/ground, shield termination, insulation condition, and terminal torque. Disconnect sensitive electronics before resistance/insulation testing."
     },
     "r999": {
       "diagnosis": "Point configuration issue",
@@ -1836,20 +1832,14 @@
     }
   },
   "product": {
-    "version": "0.6.17-safety-modal",
+    "version": "0.6.0-evidence-reporting",
     "evidenceCapture": {
       "technicianNotes": "optional_every_step",
       "photographs": "optional_local_compressed",
       "measurements": "optional"
     },
     "safety": {
-      "requiredApproach": "Complete POWRA and confirm the accessible circuit/work area is at or below 24 VAC and 50 VDC before guided BMS troubleshooting. Never bypass safety devices.",
-      "technicianRole": "BMS technicians only",
-      "normalElectricalScope": {
-        "maximumAC": "24 VAC",
-        "maximumDC": "50 VDC"
-      },
-      "aboveOrUnknownLimit": "Stop the normal workflow. Do not access or test the circuit. Escalate to appropriately authorized personnel and follow required Schneider Electric/site safety procedures and protective-equipment requirements."
+      "requiredApproach": "Follow site LOTO, PPE, arc-flash, rotating equipment, combustion, refrigerant, life-safety and authorization procedures. Never bypass safety devices."
     },
     "conclusionFormat": [
       "primary_likely_cause",
