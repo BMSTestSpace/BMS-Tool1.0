@@ -872,8 +872,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.11-cors-safe-continuation
-// v0.6.10: controls Gemini thinking, detects finishReason, and continues MAX_TOKENS responses.
+// BMS Troubleshooter Version: 0.6.12-cache-refresh-max-tokens
+// v0.6.12: cache refresh, controlled Gemini thinking, MAX_TOKENS detection, and automatic continuation.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -1632,7 +1632,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.11-cors-safe-continuation';
+const APP_LOGIC_VERSION = '0.6.12-cache-refresh-max-tokens';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }

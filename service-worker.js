@@ -1,5 +1,5 @@
-// BMS Troubleshooter service worker - application version 0.6.8
-const CACHE_NAME = 'bms-troubleshooter-v0-6-8';
+// BMS Troubleshooter service worker - application version 0.6.12
+const CACHE_NAME = 'bms-troubleshooter-v0-6-12';
 const CORE_FILES = [
   './',
   './index.html',
@@ -24,31 +24,38 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+async function networkFirst(request, fallback) {
+  try {
+    const response = await fetch(request, { cache: 'no-store' });
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    return (await caches.match(request)) || (fallback ? await caches.match(fallback) : undefined) || Response.error();
+  }
+}
+
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
-
-  // API calls should remain network-only and must never be cached.
   if (url.origin !== self.location.origin) return;
 
-  // Get the newest troubleshooting knowledge when online, then retain it offline.
-  if (url.pathname.endsWith('/output.json')) {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          if (response.ok) {
-            const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-          }
-          return response;
-        })
-        .catch(() => caches.match(request))
-    );
+  // Always check the network for navigations and HTML so new releases load promptly.
+  if (request.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/')) {
+    event.respondWith(networkFirst(request, './index.html'));
     return;
   }
 
-  // Navigation and application files load from cache first for fast field use.
+  // Troubleshooting content is also network-first, with offline fallback.
+  if (url.pathname.endsWith('/output.json')) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
+  // Stable static assets remain cache-first for reliable offline field use.
   event.respondWith(
     caches.match(request).then((cached) => cached || fetch(request).then((response) => {
       if (response.ok) {
@@ -56,6 +63,6 @@ self.addEventListener('fetch', (event) => {
         caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
       }
       return response;
-    }).catch(() => caches.match('./index.html')))
+    }))
   );
 });
