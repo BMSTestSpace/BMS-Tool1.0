@@ -776,7 +776,7 @@
   <span class="header-badge">BMS</span>
   <h1>Troubleshooter</h1>
   <button class="header-action" type="button" onclick="openSessionManager()">Sessions</button>
-  <button class="header-action" id="install-app-btn" type="button" onclick="installApp()" hidden>Install App</button>
+  <button class="header-action" id="install-app-btn" type="button" onclick="installApp()">Install App</button>
   <div id="user-chip" style="margin-left:auto;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text-muted);"></div>
   <div class="status-dot" style="margin-left:0"></div>
 </header>
@@ -872,8 +872,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.6-pwa-install-ipad-landscape
-// PWA install support restored in v0.6.6 while preserving v0.5.2 iPad landscape fixes.
+// BMS Troubleshooter Version: 0.6.7-pwa-install-reinstall-fix
+// PWA install/reinstall UX corrected in v0.6.7 while preserving iPad landscape fixes.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -883,12 +883,8 @@ function isStandaloneMode() {
 function updateInstallButton() {
   const btn = document.getElementById('install-app-btn');
   if (!btn) return;
-  if (isStandaloneMode()) {
-    btn.hidden = true;
-    return;
-  }
-  // Chromium browsers expose an install prompt event. iOS/iPadOS Safari does not.
-  btn.hidden = !deferredInstallPrompt;
+  // Keep installation discoverable in every normal browser session. Hide only inside the installed PWA.
+  btn.hidden = isStandaloneMode();
 }
 
 window.addEventListener('beforeinstallprompt', (event) => {
@@ -909,7 +905,12 @@ async function installApp() {
     return;
   }
   if (!deferredInstallPrompt) {
-    showToast('Install prompt is not available in this browser. On iPhone/iPad Safari, use Share > Add to Home Screen.', 'err');
+    const isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (isiOS) {
+      alert('Install BMS Troubleshooter\n\n1. Open this site in Safari.\n2. Tap the Share button.\n3. Select Add to Home Screen.\n4. Tap Add.');
+    } else {
+      alert('Install BMS Troubleshooter\n\nThe browser install prompt is not available yet. Refresh this page, then try Install App again. You can also use your browser menu and choose Install app or Apps > Install this site as an app when available.');
+    }
     return;
   }
   const promptEvent = deferredInstallPrompt;
@@ -1554,12 +1555,12 @@ function speakText(text){ if(!('speechSynthesis'in window))return showToast('Spo
 
 // Start local session UI immediately; tree readiness will supply the current step.
 document.body.classList.add('view-diagnose');
-document.addEventListener('DOMContentLoaded',()=>renderEvidence());
+document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInstallButton(); });
 
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.6-pwa-install-ipad-landscape';
+const APP_LOGIC_VERSION = '0.6.7-pwa-install-reinstall-fix';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
