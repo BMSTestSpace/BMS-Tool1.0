@@ -607,6 +607,17 @@
     }
 
 
+    /* Mandatory POWRA gate - v0.6.15 */
+    .powra-gate { margin:0 0 16px; padding:14px; border:2px solid #f59e0b; border-radius:10px; background:#fffbeb; }
+    .powra-gate h3 { color:#92400e; font:500 12px var(--mono); margin-bottom:7px; letter-spacing:.04em; }
+    .powra-gate p { color:#78350f; font-size:12px; line-height:1.5; margin-bottom:10px; }
+    .powra-option { width:100%; display:flex; align-items:flex-start; gap:9px; padding:10px 11px; margin:7px 0; border:1px solid #fcd34d; border-radius:8px; background:#fff; color:#78350f; font-size:13px; cursor:pointer; }
+    .powra-option input { width:18px; height:18px; flex:0 0 auto; margin-top:1px; }
+    .powra-note { display:none; margin-top:9px; }
+    .powra-note.show { display:block; }
+    .powra-note label { display:block; margin-bottom:5px; color:#92400e; font:500 10px var(--mono); text-transform:uppercase; }
+    .powra-note textarea { width:100%; min-height:72px; resize:vertical; border:1px solid #f59e0b; border-radius:8px; background:#fff; color:var(--text); padding:9px 10px; font:13px var(--sans); }
+    .powra-stop { margin-top:9px; color:#b91c1c; font:500 11px/1.45 var(--mono); }
     /* First-half product updates: sessions, photo-ready schema, safety framework v0.5.0 */
     .header-action { min-height:34px; padding:6px 10px; border:1px solid var(--border); border-radius:7px; background:var(--surface2); color:var(--text-muted); font:500 10px var(--mono); cursor:pointer; }
     .safety-banner { margin:0 0 14px; padding:12px 13px; border:1px solid #f59e0b; border-radius:9px; background:#fffbeb; color:#78350f; font-size:12px; line-height:1.5; }
@@ -872,8 +883,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.14-json-sse-fallback
-// v0.6.14: supports both application/json and text/event-stream Copilot responses; token controls, retries, and continuation retained.
+// BMS Troubleshooter Version: 0.6.15-powra-gate
+// v0.6.15: adds a mandatory POWRA review gate with a required note for Not applicable; Copilot JSON/SSE fallback retained.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -924,7 +935,7 @@ async function installApp() {
 // Register the existing offline service worker.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js?v=0.6.14', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
+    navigator.serviceWorker.register('./service-worker.js?v=0.6.15', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
       console.error('Service worker registration failed:', error);
     });
   });
@@ -1585,6 +1596,7 @@ function saveCaseLocal(){ currentCase.updatedAt=new Date().toISOString(); localS
 function evidenceStatus(answer){ const a=String(answer).toLowerCase(); return /unknown|not |cannot|no /.test(a)?'unverified':'reported'; }
 function recordTreeAnswer(stepId,step,answer,nextId){
   if(!currentCase) currentCase=newCase();
+  if(!powraAllowsWork()) return;
   currentCase.currentStep=nextId;
   currentCase.path.push({stepId,question:step.question||stepId,answer,nextId,timestamp:new Date().toISOString()});
   currentCase.evidence.push({id:'EV-'+cryptoRandom(),statement:`${step.question} Answer: ${answer}`,evidenceType:'workflow_answer',verificationStatus:evidenceStatus(answer),source:'technician_selection',relatedStep:stepId,timestamp:new Date().toISOString()});
@@ -1641,7 +1653,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.14-json-sse-fallback';
+const APP_LOGIC_VERSION = '0.6.15-powra-gate';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
@@ -1654,6 +1666,7 @@ function normalizeCase(c){
   c.unverifiedConditions=Array.isArray(c.unverifiedConditions)?c.unverifiedConditions:[];
   c.confirmedFacts=Array.isArray(c.confirmedFacts)?c.confirmedFacts:[];
   c.measurements=Array.isArray(c.measurements)?c.measurements:[];
+  c.powra=c.powra&&typeof c.powra==='object'?c.powra:{status:'',note:'',recordedAt:null};
   c.controllerName=c.controllerName||''; c.bacnetInstance=c.bacnetInstance||'';
   return c;
 }
@@ -1692,6 +1705,40 @@ function createAndStartCase(){ currentCase=normalizeCase(newCase()); if(tree){cu
 const originalJumpTo=jumpTo;
 jumpTo=function(id){ const allowed=id===current||history.some(h=>h.stepId===id); if(!allowed){showToast('Strict workflow: complete the current step first','err');return;} originalJumpTo(id); };
 
+function renderPowraGate(panel){
+  if(!panel||!currentCase)return;
+  const existing=panel.querySelector('.powra-gate'); if(existing)existing.remove();
+  const gate=document.createElement('section'); gate.className='powra-gate'; gate.setAttribute('aria-labelledby','powra-title');
+  const status=currentCase.powra?.status||''; const note=currentCase.powra?.note||'';
+  gate.innerHTML=`<h3 id="powra-title">POWRA review</h3><p>Confirm the Point of Work Risk Assessment before beginning or continuing troubleshooting.</p>
+    <label class="powra-option"><input type="radio" name="powra-status" value="completed" ${status==='completed'?'checked':''}><strong>Yes, POWRA is completed</strong></label>
+    <label class="powra-option"><input type="radio" name="powra-status" value="stop" ${status==='stop'?'checked':''}><strong>No, stop and complete the POWRA</strong></label>
+    <label class="powra-option"><input type="radio" name="powra-status" value="not-applicable" ${status==='not-applicable'?'checked':''}><strong>Not applicable, with technician note required</strong></label>
+    <div class="powra-note ${status==='not-applicable'?'show':''}"><label for="powra-note">Technician note required</label><textarea id="powra-note" placeholder="Explain why POWRA is not applicable.">${escapeHtml(note)}</textarea></div>
+    <div class="powra-stop" aria-live="polite"></div>`;
+  const noteWrap=gate.querySelector('.powra-note'), noteInput=gate.querySelector('#powra-note'), stop=gate.querySelector('.powra-stop');
+  gate.querySelectorAll('input[name="powra-status"]').forEach(input=>input.onchange=()=>{
+    currentCase.powra={status:input.value,note:input.value==='not-applicable'?(currentCase.powra?.note||''):'',recordedAt:new Date().toISOString()};
+    noteWrap.classList.toggle('show',input.value==='not-applicable');
+    noteInput.value=currentCase.powra.note;
+    stop.textContent=input.value==='stop'?'Stop work and complete the POWRA before proceeding.':'';
+    saveCaseLocal();
+  });
+  noteInput.oninput=()=>{ currentCase.powra.note=noteInput.value; currentCase.powra.recordedAt=new Date().toISOString(); saveCaseLocal(); };
+  if(status==='stop')stop.textContent='Stop work and complete the POWRA before proceeding.';
+  panel.insertBefore(gate,panel.firstChild);
+}
+function powraAllowsWork(){
+  const status=currentCase?.powra?.status||'';
+  const note=(currentCase?.powra?.note||'').trim();
+  if(status==='completed')return true;
+  if(status==='not-applicable'&&note)return true;
+  if(status==='not-applicable')showToast('Technician note is required when POWRA is not applicable','err');
+  else if(status==='stop')showToast('Stop and complete the POWRA before continuing','err');
+  else showToast('Complete the POWRA review before continuing','err');
+  document.querySelector('.powra-gate')?.scrollIntoView({behavior:'smooth',block:'start'});
+  return false;
+}
 const SAFETY_RULES=[
   {id:'live-electrical',pattern:/voltage|current|energized|power present|signal.*measur|meter/i,title:'Energized electrical measurement',text:'Proceed only if qualified and authorized, using required PPE, properly rated test equipment, and the site electrical-safety procedure. Otherwise select the applicable cannot-test or escalation response.'},
   {id:'loto',pattern:/continuity|resistance|wires removed|disconnect|terminal|mechanical inspection/i,title:'Energy isolation / lockout-tagout',text:'Follow the site-approved energy-control and lockout/tagout procedure before disconnecting conductors, resistance testing, or physical adjustment.'},
@@ -1702,7 +1749,7 @@ const SAFETY_RULES=[
 function safetyRulesForStep(step){ const text=[step?.question,step?.notes,step?.diagnosis,step?.action].filter(Boolean).join(' '); return SAFETY_RULES.filter(r=>r.pattern.test(text)); }
 function addSafetyGate(panel,step){ const rules=safetyRulesForStep(step); if(!rules.length)return; const wrap=document.createElement('div');wrap.className='safety-gate';wrap.innerHTML=`<h4>Safety review required</h4><p>${escapeHtml(SAFETY_REVIEW_STATUS)}</p>`; rules.forEach(rule=>{ const checked=currentCase.safetyAcknowledgments.some(a=>a.stepId===current&&a.ruleId===rule.id); const row=document.createElement('label');row.className='safety-check';row.innerHTML=`<input type="checkbox" ${checked?'checked':''}><span><strong>${escapeHtml(rule.title)}:</strong> ${escapeHtml(rule.text)}</span>`; row.querySelector('input').onchange=e=>{currentCase.safetyAcknowledgments=currentCase.safetyAcknowledgments.filter(a=>!(a.stepId===current&&a.ruleId===rule.id));if(e.target.checked)currentCase.safetyAcknowledgments.push({stepId:current,ruleId:rule.id,acknowledgedAt:new Date().toISOString(),status:'technician_acknowledged_draft_warning'});saveCaseLocal();};wrap.appendChild(row);}); panel.insertBefore(wrap,panel.querySelector('.nav-row')); }
 const originalRenderQuestion=renderQuestion;
-renderQuestion=function(){ originalRenderQuestion(); const panel=document.getElementById('q-content'); const step=tree?.steps?.[current]; if(panel&&step)addSafetyGate(panel,step); };
+renderQuestion=function(){ originalRenderQuestion(); const panel=document.getElementById('q-content'); const step=tree?.steps?.[current]; if(panel&&step){ renderPowraGate(panel); addSafetyGate(panel,step); } };
 
 // Auto-offer active sessions once login and tree are ready.
 const originalCheckAppReady=checkAppReady;
