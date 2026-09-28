@@ -872,8 +872,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.11-cors-safe-continuation
-// v0.6.10: controls Gemini thinking, detects finishReason, and continues MAX_TOKENS responses.
+// BMS Troubleshooter Version: 0.6.13-copilot-cache-and-continuation
+// v0.6.13: 4096 output tokens, controlled thinking, MAX_TOKENS continuation, streaming retries, and cache-safe deployment.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -924,7 +924,7 @@ async function installApp() {
 // Register the existing offline service worker.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js').catch(error => {
+    navigator.serviceWorker.register('./service-worker.js?v=0.6.13', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
       console.error('Service worker registration failed:', error);
     });
   });
@@ -1632,7 +1632,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.11-cors-safe-continuation';
+const APP_LOGIC_VERSION = '0.6.13-copilot-cache-and-continuation';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
