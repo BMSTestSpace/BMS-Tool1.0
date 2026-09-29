@@ -1,5 +1,5 @@
-// BMS Troubleshooter service worker - application version 0.6.22 feedback insert only
-const CACHE_NAME = 'bms-troubleshooter-v0-6-22-feedback-insert-only';
+// BMS Troubleshooter service worker - application version 0.6.23 document library
+const CACHE_NAME = 'bms-troubleshooter-v0-6-23-document-library';
 const CORE_FILES = [
   './',
   './index.html',

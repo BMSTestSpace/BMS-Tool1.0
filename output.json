@@ -1832,41 +1832,19 @@
     }
   },
   "product": {
-    "version": "0.6.22-feedback-insert-only",
-    "evidenceCapture": {
-      "technicianNotes": "optional_every_step",
-      "photographs": "optional_local_compressed",
-      "measurements": "optional"
-    },
-    "safety": {
-      "requiredApproach": "Follow site LOTO, PPE, arc-flash, rotating equipment, combustion, refrigerant, life-safety and authorization procedures. Never bypass safety devices."
-    },
-    "conclusionFormat": [
-      "primary_likely_cause",
-      "confidence",
-      "supporting_evidence",
-      "ruled_out_causes",
-      "remaining_possibilities",
-      "conditions_not_verified",
-      "recommended_action",
-      "safety_restrictions",
-      "powra_status",
-      "technician_notes"
-    ],
-    "conclusionAuthority": "deterministic_path_and_recorded_evidence",
-    "feedback": {
-      "scope": "final_resolutions_only",
-      "optional": true,
-      "ratings": [
-        "correct",
-        "partial",
-        "incorrect",
-        "unable_to_verify",
-        "skipped"
+    "version": "0.6.23-document-library",
+    "documentLibrary": {
+      "bucket": "bms-documents",
+      "private": true,
+      "edgeFunction": "document-library",
+      "maxFileBytes": 10485760,
+      "contentTypes": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png",
+        "image/webp"
       ],
-      "offlineQueue": true,
-      "writeMode": "insert_only",
-      "duplicateHandling": "unique_constraint_and_local_lock"
+      "offline": "search_open_upload_require_connection"
     }
   }
 }

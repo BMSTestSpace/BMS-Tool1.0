@@ -599,6 +599,12 @@
     .doc-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:10px; margin-top:14px; }
     .doc-card { border:1px solid var(--border); border-radius:10px; padding:12px; background:var(--surface); }
     .doc-card a { color:var(--accent); text-decoration:none; font-weight:500; }
+    .doc-toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:end; }
+    .doc-toolbar .app-field { flex:1 1 190px; }
+    .doc-status { margin-top:10px; color:var(--text-muted); font:10px/1.5 var(--mono); }
+    .doc-card-actions { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+    .doc-card .app-btn { min-height:36px; padding:7px 9px; }
+    .doc-cloud-badge { display:inline-block; margin-left:6px; border-radius:999px; padding:3px 7px; background:#dcfce7; color:#166534; font:9px var(--mono); }
     .source-label { display:inline-block; margin-top:7px; border-radius:999px; padding:3px 7px; background:#e0f2fe; color:#075985; font:10px var(--mono); }
     .voice-btn { width:40px; height:40px; border:1px solid var(--border); border-radius:8px; background:var(--surface2); cursor:pointer; flex:0 0 auto; }
     .voice-btn.listening { color:#fff; background:var(--red); border-color:var(--red); animation:pulse 1s infinite; }
@@ -916,8 +922,8 @@
   <section id="documents-panel" class="workspace-panel">
     <div class="workspace-wrap">
       <div class="workspace-heading"><div><h2>Documents and diagrams</h2><p>Attach project documents and manufacturer references to the active case. Exact model and revision still require technician confirmation.</p></div></div>
-      <div class="case-card"><h3>Equipment-aware search</h3><div class="field-grid"><div class="app-field"><label>Model or product</label><input id="doc-model" placeholder="MP-V-9A"></div><div class="app-field"><label>Need</label><select id="doc-need"><option>Wiring diagram</option><option>Installation instructions</option><option>Hardware reference</option><option>Specification sheet</option><option>Sequence / submittal</option></select></div></div><div class="app-actions"><button class="app-btn primary" onclick="searchOfficialDocs()">Search official manufacturer sources</button></div></div>
-      <div class="case-card" style="margin-top:14px"><h3>Project and approved files</h3><div class="doc-drop"><p>Upload PDFs or images for this troubleshooting case.</p><input id="doc-upload" type="file" accept="application/pdf,image/*" multiple onchange="attachDocuments(this.files)" style="margin-top:12px"></div><div id="doc-list" class="doc-list"></div></div>
+      <div class="case-card"><h3>Approved document library</h3><div class="doc-toolbar"><div class="app-field"><label>Search filename or path</label><input id="doc-search" placeholder="MP-V-9A, wiring, submittal"></div><div class="app-field"><label>File type</label><select id="doc-type"><option value="">All supported files</option><option value="application/pdf">PDF</option><option value="image/">Images</option></select></div><button class="app-btn primary" onclick="loadDocumentLibrary()">Search library</button><button class="app-btn" onclick="loadDocumentLibrary(true)">Show all</button></div><div id="doc-library-status" class="doc-status">An internet connection is required to search and open private documents.</div><div id="doc-library-list" class="doc-list"></div></div>
+      <div class="case-card" style="margin-top:14px"><h3>Upload approved file</h3><div class="doc-drop"><p>Upload PDF, JPEG, PNG, or WebP files up to 10 MB. Uploaded files are stored permanently in the private Supabase bucket and attached to the active case.</p><input id="doc-upload" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple onchange="attachDocuments(this.files)" style="margin-top:12px"></div><div id="doc-upload-status" class="doc-status"></div><div id="doc-list" class="doc-list"></div></div>
     </div>
   </section>
 </div>
@@ -937,8 +943,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.22-feedback-insert-only
-// v0.6.22: changes resolution feedback to privacy-preserving insert-only Supabase writes, handles duplicate responses, locks successful submissions, and safely retries the existing offline queue.
+// BMS Troubleshooter Version: 0.6.23-document-library
+// v0.6.23: connects the Documents tab to the private Supabase bms-documents bucket through a document-library Edge Function for search, signed access, uploads, case attachment, and best-effort auditing.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -989,7 +995,7 @@ async function installApp() {
 // Register the existing offline service worker.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js?v=0.6.22', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
+    navigator.serviceWorker.register('./service-worker.js?v=0.6.23', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
       console.error('Service worker registration failed:', error);
     });
   });
@@ -1840,15 +1846,58 @@ function renderEvidence(){
 function renderEvidenceList(id,items,empty){ const el=document.getElementById(id); if(!el)return; el.innerHTML=''; if(!items.length){el.innerHTML=`<li class="empty-state">${empty}</li>`;return;} items.slice().reverse().forEach(e=>{const li=document.createElement('li');li.className='evidence-item';li.innerHTML=`<strong>${escapeHtml(e.statement)}</strong><div class="evidence-meta"><span class="status-pill ${e.verificationStatus==='inferred'?'inferred':'verified'}">${escapeHtml(e.verificationStatus)}</span><span>${escapeHtml(e.evidenceType)}</span><span>${new Date(e.timestamp).toLocaleString()}</span></div>`;el.appendChild(li);}); }
 function renderTextList(id,items,empty){ const el=document.getElementById(id);if(!el)return;el.innerHTML=items.length?items.map(x=>`<li class="evidence-item"><strong>${escapeHtml(x)}</strong></li>`).join(''):`<li class="empty-state">${empty}</li>`; }
 function escapeHtml(v){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function setWorkspace(view){ document.body.classList.remove('view-diagnose','view-evidence','view-documents','view-copilot'); document.body.classList.add('view-'+view); document.querySelectorAll('.workspace-tab').forEach(b=>b.classList.toggle('active',b.dataset.view===view)); if(view==='evidence'||view==='documents')renderEvidence(); window.scrollTo({top:0,behavior:'smooth'}); }
+function setWorkspace(view){ document.body.classList.remove('view-diagnose','view-evidence','view-documents','view-copilot'); document.body.classList.add('view-'+view); document.querySelectorAll('.workspace-tab').forEach(b=>b.classList.toggle('active',b.dataset.view===view)); if(view==='evidence'||view==='documents')renderEvidence(); if(view==='documents'&&navigator.onLine)loadDocumentLibrary(); window.scrollTo({top:0,behavior:'smooth'}); }
 function resetCase(){ if(!confirm('Start a new case? The current local case will be replaced.'))return; currentCase=newCase(); history=[]; if(tree){current=tree.start;currentCase.currentStep=current;} saveCaseLocal();renderEvidence();render(); }
 function caseSummary(){ const facts=currentCase.evidence.map(e=>`- [${e.verificationStatus}] ${e.statement}`).join('\n')||'- None recorded'; const c=currentCase.conclusion; const conclusion=c?`\n\nDRAFT CONCLUSION\nPrimary likely cause: ${c.primaryCause}\nConfidence: ${c.confidence}\nRemaining possibilities:\n- ${c.remainingPossibilities.join('\n- ')}\nConditions not verified:\n- ${c.unverifiedConditions.join('\n- ')}\nRecommended next action: ${c.recommendedNextAction}`:''; return `${currentCase.caseId}\nEquipment: ${currentCase.equipment.tag||'Unknown'} ${currentCase.equipment.type||''}\nIssue: ${currentCase.reportedIssue||'Not entered'}\nCurrent step: ${currentCase.currentStep||current||'Not started'}\n\nEvidence:\n${facts}${conclusion}`; }
 async function copySummary(){ try{await navigator.clipboard.writeText(caseSummary());showToast('Summary copied','ok');}catch{showToast('Copy failed','err');} }
 function exportCase(){ const blob=new Blob([JSON.stringify(currentCase,null,2)],{type:'application/json'}); const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`${currentCase.caseId}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
-function attachDocuments(files){ [...files].forEach(file=>{ currentCase.documents.push({id:'DOC-'+cryptoRandom(),name:file.name,type:file.type,size:file.size,sourceType:'PROJECT DOCUMENT',modelMatch:'Unconfirmed',revision:'Unconfirmed',addedAt:new Date().toISOString()}); }); saveCaseLocal();renderDocuments();showToast(`${files.length} document(s) attached to this browser session`,'ok'); }
-function renderDocuments(){ const el=document.getElementById('doc-list');if(!el)return;el.innerHTML='';if(!currentCase.documents.length){el.innerHTML='<div class="empty-state">No documents attached to this case yet. File metadata is saved locally; uploaded file contents are not persisted after reload in this prototype.</div>';return;} currentCase.documents.slice().reverse().forEach(d=>{const card=document.createElement('div');card.className='doc-card';card.innerHTML=`<strong>${escapeHtml(d.name)}</strong><div class="evidence-meta"><span>${Math.round(d.size/1024)} KB</span><span>Model: ${escapeHtml(d.modelMatch)}</span><span>Revision: ${escapeHtml(d.revision)}</span></div><span class="source-label">${escapeHtml(d.sourceType)}</span>`;el.appendChild(card);}); }
-function searchOfficialDocs(){ const model=(document.getElementById('doc-model').value||currentCase.equipment.controllerModel||currentCase.equipment.model).trim(); const need=document.getElementById('doc-need').value; if(!model)return showToast('Enter or save an equipment model first','err'); window.open(`https://www.google.com/search?q=${encodeURIComponent('site:se.com OR site:product-help.schneider-electric.com '+model+' '+need+' PDF')}`,'_blank','noopener'); }
-
+const DOCUMENT_FUNCTION_URL=SB_URL+'/functions/v1/document-library';
+const DOCUMENT_ALLOWED_TYPES=['application/pdf','image/jpeg','image/png','image/webp'];
+const DOCUMENT_MAX_BYTES=10*1024*1024;
+async function documentFunction(action,payload={}){
+  const res=await fetch(DOCUMENT_FUNCTION_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${SB_KEY}`,'apikey':SB_KEY},body:JSON.stringify({action,technicianName:currentUser?.name||'',technicianEmail:currentUser?.email||'',caseId:currentCase?.caseId||'',...payload})});
+  const text=await res.text();let data={};try{data=JSON.parse(text)}catch{data={error:text||`HTTP ${res.status}`};}
+  if(!res.ok)throw new Error(data.error||`Document service HTTP ${res.status}`);return data;
+}
+async function loadDocumentLibrary(showAll=false){
+  const list=document.getElementById('doc-library-list'),status=document.getElementById('doc-library-status');if(!list||!status)return;
+  if(!navigator.onLine){status.textContent='Offline: document search and private file access require a connection.';return;}
+  const query=showAll?'':(document.getElementById('doc-search')?.value||'').trim();const contentType=document.getElementById('doc-type')?.value||'';
+  status.textContent='Loading private document library...';list.innerHTML='';
+  try{const data=await documentFunction('list',{query,contentType});renderDocumentLibrary(data.documents||[]);status.textContent=`${(data.documents||[]).length} document(s) found in the private library.`;}
+  catch(error){console.error('Document library search failed',error);status.textContent='Document library unavailable: '+error.message;}
+}
+function renderDocumentLibrary(docs){
+  const el=document.getElementById('doc-library-list');if(!el)return;el.innerHTML='';
+  if(!docs.length){el.innerHTML='<div class="empty-state">No matching private documents were found.</div>';return;}
+  docs.forEach(d=>{const card=document.createElement('div');card.className='doc-card';card.innerHTML=`<strong>${escapeHtml(d.name)}</strong><span class="doc-cloud-badge">PRIVATE CLOUD</span><div class="evidence-meta"><span>${Math.max(1,Math.round((d.size||0)/1024))} KB</span><span>${escapeHtml(d.contentType||'unknown type')}</span><span>${d.updatedAt?new Date(d.updatedAt).toLocaleString():''}</span></div><div class="doc-card-actions"><button class="app-btn primary" type="button" data-open>Open</button><button class="app-btn" type="button" data-attach>Attach to case</button></div>`;
+    card.querySelector('[data-open]').onclick=()=>openCloudDocument(d.path,d.name);card.querySelector('[data-attach]').onclick=()=>attachCloudDocument(d);el.appendChild(card);});
+}
+async function openCloudDocument(path,name){
+  if(!navigator.onLine)return showToast('Internet connection required to open private documents','err');
+  const tab=window.open('about:blank','_blank');
+  try{const data=await documentFunction('open',{path,name});if(tab)tab.location=data.signedUrl;else location.href=data.signedUrl;showToast('Private document opened','ok');}
+  catch(error){if(tab)tab.close();showToast('Document open failed: '+error.message,'err');}
+}
+async function attachCloudDocument(d){
+  if(!(currentCase.documents||[]).some(x=>x.path===d.path))currentCase.documents.push({id:d.id||'DOC-'+cryptoRandom(),name:d.name,path:d.path,type:d.contentType,size:d.size||0,sourceType:'SUPABASE DOCUMENT',modelMatch:'Unconfirmed',revision:'Unconfirmed',addedAt:new Date().toISOString(),cloud:true});
+  saveCaseLocal();renderDocuments();
+  try{await documentFunction('attach',{path:d.path,name:d.name,documentId:d.id||null});showToast('Document attached to active case','ok');}catch(error){showToast('Attached locally; cloud audit unavailable','err');}
+}
+function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(',')[1]);r.onerror=()=>reject(r.error);r.readAsDataURL(file);});}
+async function attachDocuments(files){
+  const status=document.getElementById('doc-upload-status');if(!navigator.onLine){if(status)status.textContent='Offline: reconnect before uploading permanent documents.';return;}
+  for(const file of [...files]){
+    if(!DOCUMENT_ALLOWED_TYPES.includes(file.type)){showToast(`${file.name}: unsupported file type`,'err');continue;}
+    if(file.size>DOCUMENT_MAX_BYTES){showToast(`${file.name}: larger than 10 MB`,'err');continue;}
+    try{if(status)status.textContent=`Uploading ${file.name}...`;const contentBase64=await fileToBase64(file);const data=await documentFunction('upload',{name:file.name,contentType:file.type,size:file.size,contentBase64});const d=data.document;
+      if(!(currentCase.documents||[]).some(x=>x.path===d.path))currentCase.documents.push({id:d.id||'DOC-'+cryptoRandom(),name:d.name,path:d.path,type:d.contentType,size:d.size,sourceType:'SUPABASE DOCUMENT',modelMatch:'Unconfirmed',revision:'Unconfirmed',addedAt:new Date().toISOString(),cloud:true});saveCaseLocal();renderDocuments();if(status)status.textContent=`Uploaded ${file.name}.`;showToast('Document uploaded and attached','ok');
+    }catch(error){console.error('Document upload failed',error);if(status)status.textContent=`Upload failed: ${error.message}`;showToast('Document upload failed','err');}
+  }
+  document.getElementById('doc-upload').value='';loadDocumentLibrary(true);
+}
+function renderDocuments(){const el=document.getElementById('doc-list');if(!el)return;el.innerHTML='';if(!currentCase.documents.length){el.innerHTML='<div class="empty-state">No cloud documents are attached to this case yet.</div>';return;}currentCase.documents.slice().reverse().forEach(d=>{const card=document.createElement('div');card.className='doc-card';card.innerHTML=`<strong>${escapeHtml(d.name)}</strong>${d.cloud?'<span class="doc-cloud-badge">PRIVATE CLOUD</span>':''}<div class="evidence-meta"><span>${Math.max(1,Math.round((d.size||0)/1024))} KB</span><span>Model: ${escapeHtml(d.modelMatch||'Unconfirmed')}</span><span>Revision: ${escapeHtml(d.revision||'Unconfirmed')}</span></div><span class="source-label">${escapeHtml(d.sourceType)}</span>${d.path?'<div class="doc-card-actions"><button class="app-btn primary" type="button" data-open>Open</button></div>':''}`;if(d.path)card.querySelector('[data-open]').onclick=()=>openCloudDocument(d.path,d.name);el.appendChild(card);});}
+function searchOfficialDocs(){ const model=(document.getElementById('doc-search')?.value||currentCase.equipment.controllerModel||currentCase.equipment.model).trim();if(!model)return showToast('Enter a model or keyword first','err');document.getElementById('doc-search').value=model;loadDocumentLibrary(); }
 let speechRecognition=null;
 function toggleVoice(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition; if(!SR)return showToast('Speech recognition is not supported in this browser. Type your response instead.','err');
@@ -1868,7 +1917,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.22-feedback-insert-only';
+const APP_LOGIC_VERSION = '0.6.23-document-library';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
