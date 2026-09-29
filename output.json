@@ -1832,7 +1832,7 @@
     }
   },
   "product": {
-    "version": "0.6.21-resolution-feedback",
+    "version": "0.6.22-feedback-insert-only",
     "evidenceCapture": {
       "technicianNotes": "optional_every_step",
       "photographs": "optional_local_compressed",
@@ -1864,7 +1864,9 @@
         "unable_to_verify",
         "skipped"
       ],
-      "offlineQueue": true
+      "offlineQueue": true,
+      "writeMode": "insert_only",
+      "duplicateHandling": "unique_constraint_and_local_lock"
     }
   }
 }

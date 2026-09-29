@@ -453,6 +453,8 @@
     .feedback-field textarea { width:100%; min-height:68px; resize:vertical; border:1px solid #bfdbfe; border-radius:8px; padding:9px 10px; font:13px var(--sans); }
     .feedback-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
     .feedback-status { margin-top:8px; color:#475569; font:10px/1.4 var(--mono); }
+    .feedback-box.submitted { border-color:#86efac; background:#f0fdf4; }
+    .feedback-box.submitted input, .feedback-box.submitted textarea, .feedback-box.submitted button { pointer-events:none; opacity:.7; }
     .restart-btn {
       width: 100%;
       padding: 10px;
@@ -935,8 +937,8 @@
 </div>
 
 <script>
-// BMS Troubleshooter Version: 0.6.21-resolution-feedback
-// v0.6.21: adds optional feedback at final resolutions only, stores it with the case, prevents duplicate submissions, and queues feedback for Supabase when offline.
+// BMS Troubleshooter Version: 0.6.22-feedback-insert-only
+// v0.6.22: changes resolution feedback to privacy-preserving insert-only Supabase writes, handles duplicate responses, locks successful submissions, and safely retries the existing offline queue.
 let deferredInstallPrompt = null;
 
 function isStandaloneMode() {
@@ -987,7 +989,7 @@ async function installApp() {
 // Register the existing offline service worker.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js?v=0.6.21', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
+    navigator.serviceWorker.register('./service-worker.js?v=0.6.22', { updateViaCache: 'none' }).then(registration => registration.update()).catch(error => {
       console.error('Service worker registration failed:', error);
     });
   });
@@ -1004,8 +1006,11 @@ function loadPendingFeedback(){ try{return JSON.parse(localStorage.getItem(PENDI
 function savePendingFeedback(items){ localStorage.setItem(PENDING_FEEDBACK_KEY,JSON.stringify(items)); }
 function queueFeedback(row){ const items=loadPendingFeedback(); const key=`${row.case_id}:${row.result_id}`; const pos=items.findIndex(x=>x.key===key); const item={key,row,queuedAt:new Date().toISOString(),attempts:0}; if(pos>=0)items[pos]=item;else items.push(item); savePendingFeedback(items); }
 async function sbInsertFeedback(row){
-  const response=await fetch(`${SB_URL}/rest/v1/bms_feedback`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SB_KEY,'Prefer':'resolution=merge-duplicates,return=minimal','On-Conflict':'case_id,result_id'},body:JSON.stringify(row)});
-  if(!response.ok){const text=await response.text();throw new Error(`Supabase feedback ${response.status}: ${text}`);} return true;
+  const response=await fetch(`${SB_URL}/rest/v1/bms_feedback`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SB_KEY,'Prefer':'return=minimal'},body:JSON.stringify(row)});
+  if(response.ok)return {status:'inserted'};
+  const text=await response.text();
+  if(response.status===409||/23505|duplicate key|unique constraint/i.test(text))return {status:'duplicate'};
+  throw new Error(`Supabase feedback ${response.status}: ${text}`);
 }
 async function syncPendingFeedback(){
   if(!navigator.onLine)return; const items=loadPendingFeedback(); if(!items.length)return; const remaining=[];
@@ -1577,7 +1582,7 @@ function renderResolutionFeedback(resultId,step){
   if(existing){
     const radio=box.querySelector(`input[value="${existing.rating}"]`);if(radio)radio.checked=true;
     ['comment','actualFinding','suggestedCorrection'].forEach(k=>{const el=box.querySelector(`[data-feedback="${k}"]`);if(el)el.value=existing[k]||'';});
-    details.classList.toggle('show',feedbackNeedsDetails(existing.rating));status.textContent=`Saved: ${feedbackLabel(existing.rating)}.`;
+    details.classList.toggle('show',feedbackNeedsDetails(existing.rating));status.textContent=existing.cloudStatus==='submitted'?`Submitted: ${feedbackLabel(existing.rating)}.`:`Saved: ${feedbackLabel(existing.rating)}.`;if(existing.cloudStatus==='submitted')box.classList.add('submitted');
   }
   box.querySelectorAll('input[name="resolution-feedback"]').forEach(r=>r.onchange=()=>details.classList.toggle('show',feedbackNeedsDetails(r.value)));
   box.querySelector('.app-btn.primary').onclick=()=>submitResolutionFeedback(box,resultId,step,false);
@@ -1585,16 +1590,21 @@ function renderResolutionFeedback(resultId,step){
   return box;
 }
 async function submitResolutionFeedback(box,resultId,step,skip=false){
+  if(currentCase.feedback?.resultId===resultId&&currentCase.feedback?.cloudStatus==='submitted'){box.querySelector('.feedback-status').textContent='Feedback was already submitted for this resolution.';box.classList.add('submitted');return;}
   const rating=skip?'skipped':box.querySelector('input[name="resolution-feedback"]:checked')?.value;
   const status=box.querySelector('.feedback-status'); if(!rating){status.textContent='Choose an option or select Skip feedback.';return;}
   const get=k=>(box.querySelector(`[data-feedback="${k}"]`)?.value||'').trim();
-  const feedback={id:currentCase.feedback?.resultId===resultId?currentCase.feedback.id:'FB-'+cryptoRandom(),resultId,rating,comment:get('comment'),actualFinding:get('actualFinding'),suggestedCorrection:get('suggestedCorrection'),submittedAt:new Date().toISOString(),logicVersion:APP_LOGIC_VERSION};
+  const feedback={id:currentCase.feedback?.resultId===resultId?currentCase.feedback.id:'FB-'+cryptoRandom(),resultId,rating,comment:get('comment'),actualFinding:get('actualFinding'),suggestedCorrection:get('suggestedCorrection'),submittedAt:new Date().toISOString(),logicVersion:APP_LOGIC_VERSION,cloudStatus:skip?'skipped':'pending'};
   currentCase.feedback=feedback;saveCaseLocal();
   if(skip){status.textContent='Feedback skipped for this resolution.';return;}
   const row={case_id:currentCase.caseId,technician_name:currentUser?.name||null,technician_email:currentUser?.email||null,logic_version:APP_LOGIC_VERSION,result_id:resultId,diagnosis_text:step?.diagnosis||null,rating,comment:feedback.comment||null,actual_finding:feedback.actualFinding||null,suggested_correction:feedback.suggestedCorrection||null,path:currentCase.path||[],conclusion:currentCase.conclusion||{},was_offline_queued:!navigator.onLine,submitted_at:feedback.submittedAt};
   if(!navigator.onLine){queueFeedback(row);status.textContent='Saved locally. Feedback will sync when online.';showToast('Feedback queued for sync','ok');return;}
-  try{await sbInsertFeedback(row);status.textContent='Feedback submitted. Thank you.';showToast('Feedback submitted','ok');}
-  catch(error){console.error('Feedback save failed; queued locally:',error);row.was_offline_queued=true;queueFeedback(row);status.textContent='Cloud unavailable. Feedback saved locally for retry.';showToast('Feedback queued locally','err');}
+  try{
+    const result=await sbInsertFeedback(row);
+    currentCase.feedback.cloudStatus='submitted';currentCase.feedback.cloudResult=result.status;saveCaseLocal();
+    status.textContent=result.status==='duplicate'?'Feedback was already submitted for this resolution.':'Feedback submitted. Thank you.';
+    box.classList.add('submitted');showToast(result.status==='duplicate'?'Feedback already submitted':'Feedback submitted','ok');
+  } catch(error){console.error('Feedback save failed; queued locally:',error);row.was_offline_queued=true;currentCase.feedback.cloudStatus='queued';saveCaseLocal();queueFeedback(row);status.textContent='Cloud unavailable. Feedback saved locally for retry.';showToast('Feedback queued locally','err');}
 }
 // ─── Gemini Core Placeholders ─────────────────────────────────────────────────
 // ─── Gemini AI ────────────────────────────────────────────────────────────────
@@ -1858,7 +1868,7 @@ document.addEventListener('DOMContentLoaded',()=>{ renderEvidence(); updateInsta
 
 // v0.5.0: multiple incomplete sessions, photo-ready records, and contextual safety gates
 const CASE_INDEX_KEY = 'bmsTroubleshooter.caseIndex.v1';
-const APP_LOGIC_VERSION = '0.6.21-resolution-feedback';
+const APP_LOGIC_VERSION = '0.6.22-feedback-insert-only';
 const SAFETY_REVIEW_STATUS = 'DRAFT - FORMAL COMPANY REVIEW REQUIRED';
 
 function loadCaseIndex(){ try{return JSON.parse(localStorage.getItem(CASE_INDEX_KEY)||'[]');}catch{return [];} }
