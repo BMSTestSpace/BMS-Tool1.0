@@ -1832,7 +1832,7 @@
     }
   },
   "product": {
-    "version": "0.6.19-evidence-conclusion-engine",
+    "version": "0.6.21-resolution-feedback",
     "evidenceCapture": {
       "technicianNotes": "optional_every_step",
       "photographs": "optional_local_compressed",
@@ -1853,6 +1853,18 @@
       "powra_status",
       "technician_notes"
     ],
-    "conclusionAuthority": "deterministic_path_and_recorded_evidence"
+    "conclusionAuthority": "deterministic_path_and_recorded_evidence",
+    "feedback": {
+      "scope": "final_resolutions_only",
+      "optional": true,
+      "ratings": [
+        "correct",
+        "partial",
+        "incorrect",
+        "unable_to_verify",
+        "skipped"
+      ],
+      "offlineQueue": true
+    }
   }
 }

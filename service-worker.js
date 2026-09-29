@@ -1,5 +1,5 @@
-// BMS Troubleshooter service worker - application version 0.6.20 offline identity sync
-const CACHE_NAME = 'bms-troubleshooter-v0-6-20-offline-identity';
+// BMS Troubleshooter service worker - application version 0.6.21 resolution feedback
+const CACHE_NAME = 'bms-troubleshooter-v0-6-21-resolution-feedback';
 const CORE_FILES = [
   './',
   './index.html',
