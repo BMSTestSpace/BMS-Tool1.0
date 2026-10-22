@@ -1,5 +1,8 @@
-// BMS Troubleshooter service worker - application version 0.6.23 document library
-const CACHE_NAME = 'bms-troubleshooter-v0-6-23-document-library';
+// BMS Troubleshooter service worker - application version 0.6.24 field hardening
+// v0.6.24: network-first requests time out to the cached copy, Google Fonts are cached for offline use,
+// and a new worker waits until the technician applies the update (no mid-case code or content swap).
+const CACHE_NAME = 'bms-troubleshooter-v0-6-24-field-hardening';
+const NETWORK_TIMEOUT_MS = 3000;
 const CORE_FILES = [
   './',
   './index.html',
@@ -10,10 +13,15 @@ const CORE_FILES = [
   './icons/icon-maskable-192.png',
   './icons/icon-maskable-512.png'
 ];
+const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
 self.addEventListener('install', (event) => {
+  // No skipWaiting here: the page shows an "Apply update" prompt and sends SKIP_WAITING when the technician agrees.
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_FILES.map((url) => new Request(url, { cache: 'reload' })))));
-  self.skipWaiting();
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
@@ -24,34 +32,60 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-async function networkFirst(request, fallback) {
-  try {
-    const response = await fetch(request, { cache: 'no-store' });
-    if (response.ok) {
-      const cache = await caches.open(CACHE_NAME);
-      await cache.put(request, response.clone());
-    }
+// Network first, but fall back to the cached copy if the network is slow (weak signal) or fails.
+// A slow network response still updates the cache in the background.
+async function networkFirst(event, fallback) {
+  const request = event.request;
+  const cache = await caches.open(CACHE_NAME);
+  const cached = (await cache.match(request)) || (fallback ? await cache.match(fallback) : undefined);
+  const networkPromise = fetch(request, { cache: 'no-store' }).then(async (response) => {
+    if (response.ok) await cache.put(request, response.clone());
     return response;
-  } catch (error) {
-    return (await caches.match(request)) || (fallback ? await caches.match(fallback) : undefined) || Response.error();
-  }
+  });
+  networkPromise.catch(() => {});
+  event.waitUntil(networkPromise.catch(() => {}));
+  if (!cached) return networkPromise.catch(() => Response.error());
+  const timeout = new Promise((resolve) => setTimeout(() => resolve(null), NETWORK_TIMEOUT_MS));
+  try {
+    const response = await Promise.race([networkPromise, timeout]);
+    if (response) return response;
+  } catch (error) { /* use the cached copy */ }
+  return cached;
+}
+
+// Fonts: serve from cache when present and refresh in the background, so IBM Plex renders offline after one online visit.
+async function fontCacheFirst(event) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(event.request);
+  const refresh = fetch(event.request).then(async (response) => {
+    if (response && (response.ok || response.type === 'opaque')) await cache.put(event.request, response.clone());
+    return response;
+  });
+  refresh.catch(() => {});
+  event.waitUntil(refresh.catch(() => {}));
+  return cached || refresh;
 }
 
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
+
+  if (FONT_HOSTS.includes(url.hostname)) {
+    event.respondWith(fontCacheFirst(event));
+    return;
+  }
   if (url.origin !== self.location.origin) return;
 
   // Always check the network for navigations and HTML so new releases load promptly.
   if (request.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/')) {
-    event.respondWith(networkFirst(request, './index.html'));
+    event.respondWith(networkFirst(event, './index.html'));
     return;
   }
 
   // Troubleshooting content is also network-first, with offline fallback.
   if (url.pathname.endsWith('/output.json')) {
-    event.respondWith(networkFirst(request));
+    event.respondWith(networkFirst(event));
     return;
   }
 

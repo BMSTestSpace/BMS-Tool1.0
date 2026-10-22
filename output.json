@@ -24,7 +24,7 @@
       "answers": {
         "Automation Server": "q3",
         "UI16 / Input": "q101",
-        "DO8 / Digital Output": "q201",
+        "DO8/DO12 Digital Output": "q201",
         "AO8 / Analog Output": "q301",
         "Communications": "q501"
       }
@@ -393,12 +393,12 @@
       "action": "Correct mounting, seal wall penetrations, improve thermal contact, or relocate the sensor."
     },
     "q201": {
-      "question": "Is the installed digital-output module identified correctly (for example DO-FC-8 Form C or DO-FA-12 Form A), online, and healthy?",
+      "question": "Is the installed digital-output module (DO8 / DO-FC-8 Form C, or DO12 / DO-FA-12 Form A) identified correctly, online, and healthy?",
       "answers": {
         "Yes": "q202",
         "No": "r203"
       },
-      "notes": "The 8-channel Schneider Central IO digital-output module is DO-FC-8. Form C provides COM/NO/NC relay contacts. DO-FA-12 is a separate 12-channel Form A module."
+      "notes": "The 8-channel Schneider Central IO digital-output module is DO-FC-8. Form C provides COM/NO/NC relay contacts. DO-FA-12 is a separate 12-channel Form A module; Form A provides a normally open contact only (no NC). Identify the module from its label before testing, because the contact terminals differ."
     },
     "q202": {
       "question": "Is the output commanded ON in EBO?",
@@ -424,12 +424,12 @@
       "notes": "A channel LED indicates output state, but does not prove external source voltage or load operation."
     },
     "q205": {
-      "question": "With power isolated as required, does continuity between COM and NO/NC change correctly when the relay is commanded?",
+      "question": "With power isolated as required, does continuity across the relay contact change correctly when the output is commanded (COM to NO/NC on a DO-FC-8, or the Form A contact terminals on a DO-FA-12)?",
       "answers": {
         "Yes": "q207",
         "No": "r202"
       },
-      "notes": "DO-FC-8 is a dry Form C relay output. Test the contact state appropriate to the installed wiring. Do not assume the module supplies voltage."
+      "notes": "DO-FC-8 is a dry Form C relay output; DO-FA-12 is a Form A (normally open) relay output. Test the contact state appropriate to the installed module and wiring. Do not assume the module supplies voltage."
     },
     "q206": {
       "question": "Can the output be commanded manually after verifying safeties?",
@@ -439,7 +439,7 @@
       }
     },
     "q207": {
-      "question": "Is the external control-power source present, correctly rated, and switched through the intended COM/NO/NC conductors to the field device?",
+      "question": "Is the external control-power source present, correctly rated, and switched through the intended contact conductors (COM/NO/NC on a DO8, or the Form A contact terminals on a DO12) to the field device?",
       "answers": {
         "Yes": "q208",
         "No": "r998"
@@ -459,10 +459,10 @@
     },
     "r202": {
       "diagnosis": "Relay contact or channel does not switch as commanded",
-      "action": "Verify correct module type, point type, HOA position, COM/NO/NC terminals, and isolated continuity. Compare with a known-good channel without exceeding relay ratings; replace hardware only after isolation."
+      "action": "Verify correct module type (DO8 vs DO12), point type, HOA position, contact terminals (COM/NO/NC on Form C; Form A contact terminals on DO12), and isolated continuity. Compare with a known-good channel without exceeding relay ratings; replace hardware only after isolation."
     },
     "r203": {
-      "diagnosis": "DO8 module or application is not responding",
+      "diagnosis": "DO8/DO12 module or application is not responding",
       "action": "Verify module status, I/O bus, application download, channel object, and controller health."
     },
     "r204": {
@@ -684,32 +684,98 @@
       }
     },
     "q560": {
-      "question": "Do multiple devices drop offline at the same time?",
+      "question": "What is dropping offline intermittently?",
       "answers": {
-        "Yes": "q561",
-        "No": "q563"
-      }
+        "One device or one cable segment": "q563",
+        "Several MS/TP devices on the same Automation Server trunk": "q561",
+        "The Automation Server itself drops from EBO and then returns": "q570",
+        "Several Automation Servers or devices on different trunks": "q575"
+      },
+      "notes": "Scope the drop before testing: note which devices drop, whether they drop together, and whether the Automation Server itself stays online. Event-log or trend timestamps make the correlation questions in this branch much easier to answer."
     },
     "q561": {
-      "question": "Do drops correlate with VFD/motor starts or electrical events?",
+      "question": "When the MS/TP devices drop, does the Automation Server itself stay online in EBO with normal status lights and no restart recorded?",
       "answers": {
-        "Yes": "r560",
-        "No": "q562"
-      }
+        "Yes": "q562",
+        "No": "q570"
+      },
+      "notes": "If the Automation Server restarts or loses power at the same time, the trunk devices may drop only because the server restarted. Check the Automation Server event log and status lights at the time of a drop before blaming the trunk."
     },
     "q562": {
-      "question": "Are controller resets, voltage dips, or transformer overloads recorded?",
+      "question": "Was a device, address, wiring, or program change made on this trunk shortly before the drops started?",
+      "answers": {
+        "Yes": "r566",
+        "No": "q564"
+      }
+    },
+    "q563": {
+      "question": "Does the drop follow one specific device or cable segment (for example it stays with the device when swapped, or clears when that segment is disconnected)?",
+      "answers": {
+        "Yes": "r563",
+        "No": "r562"
+      }
+    },
+    "q564": {
+      "question": "Do the drops coincide with VFD/motor starts or other large electrical loads switching, or is the trunk routed alongside VFD output or power conductors?",
+      "answers": {
+        "Yes": "r560",
+        "No": "q523"
+      },
+      "notes": "Electrical noise is only one candidate on an MS/TP trunk. Answer Yes only when the timing or the cable routing supports it; otherwise continue to the trunk physical-layer checks."
+    },
+    "q570": {
+      "question": "At the time of a drop, does the Automation Server record a restart or power loss, or show an abnormal status-light pattern?",
+      "answers": {
+        "Yes": "q571",
+        "No": "q572"
+      },
+      "notes": "Check the event log in Device Administrator or EBO and record the status-light pattern. A restart points to power, firmware, or application causes rather than the network."
+    },
+    "q571": {
+      "question": "Is the Automation Server supply power stable at its input terminals (measured or trended) when the restarts occur, and is the transformer within its rated load?",
+      "answers": {
+        "Yes": "r567",
+        "No": "r561"
+      },
+      "notes": "Stay within the authorized BMS scope and follow site electrical-safety procedures for any energized measurement."
+    },
+    "q572": {
+      "question": "Do other devices on the same switch, VLAN, or uplink also drop from the network at those times?",
+      "answers": {
+        "Yes": "r503",
+        "No": "q573"
+      }
+    },
+    "q573": {
+      "question": "Is the Automation Server IP address static or reserved, unique, and unchanged (no duplicate IP, DHCP lease change, or recent network change)?",
+      "answers": {
+        "Yes": "r504",
+        "No": "r541"
+      },
+      "notes": "Check the Ethernet link lights and, if you have access, the switch-port link history. Coordinate with the site network owner before changing addressing."
+    },
+    "q575": {
+      "question": "What do the affected controllers have in common?",
+      "answers": {
+        "Same power source or transformer": "q576",
+        "Same Ethernet switch, uplink, or VLAN": "r503",
+        "Nothing in common, or unknown": "r562"
+      }
+    },
+    "q576": {
+      "question": "Do controller resets, voltage dips, or transformer overloads coincide with the drops?",
       "answers": {
         "Yes": "r561",
         "No": "r562"
       }
     },
-    "q563": {
-      "question": "Is the issue isolated to one device or cable segment?",
-      "answers": {
-        "Yes": "r563",
-        "No": "r562"
-      }
+    "r566": {
+      "diagnosis": "Recent trunk change is the likely trigger",
+      "action": "Review exactly what changed. Verify unique MAC addresses, consistent baud rate and Max Master settings, and polarity/topology at the changed point. Revert or re-test one change at a time and document each step."
+    },
+    "r567": {
+      "diagnosis": "Automation Server restarts while supply power is stable",
+      "action": "Record the restart reason and time from the event log. Verify firmware and application download state, loading, and recent program changes. Escalate with the logs for the approved recovery or replacement process before swapping hardware."
     },
     "q580": {
       "question": "Does the value at the controller match the field measurement?",
@@ -1832,7 +1898,7 @@
     }
   },
   "product": {
-    "version": "0.6.23-document-library",
+    "version": "0.6.24-field-hardening",
     "documentLibrary": {
       "bucket": "bms-documents",
       "private": true,
