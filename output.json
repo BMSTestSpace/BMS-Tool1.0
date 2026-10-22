@@ -10918,7 +10918,7 @@
     }
   },
   "product": {
-    "version": "0.6.30-layout-assist-draft",
+    "version": "0.6.31-case-drawers-draft",
     "documentLibrary": {
       "bucket": "bms-documents",
       "private": true,
@@ -10964,7 +10964,8 @@
       "Separate recorded diagnostic findings from missing verification checks; label provenance and exclude navigation choices",
       "Added outcome_type (specific / area / inconclusive) to every result for the confidence model",
       "Evidence entry: optional Record a reading box on every question, Add measurement button on results, tappable confidence tip",
-      "Added draft step guides (why, tools, what to expect, common mistakes) and suggested readings to measurement steps; guides are pending technical review"
+      "Added draft step guides (why, tools, what to expect, common mistakes) and suggested readings to measurement steps; guides are pending technical review",
+      "Removed the Evidence tab: case details on the case card, readings and photos in a drawer, session tools in the Case menu; readings can be edited and deleted"
     ],
     "limitations": [
       "Engineering draft requiring site and exact-model validation; not a safety certification",
@@ -10974,7 +10975,7 @@
   },
   "caseRecordTemplate": {
     "case_id": null,
-    "logic_version": "0.6.30-layout-assist-draft",
+    "logic_version": "0.6.31-case-drawers-draft",
     "equipment_model": null,
     "firmware_ebo_version": null,
     "protocol_transport": null,
