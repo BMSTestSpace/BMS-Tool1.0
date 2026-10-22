@@ -36,6 +36,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Choosing the equipment loads the right set of checks.",
+        "tools": [
+          "Equipment tag and drawings",
+          "Phone (photo of the label)"
+        ],
+        "expect": "You can name the equipment type from the tag, drawing or label.",
+        "mistakes": [
+          "Choosing by symptom instead of equipment type",
+          "Choosing Other when the equipment matches a listed type"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q2": {
@@ -92,6 +105,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Nothing downstream can be trusted until the panel itself has power.",
+        "tools": [
+          "Visual check of the power-supply and controller indicators"
+        ],
+        "expect": "Power and status indicators are lit and the controller is running.",
+        "mistakes": [
+          "Assuming power from one lit LED on a different device",
+          "Skipping the disconnect and breaker check"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q4": {
@@ -120,6 +145,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Low or wrong-type supply voltage causes resets and odd faults that look like software problems.",
+        "tools": [
+          "Multimeter set to the correct AC or DC range",
+          "Panel drawing and the power-supply label"
+        ],
+        "expect": "Voltage is within the range printed for the installed power-supply and server hardware, measured under normal load.",
+        "mistakes": [
+          "Assuming 24 VAC without reading the label",
+          "Measuring with the load disconnected",
+          "Reading the wrong terminals"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Supply voltage at panel power terminals",
+        "units": "V"
       }
     },
     "q5": {
@@ -146,6 +189,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A tripped breaker is the fastest explanation for no power. Reset only after you know why it tripped.",
+        "tools": [
+          "Visual check"
+        ],
+        "expect": "The breaker handle is fully ON and not in the tripped position.",
+        "mistakes": [
+          "Resetting before checking for a short or overload",
+          "Checking only the breaker you were told about"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q6": {
@@ -173,6 +228,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "An open fuse removes power with no other sign.",
+        "tools": [
+          "Multimeter (continuity or resistance, power isolated)"
+        ],
+        "expect": "Each fuse shows continuity (low resistance) and is not open.",
+        "mistakes": [
+          "Testing fuses with power on",
+          "Missing fuse holders hidden behind covers or in line"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q7": {
@@ -199,6 +266,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "An overloaded transformer can trip and reset, causing intermittent loss of power.",
+        "tools": [
+          "Visual check",
+          "Multimeter (secondary voltage)"
+        ],
+        "expect": "The transformer has not tripped and secondary voltage is present.",
+        "mistakes": [
+          "Resetting without checking the connected load (VA)",
+          "Checking the primary but not the secondary"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q8": {
@@ -225,6 +305,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The status light summarizes controller or module health before you spend time on field wiring.",
+        "tools": [
+          "Status light on the controller or module",
+          "LED reference in the product documentation"
+        ],
+        "expect": "The pattern the product documentation lists as normal.",
+        "mistakes": [
+          "Judging by colour alone without the documentation",
+          "Not allowing boot time after power-up"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q9": {
@@ -252,6 +345,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A local connection shows whether the controller itself is healthy, independent of the network.",
+        "tools": [
+          "Laptop with Device Administrator",
+          "Known-good USB data cable (not charge-only)"
+        ],
+        "expect": "Device Administrator connects to the controller.",
+        "mistakes": [
+          "Using a charge-only cable",
+          "Using the wrong USB port"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "r1": {
@@ -488,6 +594,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The status light summarizes controller or module health before you spend time on field wiring.",
+        "tools": [
+          "Status light on the controller or module",
+          "LED reference in the product documentation"
+        ],
+        "expect": "The pattern the product documentation lists as normal.",
+        "mistakes": [
+          "Judging by colour alone without the documentation",
+          "Not allowing boot time after power-up"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q102": {
@@ -517,6 +636,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The configured electrical type decides which test is valid. The wrong test can mislead you or damage equipment.",
+        "tools": [
+          "Point configuration in EBO",
+          "Drawings and submittal"
+        ],
+        "expect": "You can state the configured type: digital, current, voltage or temperature.",
+        "mistakes": [
+          "Choosing by the field device name instead of the configured input type"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q103": {
@@ -543,6 +674,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Contact type decides what open and closed should look like.",
+        "tools": [
+          "Drawings",
+          "Multimeter continuity (device isolated)"
+        ],
+        "expect": "Contact type matches the drawing and the EBO configuration.",
+        "mistakes": [
+          "Assuming normally open",
+          "Forgetting the point may be reverse-configured in software"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q104": {
@@ -569,6 +713,20 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Isolates the controller input from the field wiring.",
+        "tools": [
+          "Small jumper lead",
+          "Laptop with EBO"
+        ],
+        "expect": "The point changes state when jumpered or opened and returns when the jumper is removed.",
+        "mistakes": [
+          "Testing with field wires still connected",
+          "Jumpering anything other than a dry-contact input",
+          "Leaving the jumper in place afterwards"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q105": {
@@ -595,6 +753,20 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Isolates the controller input from the field wiring.",
+        "tools": [
+          "Small jumper lead",
+          "Laptop with EBO"
+        ],
+        "expect": "The point changes state when jumpered or opened and returns when the jumper is removed.",
+        "mistakes": [
+          "Testing with field wires still connected",
+          "Jumpering anything other than a dry-contact input",
+          "Leaving the jumper in place afterwards"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q106": {
@@ -621,6 +793,20 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Proves the field device and its wiring can change the controller state.",
+        "tools": [
+          "Laptop with EBO",
+          "Multimeter",
+          "A helper at the device (optional)"
+        ],
+        "expect": "Simulating the contact at the field device changes the point at the controller.",
+        "mistakes": [
+          "Simulating at the wrong device",
+          "Not watching the point while you simulate"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q107": {
@@ -648,6 +834,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Loop-powered and separately powered transmitters fail differently.",
+        "tools": [
+          "Transmitter label or datasheet",
+          "Drawings"
+        ],
+        "expect": "You can say where the transmitter gets its power.",
+        "mistakes": [
+          "Guessing from the number of wires seen at one end"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q108": {
@@ -674,6 +872,22 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A two-wire loop-powered transmitter cannot work without correct loop power.",
+        "tools": [
+          "Multimeter (DC volts)"
+        ],
+        "expect": "DC voltage is present with the polarity shown on the drawing or device.",
+        "mistakes": [
+          "Reversing the meter leads and misreading polarity",
+          "Measuring with the loop disconnected"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Loop supply voltage",
+        "units": "VDC"
       }
     },
     "q109": {
@@ -700,6 +914,22 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A separately powered transmitter needs its own correct supply.",
+        "tools": [
+          "Multimeter",
+          "Transmitter label"
+        ],
+        "expect": "Supply voltage is within the range printed on the transmitter label.",
+        "mistakes": [
+          "Assuming the loop supply also powers the transmitter"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Transmitter supply voltage",
+        "units": "V"
       }
     },
     "q110": {
@@ -728,6 +958,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Current in the loop shows what the transmitter is really sending.",
+        "tools": [
+          "Multimeter with a mA range, connected in series",
+          "Fused meter leads"
+        ],
+        "expect": "A steady value inside the transmitter range. For a 4-20 mA loop, between 4 and 20 mA in normal operation.",
+        "mistakes": [
+          "Connecting the meter across a powered source",
+          "Forgetting to restore the loop afterwards",
+          "Using the voltage jacks"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Loop current at controller terminals",
+        "units": "mA"
       }
     },
     "q111": {
@@ -756,6 +1004,20 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Compares what the transmitter sends with what is really happening.",
+        "tools": [
+          "Meter reading from the previous step",
+          "Transmitter range from the nameplate or configuration",
+          "Independent measurement of the process"
+        ],
+        "expect": "Expected current from the process value matches the measured current. For 4-20 mA: 4 + 16 × (value − low) ÷ (high − low).",
+        "mistakes": [
+          "Using the wrong low or high range values",
+          "Comparing against the BMS value instead of an independent measurement"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q112": {
@@ -782,6 +1044,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Finds whether the signal is lost between the device and the controller.",
+        "tools": [
+          "Multimeter with a mA range, connected in series"
+        ],
+        "expect": "The same current at the device as at the controller.",
+        "mistakes": [
+          "Measuring at a different loop than the one in question"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Loop current at field device",
+        "units": "mA"
       }
     },
     "q114": {
@@ -809,6 +1086,23 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A 0-10 V device needs its own supply and a correct signal common.",
+        "tools": [
+          "Multimeter",
+          "Device label or datasheet"
+        ],
+        "expect": "Supply within the label range and the signal common connected as documented.",
+        "mistakes": [
+          "Ignoring the signal common or reference",
+          "Assuming the 0-10 V signal also powers the device"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Device supply voltage",
+        "units": "V"
       }
     },
     "q115": {
@@ -836,6 +1130,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Shows whether the signal actually arrives at the controller.",
+        "tools": [
+          "Multimeter (DC volts)"
+        ],
+        "expect": "A voltage between 0 and 10 VDC that follows the process.",
+        "mistakes": [
+          "Measuring at the field end and calling it the controller end"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Signal voltage at controller terminals",
+        "units": "VDC"
       }
     },
     "q116": {
@@ -864,6 +1173,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Tells a noisy field signal from a controller or input problem.",
+        "tools": [
+          "Multimeter with min/max, or an EBO trend"
+        ],
+        "expect": "If both the display and the meter move together, the source is unstable. If the meter is steady, look at the input or filtering.",
+        "mistakes": [
+          "Watching for too short a time",
+          "Comparing with an unstable reference"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q117": {
@@ -891,6 +1212,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Checks that the voltage means what the engineering range says it should.",
+        "tools": [
+          "Multimeter",
+          "Transmitter range",
+          "Independent measurement of the process"
+        ],
+        "expect": "Voltage maps to the engineering range. For a 0-10 V device, 0 V is the low end and 10 V is the high end.",
+        "mistakes": [
+          "Using the wrong range values"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q118": {
@@ -918,6 +1252,23 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Proves the controller input works by itself, with the field circuit out of the picture.",
+        "tools": [
+          "Approved signal source or calibrator",
+          "Field wires removed"
+        ],
+        "expect": "The displayed value follows the injected signal across the range.",
+        "mistakes": [
+          "Injecting while an active transmitter is still connected",
+          "Injecting above the input rating"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Injected test signal",
+        "units": "VDC"
       }
     },
     "q119": {
@@ -945,6 +1296,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Shows whether the device is producing the signal at all.",
+        "tools": [
+          "Multimeter (DC volts)"
+        ],
+        "expect": "A voltage that follows the process at the device output.",
+        "mistakes": [
+          "Measuring with the output wire disconnected from the load when the device expects a load"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Signal voltage at field device output",
+        "units": "VDC"
       }
     },
     "q120": {
@@ -972,6 +1338,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Confirms the number on the screen matches the real world and the configured scale.",
+        "tools": [
+          "EBO point view",
+          "Independent measurement"
+        ],
+        "expect": "The displayed engineering value matches an independent measurement within the device tolerance.",
+        "mistakes": [
+          "Comparing against a second BMS point",
+          "Mixing up units"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q121": {
@@ -1000,6 +1379,23 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "An open sensor circuit reads as no resistance path at all.",
+        "tools": [
+          "Multimeter in resistance mode",
+          "Sensor isolated from the wiring"
+        ],
+        "expect": "A finite resistance, not OL (open).",
+        "mistakes": [
+          "Measuring with the sensor still connected to the controller",
+          "Touching both probes with your fingers"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Sensor resistance at sensor",
+        "units": "Ω"
       }
     },
     "q122": {
@@ -1027,6 +1423,22 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A shorted sensor circuit reads close to zero.",
+        "tools": [
+          "Multimeter in resistance mode",
+          "Sensor isolated from the wiring"
+        ],
+        "expect": "A resistance well above zero.",
+        "mistakes": [
+          "Measuring with the sensor still connected to the controller"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Sensor resistance at sensor",
+        "units": "Ω"
       }
     },
     "q123": {
@@ -1055,6 +1467,25 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Compares the sensor with its own published curve at the real temperature.",
+        "tools": [
+          "Multimeter",
+          "Calibrated thermometer",
+          "Manufacturer resistance table for the exact part number"
+        ],
+        "expect": "Resistance matches the table at the measured temperature, within the stated tolerance.",
+        "mistakes": [
+          "Using a generic 10k table",
+          "Not letting the sensor settle to ambient",
+          "Taking the temperature somewhere other than at the sensor"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Sensor resistance with reference temperature",
+        "units": "Ω"
       }
     },
     "q124": {
@@ -1082,6 +1513,22 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Shows whether the wiring adds resistance or a fault between the sensor and the controller.",
+        "tools": [
+          "Multimeter in resistance mode"
+        ],
+        "expect": "The two readings agree closely.",
+        "mistakes": [
+          "Comparing readings taken at different temperatures",
+          "Poor probe contact on the terminals"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Sensor resistance at controller",
+        "units": "Ω"
       }
     },
     "q125": {
@@ -1109,6 +1556,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Different 10 kOhm curves are not interchangeable. The input must use the right one.",
+        "tools": [
+          "EBO input configuration",
+          "Sensor part number or datasheet"
+        ],
+        "expect": "The configured curve matches the installed sensor.",
+        "mistakes": [
+          "Choosing a curve only because the sensor is 10 kOhm at 25 °C"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q126": {
@@ -1135,6 +1594,23 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Final accuracy check once the sensor and input are known to be good.",
+        "tools": [
+          "Calibrated thermometer",
+          "EBO point view"
+        ],
+        "expect": "The displayed temperature is within 2 °F of the calibrated thermometer.",
+        "mistakes": [
+          "Placing the thermometer where the air differs from the sensor location",
+          "Not letting the thermometer settle"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference thermometer reading",
+        "units": "°F"
       }
     },
     "q127": {
@@ -1190,6 +1666,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Different signal types need completely different tests.",
+        "tools": [
+          "Transmitter label",
+          "Controller label",
+          "EBO input configuration",
+          "Submittal"
+        ],
+        "expect": "You can state whether the measurement is 4-20 mA, 0-10 V, or an onboard tubed sensor.",
+        "mistakes": [
+          "Assuming 4-20 mA",
+          "Missing that many VAV controllers measure airflow with an onboard pressure sensor"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q131": {
@@ -1218,6 +1709,20 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "An onboard sensor has no signal wiring to test, so the tubing is the first suspect.",
+        "tools": [
+          "Visual inspection",
+          "Small hand tools",
+          "Magnahelic (optional)"
+        ],
+        "expect": "Tubing is connected to the documented ports, with no kinks, moisture or blockage.",
+        "mistakes": [
+          "Swapping the high and low ports",
+          "Overlooking tubing that is split or pinched behind the controller"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "r130": {
@@ -1848,6 +2353,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The two digital-output modules have different contacts, so identify the module before testing.",
+        "tools": [
+          "Module label",
+          "Phone (photo of the label)"
+        ],
+        "expect": "You can name the module and its contact type (Form C or Form A).",
+        "mistakes": [
+          "Assuming Form C when the module is Form A"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q202": {
@@ -1874,6 +2391,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Separates a software command problem from a hardware problem.",
+        "tools": [
+          "Laptop with EBO"
+        ],
+        "expect": "The point shows the commanded state.",
+        "mistakes": [
+          "Looking at the status point instead of the command point",
+          "Overlooking an override"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q203": {
@@ -1901,6 +2430,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A forced value or a hand switch hides the real sequence.",
+        "tools": [
+          "Laptop with EBO (priority array)",
+          "Visual check of any HOA switch"
+        ],
+        "expect": "No forced value and the switch is in Auto.",
+        "mistakes": [
+          "Forgetting to release a value you forced yourself"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q204": {
@@ -1928,6 +2469,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The channel indicator shows the output state seen by the module.",
+        "tools": [
+          "Module LEDs",
+          "Laptop with EBO"
+        ],
+        "expect": "The channel LED follows the commanded state.",
+        "mistakes": [
+          "Treating the LED as proof that the load is powered"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q205": {
@@ -1956,6 +2509,23 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Proves the relay contact itself switches.",
+        "tools": [
+          "Multimeter continuity",
+          "Power isolated as required"
+        ],
+        "expect": "Continuity across the contact changes when the output is commanded.",
+        "mistakes": [
+          "Testing a live circuit in continuity mode",
+          "Using the NC terminal on a module that has none"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Relay contact continuity",
+        "units": "Ω"
       }
     },
     "q206": {
@@ -2009,6 +2579,22 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A dry relay contact does not supply voltage. The load circuit needs its own source.",
+        "tools": [
+          "Multimeter set to the correct AC or DC range"
+        ],
+        "expect": "The expected control voltage is present on the load side when the output is on.",
+        "mistakes": [
+          "Assuming the module supplies the voltage",
+          "Overlooking an interposing relay"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Control voltage at load side of contact",
+        "units": "V"
       }
     },
     "q208": {
@@ -2035,6 +2621,17 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The final proof that the command produces action.",
+        "tools": [
+          "Visual check at the device"
+        ],
+        "expect": "The device operates when the output is commanded.",
+        "mistakes": [
+          "Judging by a status point instead of seeing the device"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "r201": {
@@ -2210,6 +2807,17 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Voltage and current outputs are tested differently.",
+        "tools": [
+          "Module and point configuration in EBO"
+        ],
+        "expect": "You can state whether the module output is 0-10 VDC or 0-20 mA.",
+        "mistakes": [
+          "Calling the module 4-20 mA. The module is 0-20 mA even if the device uses only 4-20 mA"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q303": {
@@ -2264,6 +2872,23 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Checks that the module output matches the command within its published accuracy.",
+        "tools": [
+          "Multimeter (DC volts)",
+          "EBO command value"
+        ],
+        "expect": "Output voltage matches the command within the AO-8 accuracy shown in the notes.",
+        "mistakes": [
+          "Ignoring the minimum load in the notes",
+          "Measuring with the field wires in an unknown state"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Output voltage at AO terminals",
+        "units": "VDC"
       }
     },
     "q305": {
@@ -2291,6 +2916,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Shows whether the voltage survives the field wiring.",
+        "tools": [
+          "Multimeter (DC volts)"
+        ],
+        "expect": "The same voltage at the field device as at the module.",
+        "mistakes": [
+          "Measuring at the module and calling it the device"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Voltage at field device input",
+        "units": "VDC"
       }
     },
     "q306": {
@@ -2317,6 +2957,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The device must respond across its whole range.",
+        "tools": [
+          "Laptop with EBO (command)",
+          "Visual or mechanical check of device travel"
+        ],
+        "expect": "The device moves or responds smoothly at low, mid and high command.",
+        "mistakes": [
+          "Driving the device to an end stop repeatedly",
+          "Commanding outside the configured range"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q320": {
@@ -2371,6 +3024,22 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A current output must be measured with the loop closed.",
+        "tools": [
+          "Multimeter with a mA range, connected in series"
+        ],
+        "expect": "A steady current that follows the command, within the load limit in the notes.",
+        "mistakes": [
+          "Opening the loop and reading nothing",
+          "Connecting the meter in parallel"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "AO loop current",
+        "units": "mA"
       }
     },
     "q322": {
@@ -2399,6 +3068,22 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Compares loop current with the command within the published accuracy.",
+        "tools": [
+          "Multimeter with a mA range, connected in series",
+          "EBO command value"
+        ],
+        "expect": "Current matches the command within the accuracy in the notes.",
+        "mistakes": [
+          "Forgetting that some devices map only 4-20 mA"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "AO loop current",
+        "units": "mA"
       }
     },
     "q323": {
@@ -2427,6 +3112,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Shows whether the current survives the field wiring and load.",
+        "tools": [
+          "Multimeter with a mA range, connected in series"
+        ],
+        "expect": "The expected current at the field device.",
+        "mistakes": [
+          "Exceeding the total loop resistance limit"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Current at field device",
+        "units": "mA"
       }
     },
     "r301": {
@@ -2612,6 +3312,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Serial and IP protocols fail in completely different ways.",
+        "tools": [
+          "Drawings",
+          "Device labels",
+          "EBO device configuration"
+        ],
+        "expect": "You can name the protocol and the physical transport.",
+        "mistakes": [
+          "Treating the controller family as the transport"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q502": {
@@ -2665,6 +3378,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A local connection shows whether the controller itself is healthy, independent of the network.",
+        "tools": [
+          "Laptop with Device Administrator",
+          "Known-good USB data cable (not charge-only)"
+        ],
+        "expect": "Device Administrator connects to the controller.",
+        "mistakes": [
+          "Using a charge-only cable",
+          "Using the wrong USB port"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q504": {
@@ -2691,6 +3417,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Separates a single controller problem from a network problem.",
+        "tools": [
+          "Laptop on the same network",
+          "EBO device list"
+        ],
+        "expect": "You can say whether other controllers on the same network are reachable.",
+        "mistakes": [
+          "Relying on ping alone"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q505": {
@@ -2717,6 +3455,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Wrong addressing makes a healthy controller look dead.",
+        "tools": [
+          "Laptop with EBO or Device Administrator",
+          "IP address schedule"
+        ],
+        "expect": "Address, subnet, gateway and server association match the schedule.",
+        "mistakes": [
+          "Changing addresses without coordinating with the site network owner"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q520": {
@@ -2741,6 +3491,17 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Tells a single device problem from a whole-trunk problem.",
+        "tools": [
+          "Laptop with EBO"
+        ],
+        "expect": "You can say which devices on the trunk are online.",
+        "mistakes": [
+          "Checking only the neighbours of the failed device"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q521": {
@@ -2765,6 +3526,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A duplicate address stops token passing.",
+        "tools": [
+          "Device addressing schedule",
+          "Laptop with EBO"
+        ],
+        "expect": "No other device on the trunk uses the same address.",
+        "mistakes": [
+          "Comparing against only some of the devices"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q522": {
@@ -2815,6 +3588,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Most serial trunk faults are physical.",
+        "tools": [
+          "Visual trunk inspection",
+          "Multimeter"
+        ],
+        "expect": "Correct polarity, daisy-chain topology, shield practice and no shorts or grounds.",
+        "mistakes": [
+          "Adding termination arbitrarily",
+          "Star wiring or long stubs"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q524": {
@@ -2865,6 +3651,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Establishes basic IP reachability before looking at BACnet.",
+        "tools": [
+          "Laptop",
+          "Network drawing"
+        ],
+        "expect": "Link, ARP and routing evidence support connectivity.",
+        "mistakes": [
+          "Treating a blocked ping as proof of failure"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q541": {
@@ -3016,6 +3814,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "If the Automation Server restarted, the trunk devices may only have dropped because of it.",
+        "tools": [
+          "EBO event log",
+          "Status lights"
+        ],
+        "expect": "You can say whether the server stayed online with no restart.",
+        "mistakes": [
+          "Blaming the trunk before checking the server log"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q562": {
@@ -3064,6 +3874,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A fault that follows the device is the device. A fault that stays with the location is the cable or the port.",
+        "tools": [
+          "Swap test",
+          "Known-good device if approved"
+        ],
+        "expect": "The drop follows one device or one segment.",
+        "mistakes": [
+          "Swapping several things at once"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q564": {
@@ -3116,6 +3938,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "VFD checks apply only when a drive is involved.",
+        "tools": [
+          "Visual inspection of panels and routing",
+          "Drawings"
+        ],
+        "expect": "You can say whether a drive, or its wiring, is on or near the trunk.",
+        "mistakes": [
+          "Answering Yes for a drive that is nowhere near the communications cable"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q570": {
@@ -3144,6 +3978,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A restart points to power, firmware or application causes rather than the network.",
+        "tools": [
+          "EBO event log",
+          "Device Administrator",
+          "Status lights"
+        ],
+        "expect": "The log shows whether a restart or power loss occurred at the drop time.",
+        "mistakes": [
+          "Using an uncorrected time zone when matching the log to the drop"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q571": {
@@ -3172,6 +4019,22 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Unstable input power can cause restarts that look like network faults.",
+        "tools": [
+          "Multimeter",
+          "EBO trend if input power is trended"
+        ],
+        "expect": "Input power is steady through the event.",
+        "mistakes": [
+          "Measuring the wrong supply"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Automation Server input voltage",
+        "units": "V"
       }
     },
     "q572": {
@@ -3359,6 +4222,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Finds where a wrong value first appears.",
+        "tools": [
+          "Laptop with EBO",
+          "Independent measurement"
+        ],
+        "expect": "The value at the controller matches the field measurement.",
+        "mistakes": [
+          "Comparing two BMS screens instead of an independent measurement"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q581": {
@@ -3971,6 +4846,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A wrong temperature reading sends the whole sequence in the wrong direction, so confirm it first.",
+        "tools": [
+          "Calibrated thermometer or reference probe",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reference reading taken where the sensor is located.",
+        "mistakes": [
+          "Comparing against another BMS point instead of an independent reference",
+          "Measuring where conditions differ from what the sensor sees",
+          "Not letting the reference probe settle"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference temperature at sensor location",
+        "units": "°F"
       }
     },
     "q603": {
@@ -3997,6 +4890,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Equipment will not run when the sequence says it should be off, so confirm the enable first.",
+        "tools": [
+          "Laptop with EBO (schedule, mode and occupancy points)"
+        ],
+        "expect": "Schedule, mode and occupancy match what the building should be doing at this time.",
+        "mistakes": [
+          "Checking the schedule but missing an occupancy override or operating-mode lockout",
+          "Wrong time zone or holiday schedule",
+          "Reading the schedule of a different piece of equipment"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q604": {
@@ -4023,6 +4929,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Airflow below setpoint is the symptom most airflow checks start from.",
+        "tools": [
+          "Laptop with EBO",
+          "Magnahelic or airflow hood if available"
+        ],
+        "expect": "Actual airflow is below the airflow setpoint.",
+        "mistakes": [
+          "Using a stale or filtered value"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q605": {
@@ -4102,6 +5020,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A wrong temperature reading sends the whole sequence in the wrong direction, so confirm it first.",
+        "tools": [
+          "Calibrated thermometer or reference probe",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reference reading taken where the sensor is located.",
+        "mistakes": [
+          "Comparing against another BMS point instead of an independent reference",
+          "Measuring where conditions differ from what the sensor sees",
+          "Not letting the reference probe settle"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference temperature at sensor location",
+        "units": "°F"
       }
     },
     "q611": {
@@ -4182,6 +5118,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A VAV cannot deliver air the AHU is not providing.",
+        "tools": [
+          "Laptop with EBO",
+          "Magnahelic (duct static)"
+        ],
+        "expect": "The serving AHU fan is proven and duct static is present.",
+        "mistakes": [
+          "Trusting the AHU command instead of fan proof"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q621": {
@@ -4295,6 +5243,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The box needs enough inlet pressure to deliver its setpoint.",
+        "tools": [
+          "Magnahelic"
+        ],
+        "expect": "Inlet pressure is adequate for the box, compared with its design.",
+        "mistakes": [
+          "Assuming AHU operation guarantees pressure at this branch"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Inlet static pressure",
+        "units": "in. w.c."
       }
     },
     "q623": {
@@ -4348,6 +5311,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "If the sensor is wrong, every control decision based on it is wrong too.",
+        "tools": [
+          "Magnahelic or other reference gauge suited to the measurement",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reading taken at the same point.",
+        "mistakes": [
+          "Comparing against a second BMS point",
+          "Connecting the reference gauge to a different tap or location",
+          "Not zeroing the reference gauge"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Field airflow reading",
+        "units": "CFM"
       }
     },
     "q631": {
@@ -4375,6 +5356,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Built-in actuators have no separate signal wire to test.",
+        "tools": [
+          "Laptop with EBO",
+          "Visual check of damper rotation"
+        ],
+        "expect": "The actuator and the damper follow the commanded position.",
+        "mistakes": [
+          "Looking for an AO-8 module that is not installed"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q632": {
@@ -4460,6 +5453,18 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A free-moving damper rules out the mechanical side.",
+        "tools": [
+          "Visual check with power safe",
+          "Small hand tools"
+        ],
+        "expect": "The damper travels freely through its range and the shaft is engaged.",
+        "mistakes": [
+          "Forcing the shaft by hand while the actuator is still engaged"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q635": {
@@ -4768,6 +5773,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Equipment will not run when the sequence says it should be off, so confirm the enable first.",
+        "tools": [
+          "Laptop with EBO (schedule, mode and occupancy points)"
+        ],
+        "expect": "Schedule, mode and occupancy match what the building should be doing at this time.",
+        "mistakes": [
+          "Checking the schedule but missing an occupancy override or operating-mode lockout",
+          "Wrong time zone or holiday schedule",
+          "Reading the schedule of a different piece of equipment"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q703": {
@@ -4794,6 +5812,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Safeties and interlocks stop equipment on purpose. Find which one is open before anything else.",
+        "tools": [
+          "Laptop with EBO (safety and interlock points)",
+          "Visual check at the equipment",
+          "Manufacturer controller fault status"
+        ],
+        "expect": "All required safeties and permissives show satisfied.",
+        "mistakes": [
+          "Bypassing a safety to see if the equipment runs",
+          "Resetting repeatedly without finding the cause",
+          "Assuming the BMS point reflects the physical device"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q704": {
@@ -4820,6 +5853,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Separates a controls problem (no command) from an equipment problem (command present, no response).",
+        "tools": [
+          "Laptop with EBO (command point and priority array)"
+        ],
+        "expect": "The command point shows the state the sequence calls for.",
+        "mistakes": [
+          "Reading the status or proof point instead of the command point",
+          "Overlooking an override or a priority-array entry",
+          "Forcing the point to see if it works without authorization"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q710": {
@@ -4846,6 +5892,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A wrong temperature reading sends the whole sequence in the wrong direction, so confirm it first.",
+        "tools": [
+          "Calibrated thermometer or reference probe",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reference reading taken where the sensor is located.",
+        "mistakes": [
+          "Comparing against another BMS point instead of an independent reference",
+          "Measuring where conditions differ from what the sensor sees",
+          "Not letting the reference probe settle"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference temperature at sensor location",
+        "units": "°F"
       }
     },
     "q711": {
@@ -4924,6 +5988,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A wrong temperature reading sends the whole sequence in the wrong direction, so confirm it first.",
+        "tools": [
+          "Calibrated thermometer or reference probe",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reference reading taken where the sensor is located.",
+        "mistakes": [
+          "Comparing against another BMS point instead of an independent reference",
+          "Measuring where conditions differ from what the sensor sees",
+          "Not letting the reference probe settle"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference temperature at sensor location",
+        "units": "°F"
       }
     },
     "q721": {
@@ -5003,6 +6085,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "If the sensor is wrong, every control decision based on it is wrong too.",
+        "tools": [
+          "Magnahelic or other reference gauge suited to the measurement",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reading taken at the same point.",
+        "mistakes": [
+          "Comparing against a second BMS point",
+          "Connecting the reference gauge to a different tap or location",
+          "Not zeroing the reference gauge"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Duct static pressure (reference gauge)",
+        "units": "in. w.c."
       }
     },
     "q731": {
@@ -5316,6 +6416,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Equipment will not run when the sequence says it should be off, so confirm the enable first.",
+        "tools": [
+          "Laptop with EBO (schedule, mode and occupancy points)"
+        ],
+        "expect": "Schedule, mode and occupancy match what the building should be doing at this time.",
+        "mistakes": [
+          "Checking the schedule but missing an occupancy override or operating-mode lockout",
+          "Wrong time zone or holiday schedule",
+          "Reading the schedule of a different piece of equipment"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q803": {
@@ -5342,6 +6455,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Safeties and interlocks stop equipment on purpose. Find which one is open before anything else.",
+        "tools": [
+          "Laptop with EBO (safety and interlock points)",
+          "Visual check at the equipment",
+          "Manufacturer controller fault status"
+        ],
+        "expect": "All required safeties and permissives show satisfied.",
+        "mistakes": [
+          "Bypassing a safety to see if the equipment runs",
+          "Resetting repeatedly without finding the cause",
+          "Assuming the BMS point reflects the physical device"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q804": {
@@ -5368,6 +6496,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Separates a controls problem (no command) from an equipment problem (command present, no response).",
+        "tools": [
+          "Laptop with EBO (command point and priority array)"
+        ],
+        "expect": "The command point shows the state the sequence calls for.",
+        "mistakes": [
+          "Reading the status or proof point instead of the command point",
+          "Overlooking an override or a priority-array entry",
+          "Forcing the point to see if it works without authorization"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q810": {
@@ -5395,6 +6536,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A wrong temperature reading sends the whole sequence in the wrong direction, so confirm it first.",
+        "tools": [
+          "Calibrated thermometer or reference probe",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reference reading taken where the sensor is located.",
+        "mistakes": [
+          "Comparing against another BMS point instead of an independent reference",
+          "Measuring where conditions differ from what the sensor sees",
+          "Not letting the reference probe settle"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference temperature at sensor location",
+        "units": "°F"
       }
     },
     "q811": {
@@ -5421,6 +6580,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Separates a controls problem (no command) from an equipment problem (command present, no response).",
+        "tools": [
+          "Laptop with EBO (command point and priority array)"
+        ],
+        "expect": "The command point shows the state the sequence calls for.",
+        "mistakes": [
+          "Reading the status or proof point instead of the command point",
+          "Overlooking an override or a priority-array entry",
+          "Forcing the point to see if it works without authorization"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q820": {
@@ -5448,6 +6620,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A wrong temperature reading sends the whole sequence in the wrong direction, so confirm it first.",
+        "tools": [
+          "Calibrated thermometer or reference probe",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reference reading taken where the sensor is located.",
+        "mistakes": [
+          "Comparing against another BMS point instead of an independent reference",
+          "Measuring where conditions differ from what the sensor sees",
+          "Not letting the reference probe settle"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference temperature at sensor location",
+        "units": "°F"
       }
     },
     "q821": {
@@ -5760,6 +6950,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Safeties and interlocks stop equipment on purpose. Find which one is open before anything else.",
+        "tools": [
+          "Laptop with EBO (safety and interlock points)",
+          "Visual check at the equipment",
+          "Manufacturer controller fault status"
+        ],
+        "expect": "All required safeties and permissives show satisfied.",
+        "mistakes": [
+          "Bypassing a safety to see if the equipment runs",
+          "Resetting repeatedly without finding the cause",
+          "Assuming the BMS point reflects the physical device"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q904": {
@@ -5786,6 +6991,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Separates a controls problem (no command) from an equipment problem (command present, no response).",
+        "tools": [
+          "Laptop with EBO (command point and priority array)"
+        ],
+        "expect": "The command point shows the state the sequence calls for.",
+        "mistakes": [
+          "Reading the status or proof point instead of the command point",
+          "Overlooking an override or a priority-array entry",
+          "Forcing the point to see if it works without authorization"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q910": {
@@ -5812,6 +7030,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "If the sensor is wrong, every control decision based on it is wrong too.",
+        "tools": [
+          "Magnahelic or other reference gauge suited to the measurement",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reading taken at the same point.",
+        "mistakes": [
+          "Comparing against a second BMS point",
+          "Connecting the reference gauge to a different tap or location",
+          "Not zeroing the reference gauge"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference differential pressure or flow",
+        "units": ""
       }
     },
     "q911": {
@@ -5865,6 +7101,20 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Shows whether the status input really follows the equipment.",
+        "tools": [
+          "Laptop with EBO",
+          "Eyes and ears at the equipment (is it really running?)",
+          "Multimeter at the proof contact (optional)"
+        ],
+        "expect": "Status changes shortly after the equipment starts and returns when it stops.",
+        "mistakes": [
+          "Assuming the equipment is running because the command is on",
+          "Ignoring a proof delay in the sequence"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q930": {
@@ -6021,6 +7271,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Equipment will not run when the sequence says it should be off, so confirm the enable first.",
+        "tools": [
+          "Laptop with EBO (schedule, mode and occupancy points)"
+        ],
+        "expect": "Schedule, mode and occupancy match what the building should be doing at this time.",
+        "mistakes": [
+          "Checking the schedule but missing an occupancy override or operating-mode lockout",
+          "Wrong time zone or holiday schedule",
+          "Reading the schedule of a different piece of equipment"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1003": {
@@ -6047,6 +7310,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Safeties and interlocks stop equipment on purpose. Find which one is open before anything else.",
+        "tools": [
+          "Laptop with EBO (safety and interlock points)",
+          "Visual check at the equipment",
+          "Manufacturer controller fault status"
+        ],
+        "expect": "All required safeties and permissives show satisfied.",
+        "mistakes": [
+          "Bypassing a safety to see if the equipment runs",
+          "Resetting repeatedly without finding the cause",
+          "Assuming the BMS point reflects the physical device"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1010": {
@@ -6100,6 +7378,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A wrong temperature reading sends the whole sequence in the wrong direction, so confirm it first.",
+        "tools": [
+          "Calibrated thermometer or reference probe",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reference reading taken where the sensor is located.",
+        "mistakes": [
+          "Comparing against another BMS point instead of an independent reference",
+          "Measuring where conditions differ from what the sensor sees",
+          "Not letting the reference probe settle"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference temperature at sensor location",
+        "units": "°F"
       }
     },
     "q1021": {
@@ -6283,6 +7579,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Equipment will not run when the sequence says it should be off, so confirm the enable first.",
+        "tools": [
+          "Laptop with EBO (schedule, mode and occupancy points)"
+        ],
+        "expect": "Schedule, mode and occupancy match what the building should be doing at this time.",
+        "mistakes": [
+          "Checking the schedule but missing an occupancy override or operating-mode lockout",
+          "Wrong time zone or holiday schedule",
+          "Reading the schedule of a different piece of equipment"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1103": {
@@ -6309,6 +7618,21 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Safeties and interlocks stop equipment on purpose. Find which one is open before anything else.",
+        "tools": [
+          "Laptop with EBO (safety and interlock points)",
+          "Visual check at the equipment",
+          "Manufacturer controller fault status"
+        ],
+        "expect": "All required safeties and permissives show satisfied.",
+        "mistakes": [
+          "Bypassing a safety to see if the equipment runs",
+          "Resetting repeatedly without finding the cause",
+          "Assuming the BMS point reflects the physical device"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1110": {
@@ -6361,6 +7685,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A wrong temperature reading sends the whole sequence in the wrong direction, so confirm it first.",
+        "tools": [
+          "Calibrated thermometer or reference probe",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reference reading taken where the sensor is located.",
+        "mistakes": [
+          "Comparing against another BMS point instead of an independent reference",
+          "Measuring where conditions differ from what the sensor sees",
+          "Not letting the reference probe settle"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference temperature at sensor location",
+        "units": "°F"
       }
     },
     "q1121": {
@@ -6414,6 +7756,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "If the sensor is wrong, every control decision based on it is wrong too.",
+        "tools": [
+          "Magnahelic or other reference gauge suited to the measurement",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reading taken at the same point.",
+        "mistakes": [
+          "Comparing against a second BMS point",
+          "Connecting the reference gauge to a different tap or location",
+          "Not zeroing the reference gauge"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference differential pressure or flow",
+        "units": ""
       }
     },
     "q1122": {
@@ -6647,6 +8007,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Equipment will not run when the sequence says it should be off, so confirm the enable first.",
+        "tools": [
+          "Laptop with EBO (schedule, mode and occupancy points)"
+        ],
+        "expect": "Schedule, mode and occupancy match what the building should be doing at this time.",
+        "mistakes": [
+          "Checking the schedule but missing an occupancy override or operating-mode lockout",
+          "Wrong time zone or holiday schedule",
+          "Reading the schedule of a different piece of equipment"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1210": {
@@ -6673,6 +8046,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A wrong temperature reading sends the whole sequence in the wrong direction, so confirm it first.",
+        "tools": [
+          "Calibrated thermometer or reference probe",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reference reading taken where the sensor is located.",
+        "mistakes": [
+          "Comparing against another BMS point instead of an independent reference",
+          "Measuring where conditions differ from what the sensor sees",
+          "Not letting the reference probe settle"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Reference temperature at sensor location",
+        "units": "°F"
       }
     },
     "q1211": {
@@ -6857,6 +8248,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Equipment will not run when the sequence says it should be off, so confirm the enable first.",
+        "tools": [
+          "Laptop with EBO (schedule, mode and occupancy points)"
+        ],
+        "expect": "Schedule, mode and occupancy match what the building should be doing at this time.",
+        "mistakes": [
+          "Checking the schedule but missing an occupancy override or operating-mode lockout",
+          "Wrong time zone or holiday schedule",
+          "Reading the schedule of a different piece of equipment"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1303": {
@@ -6883,6 +8287,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Separates a controls problem (no command) from an equipment problem (command present, no response).",
+        "tools": [
+          "Laptop with EBO (command point and priority array)"
+        ],
+        "expect": "The command point shows the state the sequence calls for.",
+        "mistakes": [
+          "Reading the status or proof point instead of the command point",
+          "Overlooking an override or a priority-array entry",
+          "Forcing the point to see if it works without authorization"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1310": {
@@ -6909,6 +8326,20 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Shows whether the status input really follows the equipment.",
+        "tools": [
+          "Laptop with EBO",
+          "Eyes and ears at the equipment (is it really running?)",
+          "Multimeter at the proof contact (optional)"
+        ],
+        "expect": "Status changes shortly after the equipment starts and returns when it stops.",
+        "mistakes": [
+          "Assuming the equipment is running because the command is on",
+          "Ignoring a proof delay in the sequence"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1320": {
@@ -7041,6 +8472,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Equipment will not run when the sequence says it should be off, so confirm the enable first.",
+        "tools": [
+          "Laptop with EBO (schedule, mode and occupancy points)"
+        ],
+        "expect": "Schedule, mode and occupancy match what the building should be doing at this time.",
+        "mistakes": [
+          "Checking the schedule but missing an occupancy override or operating-mode lockout",
+          "Wrong time zone or holiday schedule",
+          "Reading the schedule of a different piece of equipment"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1403": {
@@ -7067,6 +8511,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Separates a controls problem (no command) from an equipment problem (command present, no response).",
+        "tools": [
+          "Laptop with EBO (command point and priority array)"
+        ],
+        "expect": "The command point shows the state the sequence calls for.",
+        "mistakes": [
+          "Reading the status or proof point instead of the command point",
+          "Overlooking an override or a priority-array entry",
+          "Forcing the point to see if it works without authorization"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1410": {
@@ -7093,6 +8550,20 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Shows whether the status input really follows the equipment.",
+        "tools": [
+          "Laptop with EBO",
+          "Eyes and ears at the equipment (is it really running?)",
+          "Multimeter at the proof contact (optional)"
+        ],
+        "expect": "Status changes shortly after the equipment starts and returns when it stops.",
+        "mistakes": [
+          "Assuming the equipment is running because the command is on",
+          "Ignoring a proof delay in the sequence"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1420": {
@@ -7119,6 +8590,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "If the sensor is wrong, every control decision based on it is wrong too.",
+        "tools": [
+          "Magnahelic or other reference gauge suited to the measurement",
+          "Laptop with EBO"
+        ],
+        "expect": "The BMS value agrees with an independent reading taken at the same point.",
+        "mistakes": [
+          "Comparing against a second BMS point",
+          "Connecting the reference gauge to a different tap or location",
+          "Not zeroing the reference gauge"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Duct static pressure (reference gauge)",
+        "units": "in. w.c."
       }
     },
     "q1421": {
@@ -7225,6 +8714,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Prevents testing a module that is not installed.",
+        "tools": [
+          "Drawings and submittals",
+          "Controller label",
+          "EBO point reference"
+        ],
+        "expect": "You can say where the output is physically provided.",
+        "mistakes": [
+          "Assuming a Central IO module exists"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1502": {
@@ -7628,6 +9130,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Prevents testing a module that is not installed.",
+        "tools": [
+          "Drawings and submittals",
+          "Controller label",
+          "EBO point reference"
+        ],
+        "expect": "You can say where the output is physically provided.",
+        "mistakes": [
+          "Assuming a Central IO module exists"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1602": {
@@ -8332,6 +9847,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Equipment will not run when the sequence says it should be off, so confirm the enable first.",
+        "tools": [
+          "Laptop with EBO (schedule, mode and occupancy points)"
+        ],
+        "expect": "Schedule, mode and occupancy match what the building should be doing at this time.",
+        "mistakes": [
+          "Checking the schedule but missing an occupancy override or operating-mode lockout",
+          "Wrong time zone or holiday schedule",
+          "Reading the schedule of a different piece of equipment"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q825": {
@@ -8359,6 +9887,19 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Equipment will not run when the sequence says it should be off, so confirm the enable first.",
+        "tools": [
+          "Laptop with EBO (schedule, mode and occupancy points)"
+        ],
+        "expect": "Schedule, mode and occupancy match what the building should be doing at this time.",
+        "mistakes": [
+          "Checking the schedule but missing an occupancy override or operating-mode lockout",
+          "Wrong time zone or holiday schedule",
+          "Reading the schedule of a different piece of equipment"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q582": {
@@ -9257,7 +10798,19 @@
         "Integral or network temperature value": "q584",
         "Unknown / evidence unavailable": "r585"
       },
-      "notes": "Identify the sensor part number and controller input configuration before selecting a test. Do not apply a 10k Type II resistance curve to another sensor type."
+      "notes": "Identify the sensor part number and controller input configuration before selecting a test. Do not apply a 10k Type II resistance curve to another sensor type.",
+      "guide": {
+        "why": "Applying the wrong sensor test wastes time and can mislead you.",
+        "tools": [
+          "Sensor part number",
+          "Controller input configuration"
+        ],
+        "expect": "You can name the sensor type before choosing a test.",
+        "mistakes": [
+          "Applying a 10k Type II resistance curve to another sensor type"
+        ],
+        "status": "draft_pending_review"
+      }
     },
     "r135": {
       "diagnosis": "Temperature sensor requires an exact-model test procedure",
@@ -9282,6 +10835,18 @@
         "Yes": "r116",
         "No": "r132",
         "Unknown / evidence unavailable": "r585"
+      },
+      "guide": {
+        "why": "A tubing check alone does not prove the sensor reads correctly.",
+        "tools": [
+          "Controller manufacturer procedure for zero or calibration",
+          "Laptop with EBO"
+        ],
+        "expect": "The manufacturer procedure was completed and the reading is stable.",
+        "mistakes": [
+          "Using a procedure for a different model"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "r132": {
@@ -9320,6 +10885,21 @@
         "Yes": "q1403",
         "No": "r1401",
         "Unknown / evidence unavailable": "r585"
+      },
+      "guide": {
+        "why": "Safeties and interlocks stop equipment on purpose. Find which one is open before anything else.",
+        "tools": [
+          "Laptop with EBO (safety and interlock points)",
+          "Visual check at the equipment",
+          "Manufacturer controller fault status"
+        ],
+        "expect": "All required safeties and permissives show satisfied.",
+        "mistakes": [
+          "Bypassing a safety to see if the equipment runs",
+          "Resetting repeatedly without finding the cause",
+          "Assuming the BMS point reflects the physical device"
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q1710": {
@@ -9338,7 +10918,7 @@
     }
   },
   "product": {
-    "version": "0.6.29-evidence-entry-draft",
+    "version": "0.6.30-layout-assist-draft",
     "documentLibrary": {
       "bucket": "bms-documents",
       "private": true,
@@ -9383,7 +10963,8 @@
       "Removed unreachable legacy results r996 and r525",
       "Separate recorded diagnostic findings from missing verification checks; label provenance and exclude navigation choices",
       "Added outcome_type (specific / area / inconclusive) to every result for the confidence model",
-      "Evidence entry: optional Record a reading box on every question, Add measurement button on results, tappable confidence tip"
+      "Evidence entry: optional Record a reading box on every question, Add measurement button on results, tappable confidence tip",
+      "Added draft step guides (why, tools, what to expect, common mistakes) and suggested readings to measurement steps; guides are pending technical review"
     ],
     "limitations": [
       "Engineering draft requiring site and exact-model validation; not a safety certification",
@@ -9393,7 +10974,7 @@
   },
   "caseRecordTemplate": {
     "case_id": null,
-    "logic_version": "0.6.29-evidence-entry-draft",
+    "logic_version": "0.6.30-layout-assist-draft",
     "equipment_model": null,
     "firmware_ebo_version": null,
     "protocol_transport": null,
