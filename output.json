@@ -276,7 +276,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r2": {
       "diagnosis": "Automation-server/Central IO supply or backplane power is missing or out of tolerance",
@@ -300,7 +301,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r3": {
       "diagnosis": "Breaker tripped",
@@ -324,7 +326,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r4": {
       "diagnosis": "Fuse open or missing",
@@ -348,7 +351,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r5": {
       "diagnosis": "Transformer tripped or overloaded",
@@ -372,7 +376,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r6": {
       "diagnosis": "Automation Server status is abnormal",
@@ -401,7 +406,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r7": {
       "diagnosis": "Automation Server hardware appears accessible",
@@ -425,7 +431,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r8": {
       "diagnosis": "Automation Server cannot be reached locally",
@@ -454,7 +461,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "q101": {
       "question": "Is the UI16 status light normal?",
@@ -1234,7 +1242,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "r131": {
       "diagnosis": "Onboard sensor pickup or tubing problem",
@@ -1258,7 +1267,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r101": {
       "diagnosis": "UI16 module connection or module-health issue",
@@ -1282,7 +1292,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r102": {
       "diagnosis": "Input channel or configuration issue",
@@ -1313,7 +1324,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r104": {
       "diagnosis": "Controller and wiring respond to contact simulation",
@@ -1337,7 +1349,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r105": {
       "diagnosis": "Field wiring or wrong-device issue",
@@ -1361,7 +1374,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r106": {
       "diagnosis": "Loop power is missing",
@@ -1385,7 +1399,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r107": {
       "diagnosis": "Transmitter power is missing",
@@ -1409,7 +1424,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r109": {
       "diagnosis": "Signal is present in field but absent/different at controller",
@@ -1433,7 +1449,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r113": {
       "diagnosis": "Incorrect or missing device supply voltage",
@@ -1457,7 +1474,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r114": {
       "diagnosis": "Field transmitter calibration or scaling mismatch",
@@ -1481,7 +1499,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r115": {
       "diagnosis": "Unstable signal originates at field device",
@@ -1505,7 +1524,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r116": {
       "diagnosis": "Controller scaling, filtering, or point setup issue",
@@ -1529,7 +1549,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r117": {
       "diagnosis": "Measured signal does not match expected process value",
@@ -1553,7 +1574,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r118": {
       "diagnosis": "Controller input operates with a known-good signal",
@@ -1584,7 +1606,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r119": {
       "diagnosis": "Field device is not generating the expected signal",
@@ -1608,7 +1631,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r120": {
       "diagnosis": "Input and displayed value appear normal",
@@ -1639,7 +1663,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r121": {
       "diagnosis": "Open thermistor circuit",
@@ -1663,7 +1688,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r122": {
       "diagnosis": "Shorted thermistor circuit",
@@ -1687,7 +1713,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r123": {
       "diagnosis": "Thermistor, reference measurement, or selected resistance curve does not agree",
@@ -1711,7 +1738,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r125": {
       "diagnosis": "Incorrect sensor type configured",
@@ -1735,7 +1763,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r126": {
       "diagnosis": "Temperature input hardware appears normal",
@@ -1766,7 +1795,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r127": {
       "diagnosis": "Sensor installation/location issue",
@@ -1790,7 +1820,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q201": {
       "question": "Is the installed digital-output module (DO8 / DO-FC-8 Form C, or DO12 / DO-FA-12 Form A) identified correctly, online, and healthy?",
@@ -2028,7 +2059,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r202": {
       "diagnosis": "Relay contact or channel does not switch as commanded",
@@ -2059,7 +2091,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r203": {
       "diagnosis": "DO8/DO12 module or application is not responding",
@@ -2090,7 +2123,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r204": {
       "diagnosis": "Digital output path operates correctly",
@@ -2121,7 +2155,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q301": {
       "question": "Is the AO8 module online and healthy?",
@@ -2423,7 +2458,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r302": {
       "diagnosis": "Analog output path appears normal",
@@ -2454,7 +2490,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r303": {
       "diagnosis": "AO-8 current-output test cannot establish a valid loop current",
@@ -2485,7 +2522,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r304": {
       "diagnosis": "AO-8 current output does not match the commanded value",
@@ -2516,7 +2554,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q401": {
       "applicability": {
@@ -2540,7 +2579,8 @@
       },
       "diagnosis": "Equipment or symptom is not covered by this workflow",
       "action": "Record equipment identity, reported issue, available evidence and missing checks. Escalate for a reviewed equipment-specific workflow. No fault has been established.",
-      "conclusion_status": "not_covered"
+      "conclusion_status": "not_covered",
+      "outcome_type": "inconclusive"
     },
     "q501": {
       "question": "Which communication protocol and transport are you troubleshooting?",
@@ -3261,7 +3301,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r567": {
       "diagnosis": "Automation Server restarts while supply power is stable",
@@ -3290,7 +3331,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q580": {
       "question": "Does the value at the controller match the field measurement?",
@@ -3367,7 +3409,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r502": {
       "diagnosis": "Controller is not locally accessible",
@@ -3396,7 +3439,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r503": {
       "diagnosis": "Network-wide Ethernet infrastructure issue",
@@ -3420,7 +3464,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r504": {
       "diagnosis": "Single-controller supervisory association issue",
@@ -3444,7 +3489,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r505": {
       "diagnosis": "Incorrect controller network configuration",
@@ -3468,7 +3514,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r520": {
       "diagnosis": "Entire MS/TP trunk is offline",
@@ -3490,7 +3537,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r521": {
       "diagnosis": "Duplicate MS/TP MAC address",
@@ -3512,7 +3560,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r522": {
       "diagnosis": "MS/TP baud or token-management mismatch",
@@ -3534,7 +3583,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r523": {
       "diagnosis": "MS/TP physical-layer issue",
@@ -3556,7 +3606,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r524": {
       "diagnosis": "A downstream segment or device is disrupting the trunk",
@@ -3578,7 +3629,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r540": {
       "diagnosis": "IP connectivity failure",
@@ -3600,7 +3652,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r541": {
       "diagnosis": "Incorrect or duplicate IP configuration",
@@ -3622,7 +3675,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r542": {
       "diagnosis": "BACnet service/configuration issue on local subnet",
@@ -3644,7 +3698,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r543": {
       "diagnosis": "Local BACnet/IP communication appears functional",
@@ -3666,7 +3721,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r544": {
       "diagnosis": "Routed BACnet/IP path appears configured",
@@ -3688,7 +3744,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r545": {
       "diagnosis": "BBMD, foreign-device, routing, or firewall issue",
@@ -3710,7 +3767,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r560": {
       "diagnosis": "Electrical noise or grounding issue is likely",
@@ -3733,7 +3791,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r568": {
       "diagnosis": "VFD-related interference is a candidate requiring verification",
@@ -3756,7 +3815,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r561": {
       "diagnosis": "Power-quality issue is causing resets",
@@ -3780,7 +3840,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r562": {
       "diagnosis": "Intermittent network issue not yet isolated",
@@ -3804,7 +3865,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "r563": {
       "diagnosis": "Single device or segment is intermittent",
@@ -3826,7 +3888,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r581": {
       "diagnosis": "Communication values match end to end",
@@ -3850,7 +3913,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q601": {
       "question": "What VAV symptom are you troubleshooting?",
@@ -4446,7 +4510,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r603": {
       "diagnosis": "No airflow or inadequate pressure is reaching the VAV inlet",
@@ -4470,7 +4535,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r604": {
       "diagnosis": "Upstream air-system condition is not confirmed",
@@ -4494,7 +4560,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "r605": {
       "diagnosis": "MPV or RPV built-in damper actuator is not following command",
@@ -4518,7 +4585,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r606": {
       "diagnosis": "Controller/output/actuator arrangement is unknown",
@@ -4542,7 +4610,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "r607": {
       "diagnosis": "Damper command and mechanical travel appear normal",
@@ -4566,7 +4635,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r608": {
       "diagnosis": "Damper or linkage mechanical problem",
@@ -4590,7 +4660,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r609": {
       "diagnosis": "Third-party or network-controlled damper path is not responding",
@@ -4614,7 +4685,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r601": {
       "diagnosis": "VAV controls appear to be responding",
@@ -4638,7 +4710,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q701": {
       "question": "What AHU symptom are you troubleshooting?",
@@ -5086,7 +5159,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r703": {
       "diagnosis": "Cooling medium is not reaching the AHU coil",
@@ -5110,7 +5184,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r704": {
       "diagnosis": "Heating source or distribution is unavailable",
@@ -5134,7 +5209,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r705": {
       "diagnosis": "Heating medium is not reaching the AHU coil",
@@ -5158,7 +5234,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r701": {
       "diagnosis": "AHU safety/interlock is preventing operation",
@@ -5182,7 +5259,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "q801": {
       "question": "What RTU symptom are you troubleshooting?",
@@ -5525,7 +5603,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r803": {
       "diagnosis": "RTU air path is restricting cooling operation",
@@ -5549,7 +5628,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r804": {
       "diagnosis": "RTU heating source or local permissive is unavailable",
@@ -5573,7 +5653,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r801": {
       "diagnosis": "RTU safety/interlock is preventing operation",
@@ -5597,7 +5678,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "q901": {
       "question": "What pump symptom are you troubleshooting?",
@@ -5833,7 +5915,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r902": {
       "diagnosis": "Pump runs but system flow/DP is inadequate",
@@ -5857,7 +5940,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r903": {
       "diagnosis": "Pump status input operates correctly",
@@ -5881,7 +5965,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q1001": {
       "question": "What boiler symptom are you troubleshooting?",
@@ -6092,7 +6177,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1001": {
       "diagnosis": "Boiler safety/permissive is not satisfied",
@@ -6116,7 +6202,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r1002": {
       "diagnosis": "BMS enable reaches boiler but boiler does not fire",
@@ -6140,7 +6227,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q1101": {
       "question": "What chiller symptom are you troubleshooting?",
@@ -6402,7 +6490,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1101": {
       "diagnosis": "Chiller permissive is not satisfied",
@@ -6426,7 +6515,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r1102": {
       "diagnosis": "Chiller receives enable but remains off",
@@ -6450,7 +6540,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1103": {
       "diagnosis": "BMS temperatures and setpoint appear correct",
@@ -6474,7 +6565,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1104": {
       "diagnosis": "Flow/DP instrumentation appears correct",
@@ -6498,7 +6590,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q1201": {
       "question": "What cooling-tower symptom are you troubleshooting?",
@@ -6683,7 +6776,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1202": {
       "diagnosis": "Basin-level input appears accurate",
@@ -6707,7 +6801,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q1301": {
       "question": "What exhaust-fan symptom are you troubleshooting?",
@@ -6865,7 +6960,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1302": {
       "diagnosis": "Controls command path appears normal",
@@ -6889,7 +6985,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q1401": {
       "question": "What supply-fan symptom are you troubleshooting?",
@@ -7072,7 +7169,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r1402": {
       "diagnosis": "Supply-fan status input operates correctly",
@@ -7096,7 +7194,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q1501": {
       "question": "Where is the analog output physically provided?",
@@ -7309,7 +7408,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "r1502": {
       "diagnosis": "Controller, command, override, or sequence issue",
@@ -7333,7 +7433,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r1503": {
       "diagnosis": "Controller onboard analog output does not match command",
@@ -7364,7 +7465,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1504": {
       "diagnosis": "Analog command path appears normal",
@@ -7395,7 +7497,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1505": {
       "diagnosis": "Signal is lost between controller and field device",
@@ -7419,7 +7522,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1506": {
       "diagnosis": "Packaged or third-party controller is not issuing the expected output",
@@ -7443,7 +7547,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1507": {
       "diagnosis": "Integral actuator or feedback is not following command",
@@ -7467,7 +7572,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1508": {
       "diagnosis": "Network command or feedback path is not responding",
@@ -7491,7 +7597,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "q1601": {
       "question": "Where is the start/stage/output command physically provided?",
@@ -7703,7 +7810,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "r1602": {
       "diagnosis": "Controller, command, override, or sequence issue",
@@ -7727,7 +7835,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r1603": {
       "diagnosis": "Controller onboard binary output does not change state",
@@ -7758,7 +7867,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1604": {
       "diagnosis": "Binary command path appears normal",
@@ -7789,7 +7899,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1605": {
       "diagnosis": "Binary command is lost between controller and field device",
@@ -7813,7 +7924,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1606": {
       "diagnosis": "Packaged or third-party controller is not issuing the expected command",
@@ -7837,7 +7949,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1607": {
       "diagnosis": "Equipment status does not follow the command",
@@ -7861,7 +7974,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1608": {
       "diagnosis": "Network binary command or feedback path is not responding",
@@ -7885,7 +7999,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r995": {
       "diagnosis": "Programming / sequence issue",
@@ -7909,7 +8024,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r997": {
       "diagnosis": "Field device failure",
@@ -7933,7 +8049,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r998": {
       "diagnosis": "Field wiring issue",
@@ -7957,7 +8074,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r999": {
       "diagnosis": "Point configuration issue",
@@ -7981,7 +8099,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "q510": {
       "question": "What BACnet MS/TP symptom are you troubleshooting?",
@@ -8130,7 +8249,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "r509": {
       "diagnosis": "BACnet/SC requires a separate reviewed workflow",
@@ -8152,7 +8272,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "r305": {
       "diagnosis": "AO-8 module is offline or unhealthy",
@@ -8183,7 +8304,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "q815": {
       "question": "Is cooling enabled by the required schedule, mode and permissives?",
@@ -8318,7 +8440,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "q584": {
       "question": "Does the originating network device report the correct value locally?",
@@ -8369,7 +8492,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r589": {
       "diagnosis": "Originating network device reports an incorrect value",
@@ -8393,7 +8517,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r586": {
       "diagnosis": "Calculated or software point requires logic verification",
@@ -8417,7 +8542,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "r585": {
       "diagnosis": "Required evidence or point-source identity is unavailable",
@@ -8441,7 +8567,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "q577": {
       "question": "Is transformer loading verified within its rated capacity?",
@@ -8492,7 +8619,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "q526": {
       "question": "Do available MS/TP traffic statistics or an approved capture show communication errors or retries?",
@@ -8540,7 +8668,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "q590": {
       "question": "When the BACnet/IP device drops, does the Automation Server remain online without a recorded restart?",
@@ -8642,7 +8771,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "q1701": {
       "question": "Does the Modbus RTU device have correct power and a normal local operating state?",
@@ -8792,7 +8922,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r1702": {
       "diagnosis": "Modbus RTU serial configuration mismatch",
@@ -8814,7 +8945,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1703": {
       "diagnosis": "Modbus RTU serial wiring mismatch",
@@ -8836,7 +8968,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1704": {
       "diagnosis": "Modbus RTU response fault remains unisolated",
@@ -8858,7 +8991,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "r1705": {
       "diagnosis": "Modbus request and value appear consistent with reviewed evidence",
@@ -8881,7 +9015,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1706": {
       "diagnosis": "Modbus mapping or data interpretation requires verification",
@@ -8904,7 +9039,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "q1801": {
       "question": "Does the Modbus TCP device have correct power and a normal local operating state?",
@@ -9053,7 +9189,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "r1802": {
       "diagnosis": "Modbus TCP endpoint or gateway configuration mismatch",
@@ -9075,7 +9212,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
     },
     "r1803": {
       "diagnosis": "Modbus TCP service response fault remains unisolated",
@@ -9097,7 +9235,8 @@
         "review_date": null,
         "status": "Exact topic/model verification pending"
       },
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "q912": {
       "question": "Is the running pump speed command appropriate for the current flow or differential-pressure demand?",
@@ -9123,7 +9262,8 @@
     "r135": {
       "diagnosis": "Temperature sensor requires an exact-model test procedure",
       "action": "Record sensor part number, input type, configured curve and reference temperature. Use the approved sensor and controller documentation for resistance, wiring and tolerance checks. No generic resistance table or fault diagnosis is assumed.",
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "q136": {
       "question": "Which identified onboard input signal are you testing?",
@@ -9147,7 +9287,8 @@
     "r132": {
       "diagnosis": "Onboard sensor calibration has not been verified",
       "action": "Record the sensor and controller model and follow the approved zero or calibration procedure where authorized. Retest the reading before diagnosing controller scaling or replacing hardware.",
-      "conclusion_status": "candidate_requires_field_verification"
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
     },
     "q324": {
       "question": "Does the receiving field device respond to the verified current signal as expected?",
@@ -9197,7 +9338,7 @@
     }
   },
   "product": {
-    "version": "0.6.27-evidence-separation-draft",
+    "version": "0.6.28-confidence-model-draft",
     "documentLibrary": {
       "bucket": "bms-documents",
       "private": true,
@@ -9240,7 +9381,8 @@
       "Separated signal delivery and device response",
       "Optional unavailable-measurement routes",
       "Removed unreachable legacy results r996 and r525",
-      "Separate recorded diagnostic findings from missing verification checks; label provenance and exclude navigation choices"
+      "Separate recorded diagnostic findings from missing verification checks; label provenance and exclude navigation choices",
+      "Added outcome_type (specific / area / inconclusive) to every result for the confidence model"
     ],
     "limitations": [
       "Engineering draft requiring site and exact-model validation; not a safety certification",
@@ -9250,7 +9392,7 @@
   },
   "caseRecordTemplate": {
     "case_id": null,
-    "logic_version": "0.6.27-evidence-separation-draft",
+    "logic_version": "0.6.28-confidence-model-draft",
     "equipment_model": null,
     "firmware_ebo_version": null,
     "protocol_transport": null,
