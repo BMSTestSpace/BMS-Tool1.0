@@ -10918,12 +10918,12 @@
     }
   },
   "product": {
-    "version": "0.6.31-case-drawers-draft",
+    "version": "0.6.32-document-upload-draft",
     "documentLibrary": {
       "bucket": "bms-documents",
       "private": true,
       "edgeFunction": "document-library",
-      "maxFileBytes": 10485760,
+      "maxFileBytes": 20971520,
       "contentTypes": [
         "application/pdf",
         "image/jpeg",
@@ -10965,7 +10965,8 @@
       "Added outcome_type (specific / area / inconclusive) to every result for the confidence model",
       "Evidence entry: optional Record a reading box on every question, Add measurement button on results, tappable confidence tip",
       "Added draft step guides (why, tools, what to expect, common mistakes) and suggested readings to measurement steps; guides are pending technical review",
-      "Removed the Evidence tab: case details on the case card, readings and photos in a drawer, session tools in the Case menu; readings can be edited and deleted"
+      "Removed the Evidence tab: case details on the case card, readings and photos in a drawer, session tools in the Case menu; readings can be edited and deleted",
+      "Document upload limit raised from 10 MB to 20 MB with upload progress and clearer errors (front end; the document-library function and storage bucket limits must match)"
     ],
     "limitations": [
       "Engineering draft requiring site and exact-model validation; not a safety certification",
@@ -10975,7 +10976,7 @@
   },
   "caseRecordTemplate": {
     "case_id": null,
-    "logic_version": "0.6.31-case-drawers-draft",
+    "logic_version": "0.6.32-document-upload-draft",
     "equipment_model": null,
     "firmware_ebo_version": null,
     "protocol_transport": null,
