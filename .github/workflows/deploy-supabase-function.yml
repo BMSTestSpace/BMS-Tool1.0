@@ -1,7 +1,7 @@
 name: Deploy Supabase Edge Functions
 
-# v0.6.24: deploys only when function code (or this workflow) changes, instead of on every push to main.
-# Run it manually from the Actions tab (workflow_dispatch) at any time.
+# v0.6.24c: deploys only when function code (or this workflow) changes. Run it manually from the Actions tab at any time.
+# Adds a secrets check that reports what is wrong WITHOUT printing the secret values.
 on:
   push:
     branches:
@@ -25,8 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-      SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+      RAW_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      RAW_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -36,11 +36,50 @@ jobs:
         with:
           version: latest
 
-      - name: Verify deployment secrets
+      - name: Check and clean deployment secrets
         shell: bash
         run: |
-          test -n "$SUPABASE_ACCESS_TOKEN" || { echo "SUPABASE_ACCESS_TOKEN is not configured."; exit 1; }
-          test -n "$SUPABASE_PROJECT_ID" || { echo "SUPABASE_PROJECT_ID is not configured."; exit 1; }
+          set -u
+          fail=0
+
+          # Remove spaces, tabs, line breaks and quotes that are easy to paste by accident.
+          token="$(printf '%s' "$RAW_ACCESS_TOKEN" | tr -d '[:space:]"'"'")"
+          project="$(printf '%s' "$RAW_PROJECT_ID" | tr -d '[:space:]"'"'")"
+
+          if [ "$token" != "$RAW_ACCESS_TOKEN" ]; then echo "NOTE: SUPABASE_ACCESS_TOKEN contained spaces, line breaks, or quotes. They were removed for this run. Re-save the secret without them."; fi
+          if [ "$project" != "$RAW_PROJECT_ID" ]; then echo "NOTE: SUPABASE_PROJECT_ID contained spaces, line breaks, or quotes. They were removed for this run."; fi
+
+          # Describe the token without printing any part of an unexpected value.
+          kind="something else"
+          case "$token" in
+            sbp_*)        kind="a Supabase personal access token (sbp_)" ;;
+            eyJ*)         kind="a JWT (this looks like an anon or service_role API key)" ;;
+            sb_publishable_*|sb_secret_*) kind="a Supabase API key (not an access token)" ;;
+          esac
+          echo "SUPABASE_ACCESS_TOKEN: ${#token} characters, looks like $kind"
+          echo "SUPABASE_PROJECT_ID:   ${#project} characters"
+
+          if [ -z "$token" ]; then
+            echo "ERROR: SUPABASE_ACCESS_TOKEN is empty or missing. Add it under Settings > Secrets and variables > Actions > Repository secrets (not Variables)."; fail=1
+          elif [ "${token:0:4}" != "sbp_" ]; then
+            echo "ERROR: SUPABASE_ACCESS_TOKEN does not start with sbp_. It must be a personal access token from Account preferences > Access Tokens, not an API key or password."; fail=1
+          elif ! printf '%s' "$token" | grep -Eq '^sbp_(oauth_)?[a-f0-9]{40}$'; then
+            echo "WARNING: the token starts with sbp_ but is not sbp_ followed by 40 lowercase hex characters (a normal token is 44 characters long). The CLI will probably reject it. Generate a new token and paste it again."
+          fi
+
+          if [ -z "$project" ]; then
+            echo "ERROR: SUPABASE_PROJECT_ID is empty or missing."; fail=1
+          elif ! printf '%s' "$project" | grep -Eq '^[a-z0-9]{20}$'; then
+            echo "ERROR: SUPABASE_PROJECT_ID should be the 20-character project ref only (the part before .supabase.co), not a URL."; fail=1
+          fi
+
+          [ "$fail" -eq 0 ] || exit 1
+
+          # Use the cleaned values for the deploy steps, and keep them masked in the logs.
+          echo "::add-mask::$token"
+          echo "::add-mask::$project"
+          echo "SUPABASE_ACCESS_TOKEN=$token" >> "$GITHUB_ENV"
+          echo "SUPABASE_PROJECT_ID=$project" >> "$GITHUB_ENV"
 
       - name: Deploy ai-chat
         run: supabase functions deploy ai-chat --project-ref "$SUPABASE_PROJECT_ID"
