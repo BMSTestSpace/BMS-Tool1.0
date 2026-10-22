@@ -192,7 +192,7 @@
     "q111": {
       "question": "Does measured current correspond to the transmitter range and the actual process value?",
       "answers": {
-        "Yes": "r120",
+        "Yes": "q120",
         "No": "r114"
       },
       "notes": "Use the transmitter nameplate/configured range. For a 4-20 mA transmitter, calculate expected mA from the configured lower and upper range values."
@@ -307,6 +307,32 @@
         "Yes": "r127",
         "No": "r123"
       }
+    },
+    "q130": {
+      "question": "How does this pressure, flow, or airflow measurement reach the controller?",
+      "answers": {
+        "4-20 mA (current) transmitter": "q107",
+        "0-10 VDC (voltage) transmitter": "q114",
+        "Integral or onboard sensor with tubing (no signal wiring from a separate transmitter)": "q131",
+        "Unknown": "r130"
+      },
+      "notes": "Identify the signal type from the transmitter label, controller label, submittal, or the input configuration in EBO. Many VAV controllers measure airflow with an onboard pressure sensor, which has no field signal wiring to test."
+    },
+    "q131": {
+      "question": "Are the pickup and tubing intact, connected to the correct high and low ports, and free of kinks, moisture, and blockage, and has the sensor been zeroed or calibrated using the controller manufacturer's procedure?",
+      "answers": {
+        "Yes": "r116",
+        "No": "r131"
+      },
+      "notes": "Follow the controller manufacturer's procedure for zeroing or calibrating the onboard sensor. Do not assume tubing orientation; verify it against the product documentation."
+    },
+    "r130": {
+      "diagnosis": "Sensor signal type is not identified",
+      "action": "Identify how the measurement reaches the controller from labels, drawings, submittals, and the EBO input configuration before testing. Do not assume a 4-20 mA loop."
+    },
+    "r131": {
+      "diagnosis": "Onboard sensor pickup or tubing problem",
+      "action": "Correct the tubing, pickup, and port connections, remove moisture or blockage, then zero or calibrate the sensor using the manufacturer's procedure. Replace the sensor or controller only after the tubing and calibration are confirmed good."
     },
     "r101": {
       "diagnosis": "UI16 module connection or module-health issue",
@@ -716,12 +742,20 @@
       }
     },
     "q564": {
-      "question": "Do the drops coincide with VFD/motor starts or other large electrical loads switching, or is the trunk routed alongside VFD output or power conductors?",
+      "question": "Do the drops coincide with motors or other heavy electrical loads starting or switching, or is the trunk routed alongside power or high-current conductors?",
       "answers": {
-        "Yes": "r560",
+        "Yes": "q565",
         "No": "q523"
       },
       "notes": "Electrical noise is only one candidate on an MS/TP trunk. Answer Yes only when the timing or the cable routing supports it; otherwise continue to the trunk physical-layer checks."
+    },
+    "q565": {
+      "question": "Is a VFD installed on or near this trunk, including a VFD that is itself a device on the trunk?",
+      "answers": {
+        "Yes": "r568",
+        "No": "r560"
+      },
+      "notes": "Answer Yes for any VFD whose output or power wiring runs near the communications cable or shares a panel or enclosure with it, even if the device that is dropping is not the VFD. Answer No if there is no VFD, and the VFD-specific checks will be skipped."
     },
     "q570": {
       "question": "At the time of a drop, does the Automation Server record a restart or power loss, or show an abnormal status-light pattern?",
@@ -781,7 +815,7 @@
       "question": "Does the value at the controller match the field measurement?",
       "answers": {
         "Yes": "q581",
-        "No": "r580"
+        "No": "q102"
       }
     },
     "q581": {
@@ -860,8 +894,12 @@
       "action": "Correct BDT/FDT entries, broadcast distribution, UDP port rules, and routing."
     },
     "r560": {
-      "diagnosis": "Electrical noise/grounding issue is likely",
-      "action": "Check VFD grounding, shield practices, cable separation, and induced noise on communications/power."
+      "diagnosis": "Electrical noise or grounding issue is likely",
+      "action": "Check grounding and shield termination against the trunk design, separation of the communications cable from power and high-current conductors, and induced noise on the communications cable. Confirm the specified shielded twisted-pair cable is used."
+    },
+    "r568": {
+      "diagnosis": "VFD-related electrical noise or grounding issue is likely",
+      "action": "Check VFD grounding and the shielding and routing of the VFD output cable. Keep the communications cable away from VFD output and line conductors, and cross them at right angles where unavoidable. Verify the communications shield is terminated only as the trunk design requires and is not bonded to the VFD chassis by accident. Review line reactor, output filter, and EMC requirements in the VFD manual. When it is safe and permitted, confirm by stopping the VFD and checking whether the drops stop. Coordinate with the VFD owner or electrical contractor before changing VFD settings or wiring."
     },
     "r561": {
       "diagnosis": "Power-quality issue is causing resets",
@@ -874,10 +912,6 @@
     "r563": {
       "diagnosis": "Single device or segment is intermittent",
       "action": "Inspect local power, terminals, transceiver, cable segment, address, and device logs."
-    },
-    "r580": {
-      "diagnosis": "Field value is incorrect at the controller",
-      "action": "Route to the applicable temperature, AI, or DI input workflow."
     },
     "r581": {
       "diagnosis": "Communication values match end to end",
@@ -993,7 +1027,7 @@
       "answers": {
         "Yes": "q624",
         "No": "r603",
-        "Unknown": "q623"
+        "Unknown": "r604"
       },
       "notes": "Check at the box inlet or nearest approved test location. Do not assume that AHU operation guarantees airflow at this branch."
     },
@@ -1008,7 +1042,7 @@
       "question": "Is the airflow sensor reading believable compared with a field measurement?",
       "answers": {
         "Yes": "q621",
-        "No": "q107"
+        "No": "q130"
       }
     },
     "q631": {
@@ -1163,7 +1197,7 @@
       "question": "Is static-pressure reading accurate compared with a field measurement?",
       "answers": {
         "Yes": "q731",
-        "No": "q107"
+        "No": "q130"
       }
     },
     "q731": {
@@ -1363,7 +1397,7 @@
       "question": "Is differential-pressure/flow reading accurate?",
       "answers": {
         "Yes": "q911",
-        "No": "q107"
+        "No": "q130"
       }
     },
     "q911": {
@@ -1513,7 +1547,7 @@
       "question": "Is flow/DP reading accurate compared with field measurement?",
       "answers": {
         "Yes": "q1131",
-        "No": "q107"
+        "No": "q130"
       }
     },
     "q1122": {
@@ -1686,7 +1720,7 @@
       "question": "Is static-pressure reading accurate?",
       "answers": {
         "Yes": "q1421",
-        "No": "q107"
+        "No": "q130"
       }
     },
     "q1421": {
