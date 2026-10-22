@@ -1,7 +1,7 @@
-// BMS Troubleshooter service worker - application version 0.6.24 field hardening
+// BMS Troubleshooter service worker - application version 0.6.26-logic-review-draft
 // v0.6.24: network-first requests time out to the cached copy, Google Fonts are cached for offline use,
 // and a new worker waits until the technician applies the update (no mid-case code or content swap).
-const CACHE_NAME = 'bms-troubleshooter-v0-6-24-field-hardening';
+const CACHE_NAME = 'bms-troubleshooter-v0-6-26-logic-review-draft';
 const NETWORK_TIMEOUT_MS = 3000;
 const CORE_FILES = [
   './',
@@ -27,11 +27,17 @@ self.addEventListener('message', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))))
+      .then((keys) => Promise.all(keys.filter((key) => key.startsWith('bms-troubleshooter-') && key !== CACHE_NAME).map((key) => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
 
+// v0.6.26: core release files stay paired until Apply update activates the new worker.
+async function coreSnapshot(event, fallback) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(fallback);
+  return cached || networkFirst(event, fallback);
+}
 // Network first, but fall back to the cached copy if the network is slow (weak signal) or fails.
 // A slow network response still updates the cache in the background.
 async function networkFirst(event, fallback) {
@@ -48,7 +54,7 @@ async function networkFirst(event, fallback) {
   const timeout = new Promise((resolve) => setTimeout(() => resolve(null), NETWORK_TIMEOUT_MS));
   try {
     const response = await Promise.race([networkPromise, timeout]);
-    if (response) return response;
+    if (response && response.ok) return response;
   } catch (error) { /* use the cached copy */ }
   return cached;
 }
@@ -77,15 +83,15 @@ self.addEventListener('fetch', (event) => {
   }
   if (url.origin !== self.location.origin) return;
 
-  // Always check the network for navigations and HTML so new releases load promptly.
+  // Serve the installed HTML snapshot; a waiting worker offers the next release.
   if (request.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/')) {
-    event.respondWith(networkFirst(event, './index.html'));
+    event.respondWith(coreSnapshot(event, './index.html'));
     return;
   }
 
-  // Troubleshooting content is also network-first, with offline fallback.
+  // Serve the matching installed logic snapshot, including offline.
   if (url.pathname.endsWith('/output.json')) {
-    event.respondWith(networkFirst(event));
+    event.respondWith(coreSnapshot(event, './output.json'));
     return;
   }
 
