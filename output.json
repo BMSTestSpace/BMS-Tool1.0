@@ -9197,7 +9197,7 @@
     }
   },
   "product": {
-    "version": "0.6.26-logic-review-draft",
+    "version": "0.6.27-evidence-separation-draft",
     "documentLibrary": {
       "bucket": "bms-documents",
       "private": true,
@@ -9239,7 +9239,8 @@
       "Temperature sensor identity gate",
       "Separated signal delivery and device response",
       "Optional unavailable-measurement routes",
-      "Removed unreachable legacy results r996 and r525"
+      "Removed unreachable legacy results r996 and r525",
+      "Separate recorded diagnostic findings from missing verification checks; label provenance and exclude navigation choices"
     ],
     "limitations": [
       "Engineering draft requiring site and exact-model validation; not a safety certification",
@@ -9249,7 +9250,7 @@
   },
   "caseRecordTemplate": {
     "case_id": null,
-    "logic_version": "0.6.26-logic-review-draft",
+    "logic_version": "0.6.27-evidence-separation-draft",
     "equipment_model": null,
     "firmware_ebo_version": null,
     "protocol_transport": null,
