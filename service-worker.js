@@ -1,7 +1,7 @@
-// BMS Troubleshooter service worker - application version 0.6.28-confidence-model-draft
+// BMS Troubleshooter service worker - application version 0.6.29-evidence-entry-draft
 // v0.6.24: network-first requests time out to the cached copy, Google Fonts are cached for offline use,
 // and a new worker waits until the technician applies the update (no mid-case code or content swap).
-const CACHE_NAME = 'bms-troubleshooter-v0-6-28-confidence-model-draft';
+const CACHE_NAME = 'bms-troubleshooter-v0-6-29-evidence-entry-draft';
 const NETWORK_TIMEOUT_MS = 3000;
 const CORE_FILES = [
   './',

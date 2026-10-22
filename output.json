@@ -9338,7 +9338,7 @@
     }
   },
   "product": {
-    "version": "0.6.28-confidence-model-draft",
+    "version": "0.6.29-evidence-entry-draft",
     "documentLibrary": {
       "bucket": "bms-documents",
       "private": true,
@@ -9382,7 +9382,8 @@
       "Optional unavailable-measurement routes",
       "Removed unreachable legacy results r996 and r525",
       "Separate recorded diagnostic findings from missing verification checks; label provenance and exclude navigation choices",
-      "Added outcome_type (specific / area / inconclusive) to every result for the confidence model"
+      "Added outcome_type (specific / area / inconclusive) to every result for the confidence model",
+      "Evidence entry: optional Record a reading box on every question, Add measurement button on results, tappable confidence tip"
     ],
     "limitations": [
       "Engineering draft requiring site and exact-model validation; not a safety certification",
@@ -9392,7 +9393,7 @@
   },
   "caseRecordTemplate": {
     "case_id": null,
-    "logic_version": "0.6.28-confidence-model-draft",
+    "logic_version": "0.6.29-evidence-entry-draft",
     "equipment_model": null,
     "firmware_ebo_version": null,
     "protocol_transport": null,
