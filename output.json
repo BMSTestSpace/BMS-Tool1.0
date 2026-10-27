@@ -15,7 +15,7 @@
         "Exhaust Fan": "q1301",
         "Supply Fan": "q1401",
         "Communications": "q501",
-        "Other": "q401"
+        "Other": "q402"
       },
       "notes": "SAFETY: Follow site LOTO, electrical PPE, arc-flash, ladder, rotating-equipment, combustion, refrigerant, and life-safety procedures. Never bypass a safety or exceed product ratings. Verify exact model and approved documentation.",
       "applicability": {
@@ -3281,6 +3281,454 @@
       "action": "Record equipment identity, reported issue, available evidence and missing checks. Escalate for a reviewed equipment-specific workflow. No fault has been established.",
       "conclusion_status": "not_covered",
       "outcome_type": "inconclusive"
+    },
+    "q402": {
+      "question": "What are you troubleshooting on this equipment?",
+      "answers": {
+        "Input (sensor, contact or signal read by a controller)": "q410",
+        "Output (command or signal sent to a device)": "q420",
+        "Communications (offline, intermittent or wrong data)": "q501",
+        "Controller or device power": "q430",
+        "Something else": "q401"
+      },
+      "notes": "Use this branch for equipment that is not in the main equipment list. Add the equipment tag and type on the case card first. The checks that follow are general, so the exact device documentation still decides what a normal reading is.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Choosing what is failing loads the right checks for equipment that has no workflow of its own.",
+        "tools": [
+          "Equipment tag, drawings and submittal",
+          "The point name or symptom as reported"
+        ],
+        "expect": "You can say whether the problem is a value coming in, a command going out, a communications loss, or the device power.",
+        "mistakes": [
+          "Choosing by the equipment name instead of by what is failing",
+          "Choosing Something else when the symptom is really an input, an output or communications"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q410": {
+      "question": "What type of input are you troubleshooting?",
+      "answers": {
+        "Digital input (contact, status or proof)": "q103",
+        "Current input (0-20 mA; commonly 4-20 mA)": "q107",
+        "Voltage input (0-10 VDC)": "q114",
+        "Temperature sensor": "q135",
+        "Pressure, flow or airflow sensor": "q130",
+        "Value read over the network from another device": "q584",
+        "Unknown / evidence unavailable": "r410"
+      },
+      "notes": "Identify the type from the device label, the drawings or the input configuration in EBO.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The input type decides which test is valid. A wrong test can mislead you or damage equipment.",
+        "tools": [
+          "Drawings and submittal",
+          "Input configuration in EBO",
+          "Device label"
+        ],
+        "expect": "You can name the signal type before you start testing.",
+        "mistakes": [
+          "Choosing by the name of the field device instead of the configured input type",
+          "Assuming a 4-20 mA signal when the input is 0-10 V"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q420": {
+      "question": "What type of output are you troubleshooting?",
+      "answers": {
+        "Digital output (start/stop, relay or stage command)": "q1601",
+        "Analog output (speed, valve or damper position signal)": "q1501",
+        "Unknown / evidence unavailable": "r420"
+      },
+      "notes": "The next step asks where the output is physically provided, so the checks match the hardware that is actually installed.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The output type decides which test is valid and where the signal is produced.",
+        "tools": [
+          "Drawings and submittal",
+          "Point configuration in EBO",
+          "Device label"
+        ],
+        "expect": "You can say whether the output is an on/off command or a variable signal.",
+        "mistakes": [
+          "Treating a staged output as analog",
+          "Choosing by the equipment name instead of the output the controller actually provides"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q430": {
+      "question": "Is the controller or device powered, with its power indicator or display on?",
+      "answers": {
+        "Yes": "q431",
+        "No": "q432"
+      },
+      "notes": "Check the indication on the device itself first. A device can be powered and still show a fault state.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Nothing downstream can be trusted until the device itself has power.",
+        "tools": [
+          "Visual check of the power and status indicators",
+          "Device documentation"
+        ],
+        "expect": "The power indicator or display is on.",
+        "mistakes": [
+          "Judging by a lit indicator on a different device",
+          "Assuming the device is healthy because the display is on"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q431": {
+      "question": "Does the status indication or display show a normal operating state for the exact model?",
+      "answers": {
+        "Yes": "r430",
+        "No": "r501",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The status indication summarizes device health before you spend time on wiring.",
+        "tools": [
+          "Status indicator pattern",
+          "Product documentation for the exact model"
+        ],
+        "expect": "The pattern that the product documentation lists as normal.",
+        "mistakes": [
+          "Judging by colour alone without the documentation",
+          "Not allowing boot time after power-up"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q432": {
+      "question": "Is the specified supply voltage present, the correct type, and within range at the device's power terminals?",
+      "answers": {
+        "Yes": "r432",
+        "No": "q433",
+        "Cannot verify / measurement unavailable": "r585"
+      },
+      "notes": "Read the type (AC or DC) and the range from the device label or documentation before measuring. Follow site electrical-safety procedures for any energized measurement. Anything above your authorized electrical scope needs a qualified electrician.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A low or wrong-type supply makes a device look dead or keep resetting.",
+        "tools": [
+          "Multimeter set to the correct AC or DC range",
+          "Device label or documentation"
+        ],
+        "expect": "The voltage matches the type and range printed for the device, measured under normal load.",
+        "mistakes": [
+          "Assuming the supply type without reading the label",
+          "Measuring with the load disconnected",
+          "Reading the wrong terminals"
+        ],
+        "status": "draft_pending_review"
+      },
+      "suggested_reading": {
+        "finding": "Supply voltage at device power terminals",
+        "units": "V"
+      }
+    },
+    "q433": {
+      "question": "Is the upstream breaker, fuse, disconnect or transformer tripped, open or off?",
+      "answers": {
+        "Yes": "r434",
+        "No": "r435",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A tripped or open upstream device is the quickest explanation for a missing supply. Find out why before you reset it.",
+        "tools": [
+          "Visual check",
+          "Multimeter (continuity, power isolated)"
+        ],
+        "expect": "Every upstream protective device is closed and has not tripped.",
+        "mistakes": [
+          "Resetting before checking for a short or overload",
+          "Checking only the device you were told about",
+          "Testing fuses with power on"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "r410": {
+      "diagnosis": "Input type is not identified",
+      "action": "Identify the signal type from the device label, drawings, submittals and the input configuration in EBO before testing. Do not assume a 4-20 mA loop or a 10k Type II sensor.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
+    },
+    "r420": {
+      "diagnosis": "Output type is not identified",
+      "action": "Identify whether the output is a digital command or an analog signal, and the controller and channel that provide it, from drawings, labels, submittals and EBO references before testing.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
+    },
+    "r430": {
+      "diagnosis": "Device power and status appear normal",
+      "action": "Power is not the cause. Start a new path for the input, output or communications problem that is actually failing.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r432": {
+      "diagnosis": "Device has the correct supply but does not power up",
+      "action": "Check terminal connections and polarity, any device fuse or reset, and the startup behavior of the exact model. Follow the manufacturer's recovery or replacement procedure, and escalate with the model and your observations before swapping hardware.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r434": {
+      "diagnosis": "Upstream protective device is tripped, open or off",
+      "action": "Determine the cause with safe testing before you reset it. Inspect the circuit for shorts and overloads. Anything above your authorized voltage scope needs a qualified electrician.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r435": {
+      "diagnosis": "Supply is missing between the source and the device",
+      "action": "Trace the supply from the source to the device: disconnects, wiring continuity, terminations, and any power supply or control transformer that feeds it. Anything above your authorized voltage scope needs a qualified electrician.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
     },
     "q501": {
       "question": "Which communication protocol and transport are you troubleshooting?",
@@ -10918,7 +11366,7 @@
     }
   },
   "product": {
-    "version": "0.6.32-document-upload-draft",
+    "version": "1.0.0",
     "documentLibrary": {
       "bucket": "bms-documents",
       "private": true,
@@ -10966,7 +11414,8 @@
       "Evidence entry: optional Record a reading box on every question, Add measurement button on results, tappable confidence tip",
       "Added draft step guides (why, tools, what to expect, common mistakes) and suggested readings to measurement steps; guides are pending technical review",
       "Removed the Evidence tab: case details on the case card, readings and photos in a drawer, session tools in the Case menu; readings can be edited and deleted",
-      "Document upload limit raised from 10 MB to 20 MB with upload progress and clearer errors (front end; the document-library function and storage bucket limits must match)"
+      "Document upload limit raised from 10 MB to 20 MB with upload progress and clearer errors (front end; the document-library function and storage bucket limits must match)",
+      "First 1.0.x release. Built out the Other equipment branch: input or output, then type, then the existing input, output, communications and power checks. Other equipment no longer ends at a not-covered result unless Something else is chosen"
     ],
     "limitations": [
       "Engineering draft requiring site and exact-model validation; not a safety certification",
@@ -10976,7 +11425,7 @@
   },
   "caseRecordTemplate": {
     "case_id": null,
-    "logic_version": "0.6.32-document-upload-draft",
+    "logic_version": "1.0.0",
     "equipment_model": null,
     "firmware_ebo_version": null,
     "protocol_transport": null,
@@ -11113,6 +11562,120 @@
       "node": "q565",
       "answer": "Yes",
       "expected_next": "r568"
+    },
+    {
+      "name": "Other equipment opens its own branch",
+      "node": "q1",
+      "answer": "Other",
+      "expected_next": "q402"
+    },
+    {
+      "name": "Other: input",
+      "node": "q402",
+      "answer": "Input (sensor, contact or signal read by a controller)",
+      "expected_next": "q410"
+    },
+    {
+      "name": "Other: output",
+      "node": "q402",
+      "answer": "Output (command or signal sent to a device)",
+      "expected_next": "q420"
+    },
+    {
+      "name": "Other: communications joins the protocol gate",
+      "node": "q402",
+      "answer": "Communications (offline, intermittent or wrong data)",
+      "expected_next": "q501"
+    },
+    {
+      "name": "Other: power",
+      "node": "q402",
+      "answer": "Controller or device power",
+      "expected_next": "q430"
+    },
+    {
+      "name": "Other: something else is still not covered",
+      "node": "q402",
+      "answer": "Something else",
+      "expected_next": "q401"
+    },
+    {
+      "name": "Other input: digital",
+      "node": "q410",
+      "answer": "Digital input (contact, status or proof)",
+      "expected_next": "q103"
+    },
+    {
+      "name": "Other input: current",
+      "node": "q410",
+      "answer": "Current input (0-20 mA; commonly 4-20 mA)",
+      "expected_next": "q107"
+    },
+    {
+      "name": "Other input: voltage",
+      "node": "q410",
+      "answer": "Voltage input (0-10 VDC)",
+      "expected_next": "q114"
+    },
+    {
+      "name": "Other input: temperature",
+      "node": "q410",
+      "answer": "Temperature sensor",
+      "expected_next": "q135"
+    },
+    {
+      "name": "Other input: pressure, flow or airflow",
+      "node": "q410",
+      "answer": "Pressure, flow or airflow sensor",
+      "expected_next": "q130"
+    },
+    {
+      "name": "Other input: network value",
+      "node": "q410",
+      "answer": "Value read over the network from another device",
+      "expected_next": "q584"
+    },
+    {
+      "name": "Other input: unknown type",
+      "node": "q410",
+      "answer": "Unknown / evidence unavailable",
+      "expected_next": "r410"
+    },
+    {
+      "name": "Other output: digital",
+      "node": "q420",
+      "answer": "Digital output (start/stop, relay or stage command)",
+      "expected_next": "q1601"
+    },
+    {
+      "name": "Other output: analog",
+      "node": "q420",
+      "answer": "Analog output (speed, valve or damper position signal)",
+      "expected_next": "q1501"
+    },
+    {
+      "name": "Other output: unknown type",
+      "node": "q420",
+      "answer": "Unknown / evidence unavailable",
+      "expected_next": "r420"
+    },
+    {
+      "name": "Other power: no supply goes to the upstream check",
+      "node": "q432",
+      "answer": "No",
+      "expected_next": "q433"
+    },
+    {
+      "name": "Other power: unmeasurable supply is not a failed test",
+      "node": "q432",
+      "answer": "Cannot verify / measurement unavailable",
+      "expected_next": "r585"
+    },
+    {
+      "name": "Other power: tripped upstream device",
+      "node": "q433",
+      "answer": "Yes",
+      "expected_next": "r434"
     }
   ]
 }
