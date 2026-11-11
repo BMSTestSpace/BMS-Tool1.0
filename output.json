@@ -2835,7 +2835,7 @@
     "q303": {
       "question": "Is the output command changing as expected in EBO?",
       "answers": {
-        "Yes": "q304",
+        "Yes": "q1913",
         "No": "q1901"
       },
       "applicability": {
@@ -2987,7 +2987,7 @@
     "q320": {
       "question": "Is the output command changing as expected in EBO?",
       "answers": {
-        "Yes": "q321",
+        "Yes": "q1914",
         "No": "q1901"
       },
       "applicability": {
@@ -4084,12 +4084,13 @@
       }
     },
     "q524": {
-      "question": "After documenting the trunk, does sectional isolation identify a cable segment or device that disrupts communications?",
+      "question": "Disconnect devices or sections of the trunk one at a time (keep the Automation Server connected to the part you are watching) and wait long enough to see a drop after each change. Did the drops stop when a particular device or section was disconnected?",
       "answers": {
         "Yes": "r524",
-        "No": "r526"
+        "No": "r526",
+        "Cannot verify / the trunk could not be split or watched long enough": "r585"
       },
-      "notes": "De-energize or disconnect only as permitted. Reconnect one segment/device at a time and document changes to avoid creating address or topology errors.",
+      "notes": "Follow site safety procedures, and disconnect or de-energize only as permitted. This step splits the trunk to find where the drops come from. Disconnect one device or one section from the trunk, keeping the Automation Server connected to the part you are watching, and wait at least as long as the usual time between drops. If the drops stop, the problem is in what you disconnected: reconnect it in smaller pieces, one at a time, to narrow it down. If the drops continue, reconnect it and try another part. Record each change so you do not create an address or topology error when you reconnect.",
       "applicability": {
         "protocol_transport": [
           "BACnet MS/TP"
@@ -4108,16 +4109,18 @@
         "status": "Exact topic/model verification pending"
       },
       "guide": {
-        "why": "Taking sections or devices off one at a time shows what is disrupting the trunk.",
+        "why": "Splitting the trunk shows where the problem is. If the drops stop when you disconnect something, the problem is in what you disconnected.",
         "tools": [
           "Laptop with EBO",
-          "A map of the trunk",
+          "A map of the trunk and the order of the devices on it",
           "A bus analyzer or approved capture tool (optional)"
         ],
-        "expect": "The trunk stays stable once the disrupting device or section is removed. Reconnect one at a time.",
+        "expect": "The drops stop once the faulty device or section is disconnected. If they continue every time, the cause is not in any single part you tested.",
         "mistakes": [
-          "Reconnecting several things at once",
-          "Not recording which devices were taken off"
+          "Watching for too short a time to catch a drop",
+          "Disconnecting several parts at once, so you cannot tell which one mattered",
+          "Not recording each change, then creating a duplicate address or topology error when reconnecting",
+          "Disconnecting the Automation Server from the part you are watching"
         ],
         "seen_in_field": [
           "Third-party (non-Schneider) controllers left on the trunk disrupted it. Taking them off one at a time, then checking stability, found the cause.",
@@ -4330,7 +4333,7 @@
       "question": "Was a device, address, wiring, or program change made on this trunk shortly before the drops started?",
       "answers": {
         "Yes": "r566",
-        "No": "q564"
+        "No": "q2201"
       },
       "applicability": {
         "protocol_transport": [
@@ -4390,9 +4393,9 @@
       "question": "Do the drops coincide with motors or other heavy electrical loads starting or switching, or is the trunk routed alongside power or high-current conductors?",
       "answers": {
         "Yes": "q565",
-        "No": "q523"
+        "No": "q524"
       },
-      "notes": "Electrical noise is only one candidate on an MS/TP trunk. Answer Yes only when the timing or the cable routing supports it; otherwise continue to the trunk physical-layer checks.",
+      "notes": "Electrical noise is only one candidate on an MS/TP trunk. Answer Yes only when the timing or the cable routing supports it; otherwise continue to isolating the problem by sections.",
       "applicability": {
         "protocol_transport": [
           "BACnet MS/TP"
@@ -4409,6 +4412,47 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      }
+    },
+    "q2201": {
+      "question": "Does the RS-485 segment have correct polarity, daisy-chain topology, shield practice, biasing/termination, and no shorts/grounds?",
+      "answers": {
+        "Yes": "q564",
+        "No": "r523"
+      },
+      "notes": "Do not add termination arbitrarily. Verify the exact trunk design and device instructions; inspect long stubs, star wiring, grounded conductors, and shield grounding at unintended points.",
+      "applicability": {
+        "protocol_transport": [
+          "BACnet MS/TP"
+        ]
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Most serial trunk faults are physical.",
+        "tools": [
+          "Visual trunk inspection",
+          "Multimeter"
+        ],
+        "expect": "Correct polarity, daisy-chain topology, shield practice and no shorts or grounds.",
+        "mistakes": [
+          "Adding termination arbitrarily",
+          "Star wiring or long stubs"
+        ],
+        "seen_in_field": [
+          "A shield landed on the bias terminal at the master during commissioning slowed the trunk for months. Correcting it restored normal operation."
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q565": {
@@ -9287,7 +9331,7 @@
     "q1504": {
       "question": "Does the expected analog signal reach the receiving field-device terminals?",
       "answers": {
-        "Yes": "q1509",
+        "Yes": "q1915",
         "No": "r1505",
         "Unknown / evidence unavailable": "r585"
       },
@@ -9441,7 +9485,7 @@
     },
     "r1503": {
       "diagnosis": "Controller onboard analog output does not match command",
-      "action": "Verify configured signal range, common/reference, loading, polarity, channel assignment, and controller documentation. Compare with a safe known-good test only when approved.",
+      "action": "Verify configured signal range, common/reference, loading, polarity, channel assignment, and controller documentation. Compare with a safe known-good test only when approved. Also check whether the controller or its output module has an override switch or manual setting on this output.",
       "checkout_evidence": [
         "Command and measured response",
         "Physical channel and signal type",
@@ -9505,7 +9549,7 @@
     },
     "r1505": {
       "diagnosis": "Signal is lost between controller and field device",
-      "action": "Check conductor identity, continuity, common/reference, polarity, shorts/grounds, terminations, and signal loading.",
+      "action": "Check conductor identity, continuity, common/reference, polarity, shorts/grounds, terminations, and signal loading. Also check for a Hand-Off-Auto or override station in the signal path.",
       "applicability": {
         "protocol_transport": [
           "not_transport_specific_or_shared"
@@ -11617,6 +11661,159 @@
       "conclusion_status": "candidate_requires_field_verification",
       "outcome_type": "specific"
     },
+    "q1913": {
+      "question": "Is any Hand-Off-Auto or Local/Remote selector in this output path in Auto or Remote: the AO-8-H channel switch on the module, and any selector on the receiving device (panel station, drive or starter keypad, or a switch on the device)?",
+      "answers": {
+        "All selectors that are present are in Auto / Remote, or there are none": "q304",
+        "The AO-8-H channel switch for this output is in Hand or Off": "r1912",
+        "A selector on the receiving device is in Hand, Off or Local": "r1910",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "Do this by looking at the equipment, not at EBO. Module names with -H (AO-8-H) have Hand-Off-Auto switches with a potentiometer on each output; a plain AO-8 has none. On Central IO modules built before 2021-W26, Schneider's help says the override switches must be disabled by a firmware update (it gives version 2.017 or later) to remove a risk of an improper output. Check the module date code against the current Schneider advisory, and do not update firmware without authorization. Do not override a lockout/tagout or a safety device.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/topics/show.castle?id=4333&locale=en-US&productversion=2024",
+        "documentation_version": "2024",
+        "topic_id": "4333",
+        "review_date": null,
+        "status": "Topic found in published Schneider help (AO-8 and AO-8-H Central IO modules). Exact model, manufacturing date and firmware still require technician verification."
+      },
+      "guide": {
+        "why": "The program can command the right value while a switch holds the output elsewhere. In Hand the potentiometer sets the output, in Off it is held at zero, and a selector on the device can stop it following a correct signal.",
+        "tools": [
+          "Visual check of the AO-8 module front panel and its label",
+          "Visual check at the receiving device or its panel station"
+        ],
+        "expect": "Every selector that is present is in Auto or Remote. A plain AO-8 has no switches. On an AO-8-H, Hand holds the output at the potentiometer setting, Off holds it at zero, and Auto lets the program control it.",
+        "mistakes": [
+          "Judging by the output value in EBO, which can show the command while a switch in Hand or Off holds the real output",
+          "Checking only the module and not the receiving device",
+          "Moving a switch back to Auto without noting where it was and asking why"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q1914": {
+      "question": "Is any Hand-Off-Auto or Local/Remote selector in this output path in Auto or Remote: the AO-8-H channel switch on the module, and any selector on the receiving device (panel station, drive or starter keypad, or a switch on the device)?",
+      "answers": {
+        "All selectors that are present are in Auto / Remote, or there are none": "q321",
+        "The AO-8-H channel switch for this output is in Hand or Off": "r1912",
+        "A selector on the receiving device is in Hand, Off or Local": "r1910",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "Do this by looking at the equipment, not at EBO. Module names with -H (AO-8-H) have Hand-Off-Auto switches with a potentiometer on each output; a plain AO-8 has none. On Central IO modules built before 2021-W26, Schneider's help says the override switches must be disabled by a firmware update (it gives version 2.017 or later) to remove a risk of an improper output. Check the module date code against the current Schneider advisory, and do not update firmware without authorization. Do not override a lockout/tagout or a safety device.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/topics/show.castle?id=4333&locale=en-US&productversion=2024",
+        "documentation_version": "2024",
+        "topic_id": "4333",
+        "review_date": null,
+        "status": "Topic found in published Schneider help (AO-8 and AO-8-H Central IO modules). Exact model, manufacturing date and firmware still require technician verification."
+      },
+      "guide": {
+        "why": "The program can command the right value while a switch holds the output elsewhere. In Hand the potentiometer sets the output, in Off it is held at zero, and a selector on the device can stop it following a correct signal.",
+        "tools": [
+          "Visual check of the AO-8 module front panel and its label",
+          "Visual check at the receiving device or its panel station"
+        ],
+        "expect": "Every selector that is present is in Auto or Remote. A plain AO-8 has no switches. On an AO-8-H, Hand holds the output at the potentiometer setting, Off holds it at zero, and Auto lets the program control it.",
+        "mistakes": [
+          "Judging by the output value in EBO, which can show the command while a switch in Hand or Off holds the real output",
+          "Checking only the module and not the receiving device",
+          "Moving a switch back to Auto without noting where it was and asking why"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q1915": {
+      "question": "Does the receiving device have a Hand-Off-Auto or Local/Remote selector (panel station, drive or starter keypad, or a switch on the device), and is it in Auto or Remote?",
+      "answers": {
+        "Yes, there is a selector and it is in Auto / Remote": "q1509",
+        "Yes, there is a selector but it is in Hand, Off or Local": "r1910",
+        "There is no such selector on this device": "q1509",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "Check the device itself, not the BMS point. A selector in Hand, Off or Local can stop the device from following the signal even when the signal at its terminals is correct. A manual-override lever on an actuator is a mechanical check, not this selector. Do not override a lockout/tagout or a safety device.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The signal can reach the device correctly while the device ignores it because its own selector is not in Auto or Remote.",
+        "tools": [
+          "Visual check at the receiving device, its drive or starter keypad, or its panel station"
+        ],
+        "expect": "Any selector is in Auto or Remote, or the device has no selector.",
+        "mistakes": [
+          "Judging by the BMS output instead of the device",
+          "Leaving a selector in Hand after a check",
+          "Returning a selector to Auto without asking why it was moved"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "r1912": {
+      "diagnosis": "Hand-Off-Auto switch on the analog output module is in Hand or Off",
+      "action": "Record the switch position and, if it is in Hand, the potentiometer setting before changing anything. In Hand the potentiometer sets the output and programs have no effect; in Off the output is held at zero. Find out why it was left there (maintenance, lockout/tagout, a safety trip or an operator action) and get authorization before returning it to Auto. Never override a lockout or a safety device. After it is back in Auto, confirm the output follows the command and the receiving device responds. Also check the module manufacturing date against the current Schneider advisory on the override switches.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/topics/show.castle?id=4333&locale=en-US&productversion=2024",
+        "documentation_version": "2024",
+        "topic_id": "4333",
+        "review_date": null,
+        "status": "Topic found in published Schneider help (AO-8 and AO-8-H Central IO modules). Exact model, manufacturing date and firmware still require technician verification."
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
     "q1930": {
       "question": "After the replacement, do the address, switch settings and device ID match the old unit and the documentation?",
       "answers": {
@@ -13069,7 +13266,7 @@
     }
   },
   "product": {
-    "version": "1.0.1",
+    "version": "1.0.3",
     "documentLibrary": {
       "bucket": "bms-documents",
       "private": true,
@@ -13119,7 +13316,9 @@
       "Removed the Evidence tab: case details on the case card, readings and photos in a drawer, session tools in the Case menu; readings can be edited and deleted",
       "Document upload limit raised from 10 MB to 20 MB with upload progress and clearer errors (front end; the document-library function and storage bucket limits must match)",
       "First 1.0.x release. Built out the Other equipment branch: input or output, then type, then the existing input, output, communications and power checks. Other equipment no longer ends at a not-covered result unless Something else is chosen",
-      "1.0.1: stuck-state check before programming/sequence results; Hand-Off-Auto check on digital outputs and drive-mode check on VFD speed paths; Fan-Powered Box equipment path; Light software help branch with alarms; post-replacement checks; field-log guidance (reading signatures, communications patterns) shown as Seen in field logs"
+      "1.0.1: stuck-state check before programming/sequence results; Hand-Off-Auto check on digital outputs and drive-mode check on VFD speed paths; Fan-Powered Box equipment path; Light software help branch with alarms; post-replacement checks; field-log guidance (reading signatures, communications patterns) shown as Seen in field logs",
+      "1.0.2: Hand-Off-Auto / selector checks added to analog outputs: AO-8 and AO-8-H module chains (before the voltage or current is measured) and the generic analog output chain (before the field-device response check); new result for an analog output module switch in Hand or Off; two analog result actions now name an override switch or station as a possible cause",
+      "1.0.3: BACnet MS/TP intermittent path now checks polarity, topology, shield, bias/termination and shorts before the electrical-noise question, then isolates by sections; the isolation step is reworded with the procedure in the step and a \"cannot verify\" answer"
     ],
     "limitations": [
       "Engineering draft requiring site and exact-model validation; not a safety certification",
@@ -13129,7 +13328,7 @@
   },
   "caseRecordTemplate": {
     "case_id": null,
-    "logic_version": "1.0.1",
+    "logic_version": "1.0.3",
     "equipment_model": null,
     "firmware_ebo_version": null,
     "protocol_transport": null,
@@ -13518,6 +13717,114 @@
       "node": "q1931",
       "answer": "No",
       "expected_next": "r1931"
+    },
+    {
+      "name": "q303 / Yes -> q1913",
+      "node": "q303",
+      "answer": "Yes",
+      "expected_next": "q1913"
+    },
+    {
+      "name": "q320 / Yes -> q1914",
+      "node": "q320",
+      "answer": "Yes",
+      "expected_next": "q1914"
+    },
+    {
+      "name": "q1913 / All selectors that are present are in Auto / Remote, or there are none -> q304",
+      "node": "q1913",
+      "answer": "All selectors that are present are in Auto / Remote, or there are none",
+      "expected_next": "q304"
+    },
+    {
+      "name": "q1914 / All selectors that are present are in Auto / Remote, or there are none -> q321",
+      "node": "q1914",
+      "answer": "All selectors that are present are in Auto / Remote, or there are none",
+      "expected_next": "q321"
+    },
+    {
+      "name": "q1913 / The AO-8-H channel switch for this output is in Hand or Off -> r1912",
+      "node": "q1913",
+      "answer": "The AO-8-H channel switch for this output is in Hand or Off",
+      "expected_next": "r1912"
+    },
+    {
+      "name": "q1914 / A selector on the receiving device is in Hand, Off or Local -> r1910",
+      "node": "q1914",
+      "answer": "A selector on the receiving device is in Hand, Off or Local",
+      "expected_next": "r1910"
+    },
+    {
+      "name": "q1504 / Yes -> q1915",
+      "node": "q1504",
+      "answer": "Yes",
+      "expected_next": "q1915"
+    },
+    {
+      "name": "q1915 / Yes, there is a selector but it is in Hand, Off or Local -> r1910",
+      "node": "q1915",
+      "answer": "Yes, there is a selector but it is in Hand, Off or Local",
+      "expected_next": "r1910"
+    },
+    {
+      "name": "q1915 / There is no such selector on this device -> q1509",
+      "node": "q1915",
+      "answer": "There is no such selector on this device",
+      "expected_next": "q1509"
+    },
+    {
+      "name": "q1915 / Yes, there is a selector and it is in Auto / Remote -> q1509",
+      "node": "q1915",
+      "answer": "Yes, there is a selector and it is in Auto / Remote",
+      "expected_next": "q1509"
+    },
+    {
+      "name": "q562 / No -> q2201",
+      "node": "q562",
+      "answer": "No",
+      "expected_next": "q2201"
+    },
+    {
+      "name": "q2201 / Yes -> q564",
+      "node": "q2201",
+      "answer": "Yes",
+      "expected_next": "q564"
+    },
+    {
+      "name": "q2201 / No -> r523",
+      "node": "q2201",
+      "answer": "No",
+      "expected_next": "r523"
+    },
+    {
+      "name": "q564 / No -> q524",
+      "node": "q564",
+      "answer": "No",
+      "expected_next": "q524"
+    },
+    {
+      "name": "q564 / Yes -> q565",
+      "node": "q564",
+      "answer": "Yes",
+      "expected_next": "q565"
+    },
+    {
+      "name": "q524 / Yes -> r524",
+      "node": "q524",
+      "answer": "Yes",
+      "expected_next": "r524"
+    },
+    {
+      "name": "q524 / No -> r526",
+      "node": "q524",
+      "answer": "No",
+      "expected_next": "r526"
+    },
+    {
+      "name": "q524 / Cannot verify / the trunk could not be split or watched long enough -> r585",
+      "node": "q524",
+      "answer": "Cannot verify / the trunk could not be split or watched long enough",
+      "expected_next": "r585"
     }
   ]
 }
