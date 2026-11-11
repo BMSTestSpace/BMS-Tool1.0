@@ -6,6 +6,7 @@
       "answers": {
         "BMS Panel": "q2",
         "VAV": "q601",
+        "Fan-Powered Box": "q2101",
         "RTU": "q801",
         "AHU": "q701",
         "Pump": "q901",
@@ -15,6 +16,7 @@
         "Exhaust Fan": "q1301",
         "Supply Fan": "q1401",
         "Communications": "q501",
+        "Light software help": "q2001",
         "Other": "q402"
       },
       "notes": "SAFETY: Follow site LOTO, electrical PPE, arc-flash, ladder, rotating-equipment, combustion, refrigerant, and life-safety procedures. Never bypass a safety or exceed product ratings. Verify exact model and approved documentation.",
@@ -58,7 +60,8 @@
         "UI16 / Input": "q101",
         "DO8/DO12 Digital Output": "q201",
         "AO8 / Analog Output": "q301",
-        "Communications": "q501"
+        "Communications": "q501",
+        "A controller or module was just replaced": "q1930"
       },
       "applicability": {
         "protocol_transport": [
@@ -646,6 +649,9 @@
         "expect": "You can state the configured type: digital, current, voltage or temperature.",
         "mistakes": [
           "Choosing by the field device name instead of the configured input type"
+        ],
+        "seen_in_field": [
+          "Every input on one controller reading the same maximum value (999.9) indicated a failed input board or input rail on that controller (seen on b3-series controllers). Replacing the controller fixed it."
         ],
         "status": "draft_pending_review"
       }
@@ -1350,6 +1356,9 @@
           "Comparing against a second BMS point",
           "Mixing up units"
         ],
+        "seen_in_field": [
+          "Every input on one controller reading the same maximum value (999.9) indicated a failed input board or input rail on that controller (seen on b3-series controllers). Replacing the controller fixed it."
+        ],
         "status": "draft_pending_review"
       }
     },
@@ -1390,6 +1399,9 @@
         "mistakes": [
           "Measuring with the sensor still connected to the controller",
           "Touching both probes with your fingers"
+        ],
+        "seen_in_field": [
+          "A temperature reading pinned at -327 degF (seen on b3-series controllers) indicated an open, cut or missing sensor. The fix was replacing or reconnecting the sensor, or importing the value from another sensor where the original had been removed."
         ],
         "status": "draft_pending_review"
       },
@@ -2557,7 +2569,7 @@
     "q207": {
       "question": "Is the external control-power source present, correctly rated, and switched through the intended contact conductors (COM/NO/NC on a DO8, or the Form A contact terminals on a DO12) to the field device?",
       "answers": {
-        "Yes": "q208",
+        "Yes": "q1912",
         "No": "r998"
       },
       "notes": "Verify source voltage, common/reference, relay contact selection, load rating, and any interposing relay. Use safe energized testing procedures.",
@@ -2824,7 +2836,7 @@
       "question": "Is the output command changing as expected in EBO?",
       "answers": {
         "Yes": "q304",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -2976,7 +2988,7 @@
       "question": "Is the output command changing as expected in EBO?",
       "answers": {
         "Yes": "q321",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -3289,6 +3301,7 @@
         "Output (command or signal sent to a device)": "q420",
         "Communications (offline, intermittent or wrong data)": "q501",
         "Controller or device power": "q430",
+        "A controller or module was just replaced": "q1930",
         "Something else": "q401"
       },
       "notes": "Use this branch for equipment that is not in the main equipment list. Add the equipment tag and type on the case card first. The checks that follow are general, so the exact device documentation still decides what a normal reading is.",
@@ -4011,6 +4024,22 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Controllers that disagree on baud rate or token settings can keep a trunk offline.",
+        "tools": [
+          "Laptop with EBO or Device Administrator",
+          "The trunk configuration records"
+        ],
+        "expect": "The same baud rate across the trunk, with the MAC range and Max Master consistent with the highest-address master.",
+        "mistakes": [
+          "Changing the master baud rate without checking the other devices",
+          "Checking only the neighbours of the failed device"
+        ],
+        "seen_in_field": [
+          "Controllers set to a different baud rate from the master and the third-party devices kept a loop offline."
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q523": {
@@ -4048,6 +4077,9 @@
           "Adding termination arbitrarily",
           "Star wiring or long stubs"
         ],
+        "seen_in_field": [
+          "A shield landed on the bias terminal at the master during commissioning slowed the trunk for months. Correcting it restored normal operation."
+        ],
         "status": "draft_pending_review"
       }
     },
@@ -4074,6 +4106,24 @@
         "topic_id": null,
         "review_date": null,
         "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Taking sections or devices off one at a time shows what is disrupting the trunk.",
+        "tools": [
+          "Laptop with EBO",
+          "A map of the trunk",
+          "A bus analyzer or approved capture tool (optional)"
+        ],
+        "expect": "The trunk stays stable once the disrupting device or section is removed. Reconnect one at a time.",
+        "mistakes": [
+          "Reconnecting several things at once",
+          "Not recording which devices were taken off"
+        ],
+        "seen_in_field": [
+          "Third-party (non-Schneider) controllers left on the trunk disrupted it. Taking them off one at a time, then checking stability, found the cause.",
+          "A bad transceiver in the last controller on a loop took the loop down. Bus captures before and after removing that controller confirmed it."
+        ],
+        "status": "draft_pending_review"
       }
     },
     "q540": {
@@ -4681,6 +4731,9 @@
         "mistakes": [
           "Comparing two BMS screens instead of an independent measurement"
         ],
+        "seen_in_field": [
+          "Every input on one controller reading the same maximum value (999.9) indicated a failed input board or input rail on that controller (seen on b3-series controllers). Replacing the controller fixed it."
+        ],
         "status": "draft_pending_review"
       }
     },
@@ -4842,7 +4895,7 @@
     },
     "r520": {
       "diagnosis": "Entire MS/TP trunk is offline",
-      "action": "Check trunk power, master controller port, polarity, topology, termination, shorts, and baud rate.",
+      "action": "Check trunk power, master controller port, polarity, topology, termination, shorts, and baud rate. Also check for non-Schneider devices left on the trunk and for a failed transceiver on the last device. Take devices off one at a time and confirm the trunk is stable after each.",
       "applicability": {
         "protocol_transport": [
           "BACnet MS/TP"
@@ -4911,7 +4964,7 @@
     },
     "r523": {
       "diagnosis": "MS/TP physical-layer issue",
-      "action": "Correct polarity, daisy-chain topology, shield grounding, end-of-line termination, shorts, and stubs.",
+      "action": "Correct polarity, daisy-chain topology, shield grounding, end-of-line termination, shorts, and stubs, including a shield landed on a bias terminal.",
       "applicability": {
         "protocol_transport": [
           "BACnet MS/TP"
@@ -5318,7 +5371,7 @@
       "question": "Is the VAV occupied and cooling airflow setpoint above zero?",
       "answers": {
         "Yes": "q604",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -5395,7 +5448,7 @@
       "question": "Is damper command high but measured airflow remains low?",
       "answers": {
         "Yes": "q620",
-        "No": "r995",
+        "No": "q1901",
         "Cannot verify / measurement unavailable": "r585"
       },
       "applicability": {
@@ -5584,7 +5637,7 @@
       "question": "Is the VAV damper commanded open?",
       "answers": {
         "Yes": "q630",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -6201,7 +6254,7 @@
       "question": "Is the AHU enabled by schedule/occupancy?",
       "answers": {
         "Yes": "q703",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -6281,7 +6334,7 @@
       "question": "Is the supply-fan command ON?",
       "answers": {
         "Yes": "q1601",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -6364,7 +6417,7 @@
       "question": "Is cooling enabled and the valve/compressor command increasing?",
       "answers": {
         "Yes": "q712",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -6460,7 +6513,7 @@
       "question": "Is heating enabled and command increasing?",
       "answers": {
         "Yes": "q722",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -6556,8 +6609,8 @@
     "q731": {
       "question": "Is fan-speed command changing to maintain setpoint?",
       "answers": {
-        "Yes": "q1501",
-        "No": "r995"
+        "Yes": "q1911",
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -6844,7 +6897,7 @@
       "question": "Is the RTU enabled by schedule/occupancy?",
       "answers": {
         "Yes": "q803",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -6924,7 +6977,7 @@
       "question": "Is the fan command ON?",
       "answers": {
         "Yes": "q1601",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -7008,7 +7061,7 @@
       "question": "Is a compressor/cooling-stage command present?",
       "answers": {
         "Yes": "q1601",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -7093,7 +7146,7 @@
       "answers": {
         "Digital Stage": "q1601",
         "Modulating Valve": "q1501",
-        "No Command": "r995"
+        "No Command": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -7352,7 +7405,7 @@
       "question": "Is the pump enabled and required by sequence?",
       "answers": {
         "Yes": "q903",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -7419,7 +7472,7 @@
       "question": "Is start command ON?",
       "answers": {
         "Yes": "q1601",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -7568,8 +7621,8 @@
     "q930": {
       "question": "Is speed command changing as expected?",
       "answers": {
-        "Yes": "q1501",
-        "No": "r995"
+        "Yes": "q1911",
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -7699,7 +7752,7 @@
       "question": "Is there a valid heating demand and schedule enable?",
       "answers": {
         "Yes": "q1003",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -7850,7 +7903,7 @@
       "question": "Is firing-rate command increasing?",
       "answers": {
         "Yes": "q1501",
-        "No": "r995",
+        "No": "q1901",
         "Staged boiler": "q1601"
       },
       "applicability": {
@@ -8007,7 +8060,7 @@
       "question": "Is there a valid cooling demand and schedule enable?",
       "answers": {
         "Yes": "q1103",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -8157,7 +8210,7 @@
       "question": "Is leaving-water setpoint/reset correct?",
       "answers": {
         "Yes": "r1103",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -8435,7 +8488,7 @@
       "question": "Is the tower enabled and staged by sequence?",
       "answers": {
         "Yes": "q1601",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -8517,9 +8570,9 @@
     "q1211": {
       "question": "Is fan-speed/stage command increasing?",
       "answers": {
-        "Analog Speed": "q1501",
+        "Analog Speed": "q1911",
         "Digital Stage": "q1601",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -8545,7 +8598,7 @@
       "question": "Are low-limit, heater, and bypass commands operating as designed?",
       "answers": {
         "Yes": "r1201",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -8676,7 +8729,7 @@
       "question": "Is the fan enabled by schedule, occupancy, or interlock?",
       "answers": {
         "Yes": "q1303",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -8715,7 +8768,7 @@
       "question": "Is start command ON?",
       "answers": {
         "Yes": "q1601",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -8793,8 +8846,8 @@
     "q1320": {
       "question": "Is speed command changing?",
       "answers": {
-        "Yes": "q1501",
-        "No": "r995",
+        "Yes": "q1911",
+        "No": "q1901",
         "Constant speed": "r1302"
       },
       "applicability": {
@@ -8899,7 +8952,7 @@
       "question": "Is the supply fan enabled by the required schedule and operating mode?",
       "answers": {
         "Yes": "q1404",
-        "No": "r995",
+        "No": "q1901",
         "Unknown / evidence unavailable": "r585"
       },
       "applicability": {
@@ -8939,7 +8992,7 @@
       "question": "Is start command ON?",
       "answers": {
         "Yes": "q1601",
-        "No": "r995"
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -9061,8 +9114,8 @@
     "q1421": {
       "question": "Is speed command changing to maintain setpoint?",
       "answers": {
-        "Yes": "q1501",
-        "No": "r995"
+        "Yes": "q1911",
+        "No": "q1901"
       },
       "applicability": {
         "protocol_transport": [
@@ -9649,7 +9702,7 @@
     "q1604": {
       "question": "Does the expected binary command state reach the field device?",
       "answers": {
-        "Yes": "q1609",
+        "Yes": "q1910",
         "No": "r1605",
         "Unknown / evidence unavailable": "r585"
       },
@@ -10274,7 +10327,7 @@
       "question": "Is cooling enabled by the required schedule, mode and permissives?",
       "answers": {
         "Yes": "q813",
-        "No": "r995",
+        "No": "q1901",
         "Unknown / evidence unavailable": "r585"
       },
       "applicability": {
@@ -10314,7 +10367,7 @@
       "question": "Is heating enabled by the required schedule, mode and permissives?",
       "answers": {
         "Yes": "q823",
-        "No": "r995",
+        "No": "q1901",
         "Unknown / evidence unavailable": "r585"
       },
       "applicability": {
@@ -11227,6 +11280,1653 @@
       "conclusion_status": "candidate_requires_field_verification",
       "outcome_type": "inconclusive"
     },
+    "q1901": {
+      "question": "What is the state of the controller and of the program or schedule that drives this point?",
+      "answers": {
+        "Controller online, program running with no error, values current": "r995",
+        "Controller offline, or the program is stopped or in an error state": "r1901",
+        "Running, but the values are frozen or not updating": "q1902",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "Do not reset, reload or power-cycle anything yet, and do not change any logic. First look at the controller status, the program or schedule status (running, stopped or in error), the event or error log, and whether the values the program uses are updating, and note what you see and the time.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A restart can hide the cause. Capturing the status and the log first turns a one-time fix into evidence.",
+        "tools": [
+          "Laptop with EBO",
+          "Controller status and event or error log",
+          "Program or schedule status view"
+        ],
+        "expect": "The controller is online, the program shows as running with no error, and the input and schedule values it uses change over time and carry a current timestamp.",
+        "mistakes": [
+          "Restarting first and checking afterwards",
+          "Judging by a graphic alone, which can be stale",
+          "Not noting the time, so the log entry cannot be matched later"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q1902": {
+      "question": "Was the program or import restarted, reloaded or the controller power-cycled (with the status and log captured first), and did normal operation return?",
+      "answers": {
+        "Yes": "r1903",
+        "No, not restarted yet": "r1902",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "Do not restart anything without authorization and the site procedure. Record what was restarted, the time and who approved it.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Separates a fault that is still present from one that a restart already cleared, so a restart is never recorded as a diagnosis.",
+        "tools": [
+          "Laptop with EBO",
+          "Notes or screenshots of the status and log taken before the restart"
+        ],
+        "expect": "You can state what was restarted, when, who approved it, and what the status and log showed before it.",
+        "mistakes": [
+          "Restarting without capturing the status and log first",
+          "Calling the problem fixed without watching for a repeat"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "r1901": {
+      "diagnosis": "Controller or program is stopped, in an error state, or offline",
+      "action": "Record the controller status, the program status, the error or event log entries and the time before any reset, reload or power cycle. Then recover it per the approved procedure and confirm the point follows its command. If it stops again, escalate with the captured log; repeated restarts on the same equipment need engineering review.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r1902": {
+      "diagnosis": "Program values are frozen or stale",
+      "action": "Capture the program status, the time of the last update and the event log, with notes or screenshots. Then restart the affected program or import, or power-cycle the controller, only per the approved procedure and with authorization. Record the result, and treat a repeat as a fault to investigate, not a routine reset.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "r1903": {
+      "diagnosis": "Cleared by restart; cause not identified",
+      "action": "Record what was restarted or reloaded, when, who authorized it, and the status and log captured before the restart. The cause is not identified, so watch for a repeat. If it returns, escalate with the captured evidence for program, firmware, memory or power review instead of restarting again.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "q1910": {
+      "question": "Does the controlled device have a Hand-Off-Auto or Local/Remote selector (starter, drive keypad or panel switch), and is it in Auto or Remote?",
+      "answers": {
+        "Yes, there is a selector and it is in Auto / Remote": "q1609",
+        "Yes, there is a selector but it is in Hand, Off or Local": "r1910",
+        "There is no such selector on this device": "q1609",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "Check the device itself, not the BMS point. A selector in Hand, Off or Local can stop the device from following the command even when the controller output is correct. Do not override a lockout/tagout or a safety device.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The controller can be commanding correctly while the device ignores it because its own selector is not in Auto or Remote.",
+        "tools": [
+          "Visual check at the starter, drive keypad or panel switch"
+        ],
+        "expect": "Any selector is in Auto or Remote, or the device has no selector.",
+        "mistakes": [
+          "Judging by the BMS point instead of the device",
+          "Leaving a selector in Hand after a check",
+          "Returning a selector to Auto without asking why it was moved"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q1911": {
+      "question": "Is the receiving device a VFD or similar drive with its own Hand/Auto or Local/Remote selection, and is it set to follow the BMS speed reference?",
+      "answers": {
+        "A drive, and it is set to follow the BMS (Auto / Remote)": "q1501",
+        "A drive, but it is in Hand, Local or Off, or uses its keypad reference": "r1911",
+        "Not a drive (for example a motor with no local selection)": "q1501",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "Check the drive display or keypad. Do not override a lockout/tagout or a safety device, and do not change drive parameters without authorization.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A drive in Hand or Local, or using its own keypad reference, ignores the BMS speed command even when the analog signal is correct.",
+        "tools": [
+          "Drive display or keypad",
+          "Drive documentation for its control source and reference source"
+        ],
+        "expect": "The drive shows Auto or Remote control and takes its speed reference from the BMS input.",
+        "mistakes": [
+          "Judging by the BMS speed command instead of the drive display",
+          "Changing the drive reference source without authorization",
+          "Missing a latched drive fault"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q1912": {
+      "question": "Does the controlled device have a Hand-Off-Auto or Local/Remote selector (starter, drive keypad or panel switch), and is it in Auto or Remote?",
+      "answers": {
+        "Yes, there is a selector and it is in Auto / Remote": "q208",
+        "Yes, there is a selector but it is in Hand, Off or Local": "r1910",
+        "There is no such selector on this device": "q208",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "Check the device itself, not the BMS point. A selector in Hand, Off or Local can stop the device from following the command even when the controller output is correct. Do not override a lockout/tagout or a safety device.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The controller can be commanding correctly while the device ignores it because its own selector is not in Auto or Remote.",
+        "tools": [
+          "Visual check at the starter, drive keypad or panel switch"
+        ],
+        "expect": "Any selector is in Auto or Remote, or the device has no selector.",
+        "mistakes": [
+          "Judging by the BMS point instead of the device",
+          "Leaving a selector in Hand after a check",
+          "Returning a selector to Auto without asking why it was moved"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "r1910": {
+      "diagnosis": "Device selector is in Hand, Off or Local",
+      "action": "Record the selector position found before changing anything. Find out why it was left there (maintenance, lockout/tagout, a safety trip or an operator action) and get authorization before returning it to Auto or Remote. Never override a lockout or a safety device. After returning it, confirm the device follows the BMS command and that no fault is latched.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r1911": {
+      "diagnosis": "Drive is in Hand, Local or Off, or is using its keypad reference",
+      "action": "Record the mode and the reference source shown on the drive before changing anything. Check for a latched drive fault and find out why it was left in that mode. Get authorization before returning it to Auto or Remote and to the BMS reference per site procedure, then confirm it follows the BMS speed command.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "q1930": {
+      "question": "After the replacement, do the address, switch settings and device ID match the old unit and the documentation?",
+      "answers": {
+        "Yes": "q1931",
+        "No": "r1930",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "Record the old and new serial numbers. Copy the old unit's DIP switch or address settings to the new unit.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A replacement that does not carry the old unit's identity can drop off the network or clash with another device.",
+        "tools": [
+          "The old unit's labels and records",
+          "Drawings and the device list",
+          "Laptop with EBO"
+        ],
+        "expect": "The address, DIP switches and device ID are the same as the old unit, with no duplicate on the network.",
+        "mistakes": [
+          "Powering the new unit before matching its settings",
+          "Not recording the old and new serial numbers"
+        ],
+        "seen_in_field": [
+          "A replacement controller showed a duplicate device ID until its ID was corrected."
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q1931": {
+      "question": "Is the replacement's capacity and model right for the job (for example the device or node count it supports, and a compatible model and firmware)?",
+      "answers": {
+        "Yes": "q1932",
+        "No": "r1931",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A spare that fits the slot can still be too small or the wrong version for the installation.",
+        "tools": [
+          "The replacement's label and documentation",
+          "The installation's device or node count"
+        ],
+        "expect": "The supported device or node count, model and firmware suit the installation.",
+        "mistakes": [
+          "Assuming a spare is the same as the unit it replaces",
+          "Checking the model but not its capacity"
+        ],
+        "seen_in_field": [
+          "A spare rated for 32 nodes was brought online on a loop with 52 controllers. Its node limit had to be raised to 64 before it could carry the loop."
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q1932": {
+      "question": "Has the application or program been loaded into the replacement, and is it running with its points updating?",
+      "answers": {
+        "Yes": "q1933",
+        "No": "r1932",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A controller that is online but has no application, or one that failed to reload, will not run the equipment.",
+        "tools": [
+          "Laptop with EBO",
+          "The program and status view"
+        ],
+        "expect": "The program shows as running with no error, and every point updates.",
+        "mistakes": [
+          "Stopping at the controller coming online",
+          "Not checking every point"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q1933": {
+      "question": "Is a backup or copy of the replacement controller's program and settings saved, and are the old and new serial numbers recorded?",
+      "answers": {
+        "Yes": "r1934",
+        "No": "r1933"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A saved copy lets the next swap start from a known good state.",
+        "tools": [
+          "Laptop with EBO",
+          "The site backup location"
+        ],
+        "expect": "A current backup exists and the serial numbers are recorded with the date.",
+        "mistakes": [
+          "Saving the backup before the program is verified",
+          "Leaving the old unit's serial number unrecorded"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "r1930": {
+      "diagnosis": "Address, switch setting or device ID does not match",
+      "action": "Correct the address, switch settings or device ID to match the old unit and the documentation, then recommission and confirm the device is online. Check for a duplicate ID on the network.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r1931": {
+      "diagnosis": "Replacement does not have the capacity, or is the wrong model or firmware",
+      "action": "Check the supported device or node count, model and firmware against the installation. Use a unit that fits, or raise the limit per the manufacturer's procedure, then reload and retest.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r1932": {
+      "diagnosis": "Application is not loaded or not running in the replacement",
+      "action": "Download or reload the application and settings per the approved procedure, confirm the program is running with no error, and check that every point updates.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r1933": {
+      "diagnosis": "No saved backup of the replacement controller",
+      "action": "Save a backup of the program and settings per procedure, and record the old and new serial numbers and the date, so the next swap can start from a known good copy.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r1934": {
+      "diagnosis": "Replacement checks pass; the original fault is not explained by the replacement",
+      "action": "Return to the symptom that started the call and confirm it is fixed. If it persists, the replaced unit was not the cause; use the equipment paths in this app.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "q2001": {
+      "question": "What do you need help with in the BMS software?",
+      "answers": {
+        "Sign-in or connection problem": "q2010",
+        "A graphic, link or value on screen looks wrong or stale": "q2020",
+        "An alarm is wrong, stuck or missing": "q2030",
+        "Everything is slow, or the server, database or backup system has a problem": "r2001",
+        "Something else": "q401"
+      },
+      "notes": "This branch covers light software checks only. Server, database, backup and whole-system problems are recorded and escalated.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Light software help covers quick checks a field technician can do. Server, database and backup problems are recorded and escalated, not repaired here.",
+        "tools": [
+          "The error text or a screenshot",
+          "The time the problem started"
+        ],
+        "expect": "You can say whether the problem is signing in, what is shown on screen, or an alarm.",
+        "mistakes": [
+          "Restarting services or failing over a server from the field",
+          "Choosing Something else when the symptom fits a listed choice"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2010": {
+      "question": "Can the same user sign in from another workstation or browser?",
+      "answers": {
+        "Yes": "r2010",
+        "No": "q2011",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Separates a workstation or browser problem from an account or server problem.",
+        "tools": [
+          "A second workstation or browser",
+          "The exact error text"
+        ],
+        "expect": "You know whether the problem follows the user or stays with this workstation.",
+        "mistakes": [
+          "Testing with a different user at the same time",
+          "Skipping the exact error text"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2011": {
+      "question": "Can other users sign in to the BMS right now?",
+      "answers": {
+        "Yes": "r2011",
+        "No": "q2012",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "If others can sign in, the system is up and the problem belongs to this user or account.",
+        "tools": [
+          "Another user at another workstation",
+          "The BMS administrator"
+        ],
+        "expect": "You know whether anyone can sign in.",
+        "mistakes": [
+          "Asking only people on the same network segment"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2012": {
+      "question": "Is this workstation or browser connected to the primary BMS server (not a backup or disaster-recovery server)?",
+      "answers": {
+        "Yes": "r2012",
+        "No": "r2013",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "A connection to a backup or disaster-recovery server can mean a failover is in progress. Do not switch servers, fail back or restore anything from this branch.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Clients can end up on a backup server after a failover, which looks like a broken sign-in or missing data.",
+        "tools": [
+          "The server address or name shown by the client",
+          "The site server list"
+        ],
+        "expect": "The client shows the address of the primary server.",
+        "mistakes": [
+          "Assuming the server name in the browser is the primary",
+          "Switching servers or failing back from the field"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "r2010": {
+      "diagnosis": "Problem is with this workstation or browser",
+      "action": "Try another browser, or restart the client if allowed. Check the network connection, the client or browser version, saved credentials and any security software prompts. Record the workstation name, the error text and the time. Escalate to IT if the workstation is managed.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "r2011": {
+      "diagnosis": "User account, password or permission problem",
+      "action": "Check the user name, password and any account lock or expiry. Ask the BMS administrator to check the account and its permissions. Do not share or reuse another person's credentials.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "r2012": {
+      "diagnosis": "BMS server or service is not responding",
+      "action": "Record the exact error text, the time and who is affected. Do not restart services or restore data from this app. Escalate to the BMS server owner with the captured evidence.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "r2013": {
+      "diagnosis": "Workstation is connected to a backup server",
+      "action": "Record which server the workstation is using, the time you noticed, and any error or banner text. Do not switch servers or fail back. Check with the site IT or BMS server owner whether a failover is in progress, and escalate.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "r2001": {
+      "diagnosis": "Server, database, backup or whole-system problem needs heavy software support",
+      "action": "Record the symptoms, the time they started, who is affected, which server the clients are using, any error text and any recent changes. Do not restart services, fail over or restore data from this app. Escalate to the BMS server owner or advanced support with the captured evidence.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "inconclusive"
+    },
+    "q2020": {
+      "question": "What looks wrong on the screen?",
+      "answers": {
+        "A value is frozen, zero or not updating": "q1901",
+        "A value differs from the controller or the field": "q580",
+        "A link, graphic page or object is missing, opens the wrong page or shows the wrong label": "q2021"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The kind of screen problem decides whether to look at the controller, the point mapping or the graphic itself.",
+        "tools": [
+          "The graphic and the point it shows, side by side",
+          "Laptop with EBO"
+        ],
+        "expect": "You can name the point and say whether it is stale, different, or wrongly linked.",
+        "mistakes": [
+          "Fixing the graphic when the controller value is the problem",
+          "Judging a value by the graphic alone"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2021": {
+      "question": "Is the graphic object bound to the correct point, and does that point exist and update?",
+      "answers": {
+        "Yes": "r2020",
+        "No": "r2021",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A graphic only shows what it is bound to. A wrong or missing binding looks like a wrong value.",
+        "tools": [
+          "Laptop with EBO",
+          "The point list or drawings for the equipment"
+        ],
+        "expect": "The object points to the right point, and that point shows a live value.",
+        "mistakes": [
+          "Editing the point instead of the binding",
+          "Fixing one graphic page and missing the others"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "r2020": {
+      "diagnosis": "Graphic binding is correct; check display settings, units, format and permissions",
+      "action": "Compare the displayed units and format with the point. Check whether the user has permission to see the object and whether the client is current. Record what you checked.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "r2021": {
+      "diagnosis": "Graphic object is bound to the wrong or a missing point, or its link is broken",
+      "action": "Identify the correct point and path, then correct the binding or link and confirm it shows a live value. Make graphic changes only with authorization, and record what was changed.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "q2030": {
+      "question": "What is the alarm problem?",
+      "answers": {
+        "The alarm keeps coming in and clearing": "q2031",
+        "The alarm is active and will not clear": "q2033",
+        "An expected alarm did not come in": "q2035",
+        "The alarm shows, but the horn, strobe or notification did not respond": "r2037"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The alarm problem decides whether to check the real condition, the alarm settings, or the notification path.",
+        "tools": [
+          "The alarm view",
+          "A trend of the point around the alarm times"
+        ],
+        "expect": "You can say which alarm, when it occurs and what it should have done.",
+        "mistakes": [
+          "Clearing or disabling the alarm to hide it",
+          "Changing limits before checking the live value"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2031": {
+      "question": "Does the live value or trend show the condition really crossing the alarm limit when the alarm occurs?",
+      "answers": {
+        "Yes": "r2030",
+        "No": "q2032",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Tells a real condition from a nuisance alarm.",
+        "tools": [
+          "Laptop with EBO (live value and trend)",
+          "The alarm history with times"
+        ],
+        "expect": "The trend shows the value crossing the limit at the alarm times, or it does not.",
+        "mistakes": [
+          "Judging by one reading",
+          "Not matching the alarm time to the trend"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2032": {
+      "question": "Do the alarm delay, limit and deadband match the design or comparable units?",
+      "answers": {
+        "Yes": "r2031",
+        "No": "r2032",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Alarms that bounce in and out are usually a setting, not a failure.",
+        "tools": [
+          "Laptop with EBO (alarm settings)",
+          "A comparable unit for reference",
+          "Design documents"
+        ],
+        "expect": "The delay, limit and deadband agree with the design and with comparable units.",
+        "mistakes": [
+          "Comparing against a unit that is also wrong",
+          "Changing a setting without recording the old value"
+        ],
+        "seen_in_field": [
+          "Alarms that bounced in and out were traced to an alarm delay set to zero on one unit while comparable units used a delay."
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2033": {
+      "question": "Has the alarm condition itself cleared (the live value is back inside the limit)?",
+      "answers": {
+        "Yes": "r2034",
+        "No": "r2033",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "An alarm that will not clear is either still true or latched.",
+        "tools": [
+          "Laptop with EBO (live value)",
+          "The alarm view"
+        ],
+        "expect": "You know whether the live value is inside the limit now.",
+        "mistakes": [
+          "Clearing the alarm while the condition is still true"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2035": {
+      "question": "Is the alarm enabled for this point, with a limit or state the condition would cross?",
+      "answers": {
+        "Yes": "r2038",
+        "No": "r2036",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "An alarm that never comes in is often not set up, or set where the condition cannot reach it.",
+        "tools": [
+          "Laptop with EBO (alarm settings)",
+          "Design documents or the alarm list"
+        ],
+        "expect": "The point has an enabled alarm with a limit or state that the condition would cross.",
+        "mistakes": [
+          "Assuming every point has an alarm",
+          "Testing by forcing a value without approval"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "r2030": {
+      "diagnosis": "Alarm condition is real",
+      "action": "Treat it as an equipment or process problem. Use the equipment paths in this app for the affected equipment, and do not change the alarm to hide it.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "r2031": {
+      "diagnosis": "Alarm settings are correct but the value is unstable",
+      "action": "Trend the point around the alarm times. Check the sensor, input and wiring for noise or a loose connection, and check whether the process is hunting. Change alarm settings only with approval.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "r2032": {
+      "diagnosis": "Alarm delay, limit or deadband is wrong",
+      "action": "Compare with the design and with comparable units. Correct only with approval, record the old and new values, and watch the alarm after the change.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r2033": {
+      "diagnosis": "Alarm condition is still active",
+      "action": "Fix the cause of the condition, not the alarm. Check the live value and the equipment. Do not clear or disable the alarm to hide an active condition.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r2034": {
+      "diagnosis": "Alarm is latched after the condition cleared",
+      "action": "Record the alarm source, time and state. Acknowledge or reset it per the site procedure with authorization, then watch whether it returns. If it does not clear, or it returns, check the alarm source and its configuration.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "r2036": {
+      "diagnosis": "Alarm is not enabled or not configured for this point",
+      "action": "Confirm what the alarm is meant to detect. Enable or create the alarm, with its limit, delay and notification, only with approval, then test it and record the change.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "specific"
+    },
+    "r2037": {
+      "diagnosis": "Alarm is raised but the horn, strobe or notification path is not responding",
+      "action": "Check who or what the alarm is set to notify. Check a horn or strobe output with the digital output checks in this app, and message or notification settings with the BMS administrator. Tell the people who would be affected before any test.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "r2038": {
+      "diagnosis": "Alarm is configured but not being raised",
+      "action": "Check the point status and reliability, the alarm view filters, the alarm priority, and that the source device is communicating. Record what you checked and escalate with the point and the time.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
+    "q2101": {
+      "question": "What fan-powered box symptom are you troubleshooting?",
+      "answers": {
+        "Space Too Hot": "q602",
+        "Space Too Cold": "q610",
+        "No/Low Airflow": "q2102",
+        "Damper Not Moving": "q630",
+        "Reheat Not Working": "q640",
+        "Fan Not Running": "q2103",
+        "Fan Speed or Noise": "q2104",
+        "Fan Status Incorrect": "q1310",
+        "Offline": "q501"
+      },
+      "notes": "A fan-powered box (FPB) is a VAV box with a fan. Primary air, damper, reheat and temperature use the VAV checks. The fan uses the same start, speed and status checks as the fans elsewhere in this app. Confirm the box type (series or parallel) and its sequence of operations first.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "The symptom sends you to the VAV checks for primary air, damper, reheat and temperature, and to the fan checks for the blower.",
+        "tools": [
+          "Sequence of operations for this box type",
+          "Equipment tag, drawings and submittal"
+        ],
+        "expect": "You can say whether the box is series or parallel and which part is failing: primary air, damper, reheat or the fan.",
+        "mistakes": [
+          "Treating a fan problem as a primary-air problem, or the reverse",
+          "Assuming the fan runs all the time on every box type"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2102": {
+      "question": "Is the box fan running (heard or felt, or confirmed by fan status or airflow at the discharge)?",
+      "answers": {
+        "Yes": "q620",
+        "No": "q2103",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "A parallel box fan runs only in some modes. Check the sequence before treating a stopped fan as a fault.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "Discharge airflow is primary air plus the fan, so a stopped fan and a primary-air problem look alike.",
+        "tools": [
+          "Eyes, ears and hand at the box",
+          "Fan status in EBO",
+          "Magnahelic or airflow hood (optional)"
+        ],
+        "expect": "You can say whether the fan is running now.",
+        "mistakes": [
+          "Judging by the fan command instead of the fan itself",
+          "Assuming a parallel box fan should be running in every mode"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2103": {
+      "question": "Is the box fan required to run in the current mode, according to the sequence of operations?",
+      "answers": {
+        "Yes": "q1303",
+        "No": "q1901",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A fan that is off because the sequence says so is not a fault; a fan that should be on but is not is.",
+        "tools": [
+          "Sequence of operations",
+          "Laptop with EBO (mode, occupancy and demand points)"
+        ],
+        "expect": "You can state the mode the box is in and whether that mode calls for the fan.",
+        "mistakes": [
+          "Guessing the box type",
+          "Reading the fan status instead of the sequence"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "q2104": {
+      "question": "Is the box fan speed command (SCR, ECM or analog output) at the value the sequence calls for?",
+      "answers": {
+        "Yes": "q1501",
+        "No": "q1901",
+        "Constant speed (no speed command)": "r2101",
+        "Unknown / evidence unavailable": "r585"
+      },
+      "notes": "Compare the command with the sequence and with a comparable box before changing any setting. Speed changes need authorization.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "guide": {
+        "why": "A fan that is too fast, too slow or noisy is often a speed setting, not a failure.",
+        "tools": [
+          "Laptop with EBO (fan speed command and setting)",
+          "A comparable box for reference"
+        ],
+        "expect": "The speed command matches the sequence and is similar to a comparable box in the same mode.",
+        "mistakes": [
+          "Changing a speed setting before comparing with the sequence",
+          "Treating a mechanical noise as a control problem"
+        ],
+        "status": "draft_pending_review"
+      }
+    },
+    "r2101": {
+      "diagnosis": "Constant-speed box fan is not delivering the expected airflow, or is noisy",
+      "action": "Check fan motor operation and rotation, the blower wheel and its mounting, any motor protection or capacitor where fitted, discharge restrictions and filters, and that the box is in the intended mode. Use the exact unit documentation. Speed cannot be changed from the BMS on a constant-speed fan.",
+      "applicability": {
+        "protocol_transport": [
+          "not_transport_specific_or_shared"
+        ],
+        "equipment_model": "verify exact installed model",
+        "ebo_firmware_version": "verify installed version"
+      },
+      "evidence_required": [
+        "Observed condition or measurement",
+        "Timestamp and timezone",
+        "Exact equipment/point identity"
+      ],
+      "reference": {
+        "url": "https://ecostruxure-building-help.se.com/bms/home/index.castle?locale=en-US&productversion=7.0",
+        "documentation_version": "7.0",
+        "topic_id": null,
+        "review_date": null,
+        "status": "Exact topic/model verification pending"
+      },
+      "conclusion_status": "candidate_requires_field_verification",
+      "outcome_type": "area"
+    },
     "q912": {
       "question": "Is the running pump speed command appropriate for the current flow or differential-pressure demand?",
       "answers": {
@@ -11256,6 +12956,9 @@
         "expect": "You can name the sensor type before choosing a test.",
         "mistakes": [
           "Applying a 10k Type II resistance curve to another sensor type"
+        ],
+        "seen_in_field": [
+          "A temperature reading pinned at -327 degF (seen on b3-series controllers) indicated an open, cut or missing sensor. The fix was replacing or reconnecting the sensor, or importing the value from another sensor where the original had been removed."
         ],
         "status": "draft_pending_review"
       }
@@ -11366,7 +13069,7 @@
     }
   },
   "product": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "documentLibrary": {
       "bucket": "bms-documents",
       "private": true,
@@ -11415,7 +13118,8 @@
       "Added draft step guides (why, tools, what to expect, common mistakes) and suggested readings to measurement steps; guides are pending technical review",
       "Removed the Evidence tab: case details on the case card, readings and photos in a drawer, session tools in the Case menu; readings can be edited and deleted",
       "Document upload limit raised from 10 MB to 20 MB with upload progress and clearer errors (front end; the document-library function and storage bucket limits must match)",
-      "First 1.0.x release. Built out the Other equipment branch: input or output, then type, then the existing input, output, communications and power checks. Other equipment no longer ends at a not-covered result unless Something else is chosen"
+      "First 1.0.x release. Built out the Other equipment branch: input or output, then type, then the existing input, output, communications and power checks. Other equipment no longer ends at a not-covered result unless Something else is chosen",
+      "1.0.1: stuck-state check before programming/sequence results; Hand-Off-Auto check on digital outputs and drive-mode check on VFD speed paths; Fan-Powered Box equipment path; Light software help branch with alarms; post-replacement checks; field-log guidance (reading signatures, communications patterns) shown as Seen in field logs"
     ],
     "limitations": [
       "Engineering draft requiring site and exact-model validation; not a safety certification",
@@ -11425,7 +13129,7 @@
   },
   "caseRecordTemplate": {
     "case_id": null,
-    "logic_version": "1.0.0",
+    "logic_version": "1.0.1",
     "equipment_model": null,
     "firmware_ebo_version": null,
     "protocol_transport": null,
@@ -11483,7 +13187,7 @@
       "name": "Cooling disabled",
       "node": "q815",
       "answer": "No",
-      "expected_next": "r995"
+      "expected_next": "q1901"
     },
     {
       "name": "Heating sensor accuracy",
@@ -11495,7 +13199,7 @@
       "name": "Heating disabled",
       "node": "q825",
       "answer": "No",
-      "expected_next": "r995"
+      "expected_next": "q1901"
     },
     {
       "name": "Point mismatch identification",
@@ -11676,6 +13380,144 @@
       "node": "q433",
       "answer": "Yes",
       "expected_next": "r434"
+    },
+    {
+      "name": "q1 / Fan-Powered Box -> q2101",
+      "node": "q1",
+      "answer": "Fan-Powered Box",
+      "expected_next": "q2101"
+    },
+    {
+      "name": "q1 / Light software help -> q2001",
+      "node": "q1",
+      "answer": "Light software help",
+      "expected_next": "q2001"
+    },
+    {
+      "name": "q2 / A controller or module was just replaced -> q1930",
+      "node": "q2",
+      "answer": "A controller or module was just replaced",
+      "expected_next": "q1930"
+    },
+    {
+      "name": "q402 / A controller or module was just replaced -> q1930",
+      "node": "q402",
+      "answer": "A controller or module was just replaced",
+      "expected_next": "q1930"
+    },
+    {
+      "name": "q1303 / No -> q1901",
+      "node": "q1303",
+      "answer": "No",
+      "expected_next": "q1901"
+    },
+    {
+      "name": "q603 / No -> q1901",
+      "node": "q603",
+      "answer": "No",
+      "expected_next": "q1901"
+    },
+    {
+      "name": "q1901 / Controller online, program running with no error, values current -> r995",
+      "node": "q1901",
+      "answer": "Controller online, program running with no error, values current",
+      "expected_next": "r995"
+    },
+    {
+      "name": "q1901 / Controller offline, or the program is stopped or in an error state -> r1901",
+      "node": "q1901",
+      "answer": "Controller offline, or the program is stopped or in an error state",
+      "expected_next": "r1901"
+    },
+    {
+      "name": "q1901 / Running, but the values are frozen or not updating -> q1902",
+      "node": "q1901",
+      "answer": "Running, but the values are frozen or not updating",
+      "expected_next": "q1902"
+    },
+    {
+      "name": "q1902 / Yes -> r1903",
+      "node": "q1902",
+      "answer": "Yes",
+      "expected_next": "r1903"
+    },
+    {
+      "name": "q1604 / Yes -> q1910",
+      "node": "q1604",
+      "answer": "Yes",
+      "expected_next": "q1910"
+    },
+    {
+      "name": "q207 / Yes -> q1912",
+      "node": "q207",
+      "answer": "Yes",
+      "expected_next": "q1912"
+    },
+    {
+      "name": "q1910 / Yes, there is a selector but it is in Hand, Off or Local -> r1910",
+      "node": "q1910",
+      "answer": "Yes, there is a selector but it is in Hand, Off or Local",
+      "expected_next": "r1910"
+    },
+    {
+      "name": "q930 / Yes -> q1911",
+      "node": "q930",
+      "answer": "Yes",
+      "expected_next": "q1911"
+    },
+    {
+      "name": "q1911 / A drive, but it is in Hand, Local or Off, or uses its keypad reference -> r1911",
+      "node": "q1911",
+      "answer": "A drive, but it is in Hand, Local or Off, or uses its keypad reference",
+      "expected_next": "r1911"
+    },
+    {
+      "name": "q2101 / Fan Not Running -> q2103",
+      "node": "q2101",
+      "answer": "Fan Not Running",
+      "expected_next": "q2103"
+    },
+    {
+      "name": "q2103 / Yes -> q1303",
+      "node": "q2103",
+      "answer": "Yes",
+      "expected_next": "q1303"
+    },
+    {
+      "name": "q2104 / Yes -> q1501",
+      "node": "q2104",
+      "answer": "Yes",
+      "expected_next": "q1501"
+    },
+    {
+      "name": "q2001 / An alarm is wrong, stuck or missing -> q2030",
+      "node": "q2001",
+      "answer": "An alarm is wrong, stuck or missing",
+      "expected_next": "q2030"
+    },
+    {
+      "name": "q2030 / The alarm is active and will not clear -> q2033",
+      "node": "q2030",
+      "answer": "The alarm is active and will not clear",
+      "expected_next": "q2033"
+    },
+    {
+      "name": "q2020 / A value differs from the controller or the field -> q580",
+      "node": "q2020",
+      "answer": "A value differs from the controller or the field",
+      "expected_next": "q580"
+    },
+    {
+      "name": "q1930 / Yes -> q1931",
+      "node": "q1930",
+      "answer": "Yes",
+      "expected_next": "q1931"
+    },
+    {
+      "name": "q1931 / No -> r1931",
+      "node": "q1931",
+      "answer": "No",
+      "expected_next": "r1931"
     }
   ]
 }
